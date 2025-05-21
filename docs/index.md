@@ -19,4 +19,4 @@ features:
     description: Put ! description here
 ---
 
-react-tiptap-editor
+ct-tiptap-editor

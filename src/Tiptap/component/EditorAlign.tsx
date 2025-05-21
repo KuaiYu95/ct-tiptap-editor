@@ -1,7 +1,7 @@
 import { Box, MenuItem, Select, Tooltip } from "@mui/material";
 import { type Editor } from "@tiptap/react";
+import { getShortcutKeyText } from "ct-tiptap-editor/utils";
 import React, { useEffect, useState } from "react";
-import { getShortcutKeyText } from "react-tiptap-editor/utils";
 import { AlignCenterIcon } from "../icons/align-center-icon";
 import { AlignJustifyIcon } from "../icons/align-justify-icon";
 import { AlignLeftIcon } from "../icons/align-left-icon";

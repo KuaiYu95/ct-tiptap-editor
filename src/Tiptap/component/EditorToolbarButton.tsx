@@ -1,7 +1,7 @@
 import { Theme } from "@emotion/react";
 import { Box, Button, Stack, SxProps, Tooltip } from "@mui/material";
+import { getShortcutKeyText } from "ct-tiptap-editor/utils";
 import React from "react";
-import { getShortcutKeyText } from "react-tiptap-editor/utils";
 
 
 interface EditorToolbarButtonProps {

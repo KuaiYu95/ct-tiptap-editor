@@ -3,7 +3,7 @@
 This is an example component.
 
 ```jsx
-import { TiptapReader } from 'react-tiptap-editor';
+import { TiptapReader } from 'ct-tiptap-editor';
 
 export default () => <div style={{ 
   width: '100%', 
@@ -15,7 +15,7 @@ export default () => <div style={{
 ```
 
 ```jsx
-import { TiptapEditor } from 'react-tiptap-editor';
+import { TiptapEditor } from 'ct-tiptap-editor';
 
 export default () => <div style={{ 
   width: '100%', 

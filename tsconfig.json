@@ -8,8 +8,8 @@
     "baseUrl": "./",
     "paths": {
       "@@/*": [".dumi/tmp/*"],
-      "react-tiptap-editor": ["src"],
-      "react-tiptap-editor/*": ["src/*", "*"]
+      "ct-tiptap-editor": ["src"],
+      "ct-tiptap-editor/*": ["src/*", "*"]
     }
   },
   "include": [".dumirc.ts", "src/**/*"]

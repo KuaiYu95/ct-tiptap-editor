@@ -24,10 +24,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KuaiYu95/react-tiptap-editor.git"
+    "url": "git+https://github.com/KuaiYu95/ct-tiptap-editor.git"
   },
   "bugs": {
-    "url": "https://github.com/KuaiYu95/react-tiptap-editor/issues"
+    "url": "https://github.com/KuaiYu95/ct-tiptap-editor/issues"
   },
   "keywords": [
     "react",
@@ -38,7 +38,7 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/KuaiYu95/react-tiptap-editor#readme",
+  "homepage": "https://github.com/KuaiYu95/ct-tiptap-editor#readme",
   "license": "MIT",
   "files": [
     "dist"
