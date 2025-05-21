@@ -1,3 +1,4 @@
+import { Mark } from '@tiptap/core';
 import { defineConfig } from 'dumi';
 
 export default defineConfig({
@@ -6,3 +7,20 @@ export default defineConfig({
     name: 'react-tiptap-editor',
   },
 });
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    mark: {
+      removeMark: (
+        type: string | Mark,
+        options?: {
+          extendEmptyMarkRange?: boolean
+        }
+      ) => ReturnType
+    },
+    fontSize: {
+      setFontSize: (size: number) => ReturnType
+      unsetFontSize: () => ReturnType
+    }
+  }
+}

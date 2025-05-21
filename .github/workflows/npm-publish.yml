@@ -1,0 +1,34 @@
+name: 发布 NPM 包
+
+on:
+  push:
+    tags:
+      - 'v*' # 当推送以 'v' 开头的标签时触发，如 v1.0.0
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 安装依赖
+        run: pnpm install --no-frozen-lockfile
+
+      - name: 构建
+        run: pnpm run build
+
+      - name: 发布到 NPM
+        run: pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
