@@ -430,7 +430,6 @@
 .tiptap.ProseMirror {
   white-space: pre-wrap;
   outline: none;
-  padding: 48px;
   min-height: 100%;
   caret-color: var(--tt-cursor-color);
 }

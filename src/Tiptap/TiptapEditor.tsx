@@ -145,6 +145,9 @@ const TiptapEditor = ({ content, onSave, onUpdate, onImageUpload }: TiptapEditor
           },
           '& div > .tiptap': {
             minHeight: 'calc(100% - 96px)',
+            '& .ProseMirror': {
+              padding: '48px',
+            }
           }
         }}>
           <EditorContent editor={editor} />
