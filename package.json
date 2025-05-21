@@ -1,5 +1,5 @@
 {
-  "name": "react-tiptap-editor",
+  "name": "ct-tiptap-editor",
   "version": "0.0.2",
   "description": "基于 Tiptap 二次开发的编辑器组件",
   "main": "dist/index.js",
