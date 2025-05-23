@@ -1,4 +1,4 @@
-import { Box, MenuItem, Select } from "@mui/material";
+import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { type Editor } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
 import { ArrowIcon } from "../icons/arrow-icon";
@@ -74,9 +74,9 @@ const EditorListSelect = ({ editor }: { editor: Editor }) => {
       renderValue={(value) => {
         return <EditorToolbarButton
           tip={'列表'}
-          icon={<Box sx={{ mr: 0.5 }}>
+          icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
             {ListOptions.find(it => it.id === value)?.icon || <ListIcon />}
-          </Box>}
+          </Stack>}
         />;
       }}
       IconComponent={({ className, ...rest }) => {

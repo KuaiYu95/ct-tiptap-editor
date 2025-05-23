@@ -430,7 +430,10 @@
 .tiptap.ProseMirror {
   white-space: pre-wrap;
   outline: none;
-  min-height: 100%;
+  padding-left: 48px;
+  padding-right: 48px;
+  padding-top: 48px;
+  padding-bottom: 48px;
   caret-color: var(--tt-cursor-color);
 }
 
@@ -1014,26 +1017,6 @@
 
 .tiptap.ProseMirror {
   font-family: "DM Sans", sans-serif;
-}
-
-.editor-content {
-  /* Firefox scrollbar */
-  scrollbar-width: thin;
-  scrollbar-color: var(--tt-scrollbar-color) transparent;
-}
-
-.editor-content::-webkit-scrollbar {
-  display: block;
-  width: 0.5rem;
-}
-
-.editor-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.editor-content::-webkit-scrollbar-thumb {
-  background-color: var(--tt-scrollbar-color);
-  border-radius: 4px;
 }
 
 .editor-table {

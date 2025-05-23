@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { ImagePlusIcon } from "../icons/image-plus-icon";
 import EditorToolbarButton from "./EditorToolbarButton";
 
-const EditorImage = ({ onUpload }: { onUpload: (files: File, callback: () => void) => void }) => {
+const EditorImage = ({ imageUpload }: { imageUpload: (files: File, callback: () => void) => void }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -18,7 +18,7 @@ const EditorImage = ({ onUpload }: { onUpload: (files: File, callback: () => voi
 
   const onChange = (files: File[]) => {
     const file = files[0];
-    onUpload(file, callback);
+    imageUpload(file, callback);
   }
 
   return <>

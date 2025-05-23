@@ -1,43 +1,14 @@
-import { EditorContent, useEditor } from "@tiptap/react";
-import React, { useEffect } from "react";
-import extensions from "./extension";
+import { EditorContent } from "@tiptap/react";
+import { UseTiptapEditorReturn } from "ct-tiptap-editor/hook/useTiptapEditor";
+import React from "react";
 import './index.css';
 
-interface TiptapEditorProps {
-  content: string;
-}
-
-const TiptapEditor = ({ content }: TiptapEditorProps) => {
-
-  const editor = useEditor({
-    immediatelyRender: false,
-    editable: false,
-    editorProps: {
-      attributes: {
-        autocomplete: "off",
-        autocorrect: "off",
-        autocapitalize: "off",
-        "aria-label": "Main content area, start typing to enter text.",
-      },
-    },
-    extensions,
-    content: content,
-  });
-
-  useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content);
-    }
-
-  }, [content, editor])
-
-  if (!editor) {
-    return null;
-  }
+const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
+  if (!editorRef) return null;
 
   return (
-    <EditorContent editor={editor} />
+    <EditorContent editor={editorRef.editor} />
   );
 };
 
-export default TiptapEditor;
+export default TiptapReader;

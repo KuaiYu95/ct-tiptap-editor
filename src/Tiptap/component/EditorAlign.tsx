@@ -1,4 +1,4 @@
-import { Box, MenuItem, Select, Tooltip } from "@mui/material";
+import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
 import { type Editor } from "@tiptap/react";
 import { getShortcutKeyText } from "ct-tiptap-editor/utils";
 import React, { useEffect, useState } from "react";
@@ -57,9 +57,9 @@ const EditorAlign = ({ editor }: { editor: Editor }) => {
     renderValue={(value) => {
       return <EditorToolbarButton
         tip={'对齐'}
-        icon={<Box sx={{ mr: 0.5 }}>
+        icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
           {AlignOptions.find(it => it.id === value)?.icon || <AlignLeftIcon />}
-        </Box>}
+        </Stack>}
       />;
     }}
     IconComponent={({ className, ...rest }) => {

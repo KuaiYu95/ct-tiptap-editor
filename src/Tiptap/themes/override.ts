@@ -22,7 +22,6 @@ declare module "@mui/material/ButtonGroup" {
 }
 
 const componentStyleOverrides = (theme: ThemeColor) => {
-  console.log(theme)
   return {
     MuiTabs: {
       styleOverrides: {
