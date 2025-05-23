@@ -1,43 +1,66 @@
-# ct-tiptap-editor
+# Tiptap
 
-[![NPM version](https://img.shields.io/npm/v/ct-tiptap-editor.svg?style=flat)](https://npmjs.org/package/ct-tiptap-editor)
-[![NPM downloads](http://img.shields.io/npm/dm/ct-tiptap-editor.svg?style=flat)](https://npmjs.org/package/ct-tiptap-editor)
+This is an example component.
 
-基于 Tiptap 二次开发的编辑器组件
+```tsx
+import { TiptapEditor, TiptapToolbar, useTiptapEditor} from 'ct-tiptap-editor';
+import { useState } from 'react';
 
-## Usage
+export default () => {
+  const [content, setContent] = useState('');
 
-TODO
+  const onSave = (value) => {
+    console.log('onSave', value)
+  }
 
-## Options
+  const onUpdate = (value) => {
+    console.log('onUpdate', value)
+  }
 
-TODO
+  const onImageUpload = (file) => {
+    // 上传图片，返回 url
+    return ''
+    console.log('onImageUpload', file)
+  }
 
-## Development
+  const editorRef = useTiptapEditor({
+    content,
+    onSave,
+    onUpdate,
+    onImageUpload
+  });
 
-```bash
-# install dependencies
-$ pnpm install
+  if (!editorRef) return null;
 
-# develop library by docs demo
-$ pnpm start
-
-# build library source code
-$ pnpm run build
-
-# build library source code in watch mode
-$ pnpm run build:watch
-
-# build docs
-$ pnpm run docs:build
-
-# Locally preview the production build.
-$ pnpm run docs:preview
-
-# check your project for potential problems
-$ pnpm run doctor
+  return <div style={{ 
+    width: '100%', 
+    border: '1px solid #ccc'
+  }}>
+  <div>
+    <TiptapToolbar editorRef={editorRef}  />
+    <TiptapEditor editorRef={editorRef} onUpdate={onUpdate} content={content} />
+  </div>
+</div>
+}
 ```
 
-## LICENSE
 
-MIT
+```jsx
+import { TiptapReader, useTiptapEditor } from 'ct-tiptap-editor';
+
+export default () => {
+  const content=`<h1>HTML Elements</h1>`
+  const editorRef = useTiptapEditor({
+    content,
+    editable: false
+  });
+  return <div style={{ 
+    width: '100%', 
+    height: '500px',
+    overflow: 'auto',
+    border: '1px solid #ccc'
+  }}>
+    <TiptapReader editorRef={editorRef} />
+  </div>
+}
+```
