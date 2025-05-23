@@ -1,5 +1,5 @@
 import { EditorContent } from "@tiptap/react";
-import { UseTiptapEditorReturn } from "ct-tiptap-editor/hook/useTiptapEditor";
+import { UseTiptapEditorReturn } from "ct-tiptap-editor/types";
 import React from "react";
 import './index.css';
 

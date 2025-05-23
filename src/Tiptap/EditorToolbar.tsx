@@ -1,6 +1,6 @@
 import { Divider, Stack } from "@mui/material";
 import { ThemeProvider } from "ct-mui";
-import { UseTiptapEditorReturn } from "ct-tiptap-editor/hook/useTiptapEditor";
+import { UseTiptapEditorReturn } from "ct-tiptap-editor/types";
 import React from "react";
 import EditorAlign from "./component/EditorAlign";
 import EditorFontSize from "./component/EditorFontSize";
@@ -27,7 +27,7 @@ import light from "./themes/light";
 import componentStyleOverrides from "./themes/override";
 
 type EditorToolbarProps = {
-  editorRef: UseTiptapEditorReturn;
+  editorRef: UseTiptapEditorReturn
 }
 
 const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {

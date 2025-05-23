@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { EditorContent } from "@tiptap/react";
 import { ThemeProvider } from "ct-mui";
-import { UseTiptapEditorReturn } from "ct-tiptap-editor/hook/useTiptapEditor";
+import { UseTiptapEditorReturn } from "ct-tiptap-editor/types";
 import React from "react";
 import ImageEditDialog from "./component/ImageEditDialog";
 import './index.css';
