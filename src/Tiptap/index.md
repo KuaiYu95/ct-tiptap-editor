@@ -25,7 +25,7 @@ export default () => {
     content,
     onSave,
     onUpdate,
-    onImageUpload
+    // onImageUpload
   });
 
   if (!editorRef) return null;

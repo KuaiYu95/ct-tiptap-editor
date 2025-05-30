@@ -9,7 +9,7 @@ export interface UseTiptapEditorProps {
   editable?: boolean;
   onSave?: (html: string) => void;
   onUpdate?: (content: string) => void;
-  onImageUpload: (file: File) => Promise<string>;
+  onImageUpload?: (file: File) => Promise<string>;
 }
 
 export type UseTiptapEditorReturn = {
@@ -21,7 +21,7 @@ export type UseTiptapEditorReturn = {
   setImageEditOpen: (open: boolean) => void;
   imageFile: File | null;
   setImageFile: (file: File | null) => void;
-  onImageUpload: (file: File) => Promise<string>;
+  onImageUpload?: (file: File) => Promise<string>;
   handleImageEdit: (imageUrl: string, file?: File) => void;
   previewImg: string;
 } | null
@@ -29,9 +29,9 @@ export type UseTiptapEditorReturn = {
 const useTiptapEditor = ({
   content,
   editable = true,
-  onSave = () => { },
-  onUpdate = () => { },
-  onImageUpload = async () => { return '' }
+  onSave,
+  onUpdate,
+  onImageUpload,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
   const [imageEditOpen, setImageEditOpen] = useState(false);
