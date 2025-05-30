@@ -1,4 +1,4 @@
-import { Dialog } from "@mui/material";
+import { Box, Dialog } from "@mui/material";
 import { EditorContent } from "@tiptap/react";
 import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React, { useEffect, useState } from "react";
@@ -31,7 +31,11 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
   }, [previewImg]);
 
   return (
-    <>
+    <Box sx={{
+      '.tiptap.ProseMirror': {
+        padding: '0px !important'
+      }
+    }}>
       <EditorContent editor={editorRef.editor} />
       <Dialog open={previewOpen} onClose={() => {
         setPreviewOpen(false)
@@ -40,7 +44,7 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
           setPreviewOpen(false)
         }} src={previewImgSrc} alt="preview" style={{ width: '100%', height: '100%' }} />
       </Dialog>
-    </>
+    </Box>
   );
 };
 

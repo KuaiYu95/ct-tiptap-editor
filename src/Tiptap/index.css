@@ -424,10 +424,6 @@
 .tiptap.ProseMirror {
   white-space: pre-wrap;
   outline: none;
-  padding-left: 48px;
-  padding-right: 48px;
-  padding-top: 48px;
-  padding-bottom: 48px;
   color: #424242;
 }
 
