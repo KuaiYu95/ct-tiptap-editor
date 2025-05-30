@@ -69,7 +69,12 @@ const extensions = [
     types: ["heading", "paragraph"],
     alignments: ['left', 'center', 'right', 'justify']
   }),
-  Link.configure({ openOnClick: false }),
+  Link.configure({
+    openOnClick: false,
+    HTMLAttributes: {
+      target: '_self'
+    }
+  }),
   TaskItem.configure({ nested: true }),
   Highlight.configure({
     multicolor: true,
