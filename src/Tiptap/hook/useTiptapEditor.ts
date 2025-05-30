@@ -71,17 +71,21 @@ const useTiptapEditor = ({
           const { state } = view;
           const { selection } = state;
           const { $from } = selection;
-          const node = $from.node();
+          let isList = false;
+          let depth = $from.depth;
+          while (depth > 0) {
+            const node = $from.node(depth);
+            if (node.type.name === 'bulletList' ||
+              node.type.name === 'orderedList' ||
+              node.type.name === 'taskList' ||
+              node.type.name === 'listItem') {
+              isList = true;
+              break;
+            }
+            depth--;
+          }
 
-          // 检查当前节点是否是列表
-          const isList = node.type.name === 'bulletList' ||
-            node.type.name === 'orderedList' ||
-            node.type.name === 'taskList';
-
-          // 检查列表项是否有内容
-          const hasContent = $from.parent.textContent.trim().length > 0;
-
-          if (!isList && hasContent) {
+          if (!isList) {
             view.dispatch(state.tr.insertText('\t'));
           }
         }

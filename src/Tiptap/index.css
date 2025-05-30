@@ -566,21 +566,12 @@
   border-bottom: 1px solid var(--tt-gray-light-a-300);
 }
 
-/* .tiptap.ProseMirror h1:first-child,
-.tiptap.ProseMirror h2:first-child,
-.tiptap.ProseMirror h3:first-child,
-.tiptap.ProseMirror h4:first-child,
-.tiptap.ProseMirror h5:first-child,
-.tiptap.ProseMirror h6:first-child {
-  margin-top: 0;
-} */
-
 .tiptap.ProseMirror h1 {
   font-size: 2.2em;
   font-weight: 700;
   margin-top: 0.7em;
   color: var(--tt-brand-color-500);
-  border-bottom-color: var(--tt-brand-color-500);
+  border-bottom: 2px solid var(--tt-brand-color-500);
 }
 
 .tiptap.ProseMirror h2 {
