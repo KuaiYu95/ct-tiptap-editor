@@ -25,7 +25,7 @@ const EditorImage = ({ imageUpload }: { imageUpload: (files: File, callback: () 
     <EditorToolbarButton
       tip={'图片'}
       ref={buttonRef}
-      onClick={(e) => setAnchorEl(e.currentTarget)}
+      onClick={(e: any) => setAnchorEl(e.currentTarget)}
       icon={<ImagePlusIcon />}
     />
     <Popover

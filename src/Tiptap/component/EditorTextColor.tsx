@@ -48,7 +48,7 @@ const EditorTextColor = ({ editor }: { editor: Editor }) => {
         tip={'文字颜色'}
         ref={buttonRef}
         className={currentColor ? 'active' : ''}
-        onClick={(e) => setAnchorEl(e.currentTarget)}
+        onClick={(e: any) => setAnchorEl(e.currentTarget)}
         icon={<TextColorIcon sx={{ fontSize: 17, color: currentColor }} />}
         sx={{
           color: `${currentColor || 'inherit'} !important`,

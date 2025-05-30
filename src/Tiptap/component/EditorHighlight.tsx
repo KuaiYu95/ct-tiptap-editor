@@ -58,7 +58,7 @@ const HighlightButton = ({ editor }: { editor: Editor }) => {
         ref={buttonRef}
         tip={'高亮'}
         icon={<HighlighterIcon />}
-        onClick={(e) => setAnchorEl(e.currentTarget)}
+        onClick={(e: any) => setAnchorEl(e.currentTarget)}
         className={editor.isActive("highlight") ? "active" : ""}
       />
       <Popover
