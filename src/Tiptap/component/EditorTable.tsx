@@ -18,43 +18,51 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
       .run();
   };
 
+
+  const handleContextMenu = (e: any) => {
+    // 只在可编辑模式下处理右键菜单
+    if (!editor.isEditable) return;
+
+    const cell = e.target.closest('td, th');
+    if (!cell) return;
+
+    e.preventDefault();
+
+    // 设置选区
+    const pos = editor.view.posAtDOM(cell, 0);
+    const $pos = editor.state.doc.resolve(pos);
+    const selection = TextSelection.create(editor.state.doc, $pos.pos);
+    editor.view.dispatch(editor.state.tr.setSelection(selection));
+
+    // 更新选中单元格样式
+    setSelectedCell(prev => {
+      prev?.style.removeProperty('background-color');
+      cell.style.backgroundColor = 'rgba(0, 0, 0, 0.04)';
+      return cell;
+    });
+
+    // 显示弹出菜单
+    setContextMenu({
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+    })
+  };
+
+
+  // 添加CSS样式类来改变表格单元格的鼠标样式
+  const addHoverClass = () => {
+    const tables = editor.options.element.querySelectorAll('table');
+    console.log(tables)
+    tables.forEach(table => {
+      if (!table.classList.contains('editor-table')) {
+        table.classList.add('editor-table');
+      }
+    });
+  };
+
   // 处理右键点击
   useEffect(() => {
     if (!editor) return;
-
-    const handleContextMenu = (e: any) => {
-      const cell = e.target.closest('td, th');
-      if (!cell) return;
-
-      e.preventDefault();
-
-      // 设置选区
-      const pos = editor.view.posAtDOM(cell, 0);
-      const $pos = editor.state.doc.resolve(pos);
-      const selection = TextSelection.create(editor.state.doc, $pos.pos);
-      editor.view.dispatch(editor.state.tr.setSelection(selection));
-
-      // 更新选中单元格样式
-      setSelectedCell(prev => {
-        prev?.style.removeProperty('background-color');
-        cell.style.backgroundColor = 'rgba(0, 0, 0, 0.04)';
-        return cell;
-      });
-
-      // 显示弹出菜单
-      setContextMenu({
-        mouseX: e.clientX,
-        mouseY: e.clientY,
-      });
-    };
-
-    // 添加CSS样式类来改变表格单元格的鼠标样式
-    const addHoverClass = () => {
-      const tables = editor.options.element.querySelectorAll('table');
-      tables.forEach(table => {
-        table.classList.add('editor-table');
-      });
-    };
 
     // 监听编辑器更新，确保新插入的表格也有正确的样式
     const updateListener = () => {
@@ -65,21 +73,16 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
     element.addEventListener('contextmenu', handleContextMenu);
     editor.on('update', updateListener);
     editor.on('transaction', updateListener);
-
-    // 监听编辑器就绪事件
-    if (editor.isEditable) {
-      addHoverClass();
-    }
     editor.on('focus', addHoverClass);
-
-    // 确保初始加载的表格有样式
-    setTimeout(addHoverClass, 100);
+    editor.on('selectionUpdate', addHoverClass);
+    addHoverClass();
 
     return () => {
       element.removeEventListener('contextmenu', handleContextMenu);
       editor.off('update', updateListener);
       editor.off('transaction', updateListener);
       editor.off('focus', addHoverClass);
+      editor.off('selectionUpdate', addHoverClass);
       selectedCell?.style.removeProperty('background-color');
     };
   }, [editor]);
