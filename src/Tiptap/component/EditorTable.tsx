@@ -52,7 +52,6 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
   // 添加CSS样式类来改变表格单元格的鼠标样式
   const addHoverClass = () => {
     const tables = editor.options.element.querySelectorAll('table');
-    console.log(tables)
     tables.forEach(table => {
       if (!table.classList.contains('editor-table')) {
         table.classList.add('editor-table');

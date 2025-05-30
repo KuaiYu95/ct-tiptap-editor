@@ -12,6 +12,15 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
   const [previewImgSrc, setPreviewImgSrc] = useState('');
 
   useEffect(() => {
+    const tables = editorRef.editor.options.element.querySelectorAll('table');
+    tables.forEach(table => {
+      if (!table.classList.contains('editor-table')) {
+        table.classList.add('editor-table');
+      }
+    });
+  }, [editorRef.editor]);
+
+  useEffect(() => {
     if (previewImg) {
       const src = previewImg.split('___preview___')[0];
       if (src) {
