@@ -62,7 +62,7 @@
   --tt-brand-color-200: rgba(195, 189, 255, 1);
   --tt-brand-color-300: rgba(157, 138, 255, 1);
   --tt-brand-color-400: rgba(122, 82, 255, 1);
-  --tt-brand-color-500: rgba(50, 72, 242, 1);
+  --tt-brand-color-500: rgba(25, 118, 210, 1);
   --tt-brand-color-600: rgba(84, 0, 229, 1);
   --tt-brand-color-700: rgba(75, 0, 204, 1);
   --tt-brand-color-800: rgba(56, 0, 153, 1);
@@ -428,7 +428,7 @@
   padding-right: 48px;
   padding-top: 48px;
   padding-bottom: 48px;
-  caret-color: var(--tt-cursor-color);
+  caret-color: #000;
 }
 
 .tiptap.ProseMirror p:not(:first-child) {
@@ -501,6 +501,7 @@
   padding-top: 0.375em;
   padding-bottom: 0.375em;
   margin: 1.5rem 0;
+  color: var(--tt-gray-light-500);
   background-color: var(--tt-gray-light-50);
 }
 
@@ -516,7 +517,7 @@
   top: 0;
   height: 100%;
   width: 0.25em;
-  background-color: var(--blockquote-bg-color);
+  background-color: var(--tt-gray-light-500);
   content: "";
   border-radius: 0;
 }
@@ -561,51 +562,57 @@
   position: relative;
   color: inherit;
   font-style: inherit;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--tt-gray-light-a-300);
 }
 
-.tiptap.ProseMirror h1:first-child,
+/* .tiptap.ProseMirror h1:first-child,
 .tiptap.ProseMirror h2:first-child,
 .tiptap.ProseMirror h3:first-child,
 .tiptap.ProseMirror h4:first-child,
 .tiptap.ProseMirror h5:first-child,
 .tiptap.ProseMirror h6:first-child {
   margin-top: 0;
-}
+} */
 
 .tiptap.ProseMirror h1 {
-  font-size: 28px;
+  font-size: 2.2em;
   font-weight: 700;
-  margin-top: 1.5em;
+  margin-top: 0.7em;
+  color: var(--tt-brand-color-500);
+  border-bottom-color: var(--tt-brand-color-500);
 }
 
 .tiptap.ProseMirror h2 {
-  font-size: 24px;
+  font-size: 1.6em;
   font-weight: 700;
-  margin-top: 1.2em;
+  margin-top: 0.7em;
 }
 
 .tiptap.ProseMirror h3 {
-  font-size: 20px;
+  font-size: 1.2em;
   font-weight: 600;
-  margin-top: 1em;
+  margin-top: 0.7em;
 }
 
 .tiptap.ProseMirror h4 {
-  font-size: 18px;
+  font-size: 1em;
   font-weight: 600;
-  margin-top: 0.8em;
+  margin-top: 0.7em;
 }
 
 .tiptap.ProseMirror h5 {
-  font-size: 16px;
+  font-size: 1em;
   font-weight: 600;
-  margin-top: 0.5em;
+  color: var(--tt-gray-light-500);
+  margin-top: 0.7em;
 }
 
 .tiptap.ProseMirror h6 {
-  font-size: 14px;
+  font-size: 0.9em;
   font-weight: 600;
-  margin-top: 0.2em;
+  color: var(--tt-gray-light-500);
+  margin-top: 0.7em;
 }
 
 .tiptap.ProseMirror hr {
