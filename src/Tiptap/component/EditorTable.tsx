@@ -111,7 +111,7 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
         onClick={insertTable}
       />
       <Popover
-        open={!!contextMenu}
+        open={!!contextMenu && editor.isEditable}
         onClose={closeMenu}
         anchorReference="anchorPosition"
         anchorPosition={
