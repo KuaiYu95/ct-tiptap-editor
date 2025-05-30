@@ -68,7 +68,22 @@ const useTiptapEditor = ({
           return true;
         }
         if (event.key === 'Tab') {
-          view.dispatch(view.state.tr.insertText('\t'));
+          const { state } = view;
+          const { selection } = state;
+          const { $from } = selection;
+          const node = $from.node();
+
+          // 检查当前节点是否是列表
+          const isList = node.type.name === 'bulletList' ||
+            node.type.name === 'orderedList' ||
+            node.type.name === 'taskList';
+
+          // 检查列表项是否有内容
+          const hasContent = $from.parent.textContent.trim().length > 0;
+
+          if (!isList && hasContent) {
+            view.dispatch(state.tr.insertText('\t'));
+          }
         }
       },
       handlePaste: (_, event) => {
