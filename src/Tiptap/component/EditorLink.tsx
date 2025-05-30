@@ -81,7 +81,6 @@ const EditorLink = ({ editor }: { editor: Editor }) => {
     setUrl('');
   };
 
-  console.log('anchorEl', anchorEl);
   const open = Boolean(anchorEl);
   const id = open ? 'editor-link' : undefined;
 

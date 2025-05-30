@@ -54,11 +54,8 @@ const useTiptapEditor = ({
           const target = event.target as HTMLElement;
           if (target.tagName === 'IMG') {
             const src = target.getAttribute('src');
-            if (src) {
-              setPreviewImg(src + '___preview___' + Date.now().toString());
-            } else {
-              setPreviewImg('');
-            }
+            if (src) setPreviewImg(src + '___preview___' + Date.now().toString());
+            else setPreviewImg('');
             return true;
           }
         }
@@ -67,9 +64,7 @@ const useTiptapEditor = ({
       handleKeyDown: (view, event) => {
         if ((event.metaKey || event.ctrlKey) && event.key === 's') {
           event.preventDefault();
-          if (editor) {
-            onSave?.(editor.getHTML());
-          }
+          if (editor) onSave?.(editor.getHTML());
           return true;
         }
         if (event.key === 'Tab') {
