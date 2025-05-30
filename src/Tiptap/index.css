@@ -1015,8 +1015,8 @@
   background-color: #F8F9FA;
 }
 
-.editor-table td:hover::after,
-.editor-table th:hover::after {
+.editor-table:not(.editor-table-editable) td:hover::after,
+.editor-table:not(.editor-table-editable) th:hover::after {
   content: '右键点击可操作';
   position: absolute;
   bottom: -20px;
