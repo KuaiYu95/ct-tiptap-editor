@@ -62,7 +62,7 @@
   --tt-brand-color-200: rgba(195, 189, 255, 1);
   --tt-brand-color-300: rgba(157, 138, 255, 1);
   --tt-brand-color-400: rgba(122, 82, 255, 1);
-  --tt-brand-color-500: rgba(98, 41, 255, 1);
+  --tt-brand-color-500: rgba(50, 72, 242, 1);
   --tt-brand-color-600: rgba(84, 0, 229, 1);
   --tt-brand-color-700: rgba(75, 0, 204, 1);
   --tt-brand-color-800: rgba(56, 0, 153, 1);
@@ -496,24 +496,13 @@
   }
 }
 
-.tiptap.ProseMirror a span {
-  text-decoration: underline;
-}
-
-.tiptap.ProseMirror s span {
-  text-decoration: line-through;
-}
-
-.tiptap.ProseMirror u span {
-  text-decoration: underline;
-}
-
 .tiptap.ProseMirror blockquote {
   position: relative;
   padding-left: 1em;
   padding-top: 0.375em;
   padding-bottom: 0.375em;
   margin: 1.5rem 0;
+  background-color: var(--tt-gray-light-50);
 }
 
 .tiptap.ProseMirror blockquote p {
@@ -636,7 +625,6 @@
 
 .tiptap.ProseMirror a {
   color: var(--link-text-color);
-  text-decoration: underline;
 }
 
 .tiptap.ProseMirror [data-type="mention"] {
@@ -864,7 +852,7 @@
 
 .editor-container a {
   color: inherit;
-  text-decoration: inherit;
+  text-decoration: none;
 }
 
 .editor-container b,

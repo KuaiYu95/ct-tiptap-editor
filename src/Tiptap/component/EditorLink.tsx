@@ -19,8 +19,8 @@ const EditorLink = ({ editor }: { editor: Editor }) => {
   const [url, setUrl] = useState('');
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const handleManualOpen = () => {
-    const { href } = editor.getAttributes('link');
+  const handleManualOpen = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { href = '' } = editor.getAttributes('link');
     setUrl(href);
     setAnchorEl(buttonRef.current);
   };
@@ -81,8 +81,10 @@ const EditorLink = ({ editor }: { editor: Editor }) => {
     setUrl('');
   };
 
+  console.log('anchorEl', anchorEl);
   const open = Boolean(anchorEl);
   const id = open ? 'editor-link' : undefined;
+
   return (
     <>
       <EditorToolbarButton
@@ -96,7 +98,10 @@ const EditorLink = ({ editor }: { editor: Editor }) => {
         id={id}
         open={open}
         anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
+        onClose={() => {
+          setAnchorEl(null);
+          setUrl('');
+        }}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',

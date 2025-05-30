@@ -97,6 +97,8 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
     insertColumnRight: () => editor.chain().focus().addColumnAfter().run(),
     insertRowAbove: () => editor.chain().focus().addRowBefore().run(),
     insertRowBelow: () => editor.chain().focus().addRowAfter().run(),
+    deleteColumn: () => editor.chain().focus().deleteColumn().run(),
+    deleteRow: () => editor.chain().focus().deleteRow().run(),
   };
 
   return (
@@ -127,6 +129,12 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
         </MenuItem>
         <MenuItem onClick={() => { tableOperations.insertRowBelow(); closeMenu(); }}>
           下方插入行
+        </MenuItem>
+        <MenuItem onClick={() => { tableOperations.deleteColumn(); closeMenu(); }}>
+          删除当前列
+        </MenuItem>
+        <MenuItem onClick={() => { tableOperations.deleteRow(); closeMenu(); }}>
+          删除当前行
         </MenuItem>
       </Popover>
     </>

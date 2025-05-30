@@ -3,14 +3,18 @@
 This is an example component.
 
 ```tsx
-import { TiptapEditor, TiptapToolbar, useTiptapEditor} from 'ct-tiptap-editor';
+import { TiptapEditor, TiptapToolbar, TiptapReader, useTiptapEditor} from 'ct-tiptap-editor';
 import { useState } from 'react';
+import { Modal } from 'ct-mui';
+import { Button } from '@mui/material';
 
 export default () => {
   const [content, setContent] = useState('');
+  const [open, setOpen] = useState(true);
 
   const onSave = (value) => {
     console.log('onSave', value)
+    editorRef?.setContent(value);
   }
 
   const onUpdate = (value) => {
@@ -30,15 +34,25 @@ export default () => {
 
   if (!editorRef) return null;
 
-  return <div style={{ 
-    width: '100%', 
-    border: '1px solid #ccc'
-  }}>
-  <div>
-    <TiptapToolbar editorRef={editorRef}  />
-    <TiptapEditor editorRef={editorRef} onUpdate={onUpdate} content={content} />
-  </div>
-</div>
+  return <>
+    <Button onClick={() => setOpen(true)}>editor</Button>
+    <Modal 
+      title={'Editor'}
+      open={open} 
+      width={'100vw'}
+      onCancel={() => setOpen(false)}
+    >
+      <div style={{ 
+        height: '78vh',
+        border: '1px solid #ccc'
+      }}>
+      <div>
+        <TiptapToolbar editorRef={editorRef}  />
+        <TiptapEditor editorRef={editorRef} onUpdate={onUpdate} content={content} />
+      </div>
+      </div>
+    </Modal>
+  </>
 }
 ```
 

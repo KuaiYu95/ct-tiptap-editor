@@ -65,7 +65,10 @@ const extensions = [
   CodeBlockLowlight.configure({
     lowlight,
   }),
-  TextAlign.configure({ types: ["heading", "paragraph"] }),
+  TextAlign.configure({
+    types: ["heading", "paragraph"],
+    alignments: ['left', 'center', 'right', 'justify']
+  }),
   Link.configure({ openOnClick: false }),
   TaskItem.configure({ nested: true }),
   Highlight.configure({

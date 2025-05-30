@@ -27,7 +27,9 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
       <Dialog open={previewOpen} onClose={() => {
         setPreviewOpen(false)
       }}>
-        <img src={previewImgSrc} alt="preview" style={{ width: '100%', height: '100%' }} />
+        <img onClick={() => {
+          setPreviewOpen(false)
+        }} src={previewImgSrc} alt="preview" style={{ width: '100%', height: '100%' }} />
       </Dialog>
     </>
   );

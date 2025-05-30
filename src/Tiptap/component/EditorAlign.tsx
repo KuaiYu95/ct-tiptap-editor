@@ -87,14 +87,16 @@ const EditorAlign = ({ editor }: { editor: Editor }) => {
       <Box sx={{ ml: 0.5 }}>无</Box>
     </MenuItem>
     {AlignOptions.map(it => {
-      return <Tooltip title={<Box>
-        {getShortcutKeyText(it.shortcutKey || [])}
-      </Box>} key={it.id} placement="right" arrow>
-        <MenuItem key={it.id} value={it.id}>
-          {it.icon}
-          <Box sx={{ ml: 0.5 }}>{it.label}</Box>
-        </MenuItem>
-      </Tooltip>
+      return <MenuItem key={it.id} value={it.id}>
+        <Tooltip title={<Box>
+          {getShortcutKeyText(it.shortcutKey || [])}
+        </Box>} key={it.id} placement="right" arrow>
+          <Stack direction={'row'} alignItems={'center'} gap={0.5}>
+            {it.icon}
+            <Box>{it.label}</Box>
+          </Stack>
+        </Tooltip>
+      </MenuItem>
     })}
   </Select>
 }

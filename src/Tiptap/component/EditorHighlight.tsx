@@ -7,7 +7,7 @@ import EditorToolbarButton from './EditorToolbarButton';
 
 // 预设颜色列表
 const PRESET_COLORS = [
-  '#FFF9C4',
+  '#FFFFFF',
   '#FFE0B2',
   '#F8BBD0',
   '#FFCDD2',
@@ -77,8 +77,10 @@ const HighlightButton = ({ editor }: { editor: Editor }) => {
                 <Box
                   onClick={() => handleColorSelect(color)}
                   sx={{
-                    width: 20,
-                    height: 20,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    width: 18,
+                    height: 18,
                     borderRadius: '2px',
                     cursor: 'pointer',
                     backgroundColor: color,

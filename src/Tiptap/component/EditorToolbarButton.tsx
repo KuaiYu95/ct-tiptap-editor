@@ -13,22 +13,26 @@ interface EditorToolbarButtonProps {
   [key: string]: any;
 }
 
-const EditorToolbarButton = ({ tip, shortcutKey, icon, sx, onClick, ...rest }: EditorToolbarButtonProps) => {
-  const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
-  return (
-    <Tooltip title={
-      <Stack alignItems="center">
-        <Box>{tip}</Box>
-        {shortcutKeyText && <Box sx={{ fontSize: 12 }}>{shortcutKeyText}</Box>}
-      </Stack>
-    } arrow>
-      <Box>
-        <Button onClick={onClick} sx={{ ...sx, textTransform: 'none' }} {...rest} >
-          {icon}
-        </Button>
-      </Box>
-    </Tooltip>
-  )
-}
+const EditorToolbarButton = React.forwardRef<HTMLButtonElement, EditorToolbarButtonProps>(
+  ({ tip, shortcutKey, icon, sx, onClick, ...rest }, ref) => {
+    const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
+    return (
+      <Tooltip title={
+        <Stack alignItems="center">
+          <Box>{tip}</Box>
+          {shortcutKeyText && <Box sx={{ fontSize: 12 }}>{shortcutKeyText}</Box>}
+        </Stack>
+      } arrow>
+        <Box>
+          <Button ref={ref} onClick={onClick} sx={{ ...sx, textTransform: 'none' }} {...rest} >
+            {icon}
+          </Button>
+        </Box>
+      </Tooltip>
+    )
+  }
+);
+
+EditorToolbarButton.displayName = 'EditorToolbarButton';
 
 export default EditorToolbarButton;
