@@ -6,11 +6,10 @@ This is an example component.
 import { TiptapEditor, TiptapToolbar, TiptapReader, useTiptapEditor} from 'ct-tiptap-editor';
 import { useState } from 'react';
 import { Modal } from 'ct-mui';
-import { Button } from '@mui/material';
 
 export default () => {
   const [content, setContent] = useState('');
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const onSave = (value) => {
     console.log('onSave', value)
@@ -35,7 +34,7 @@ export default () => {
   if (!editorRef) return null;
 
   return <>
-    <Button onClick={() => setOpen(true)}>editor</Button>
+    <button onClick={() => setOpen(true)}>editor</button>
     <Modal 
       title={'Editor'}
       open={open} 
