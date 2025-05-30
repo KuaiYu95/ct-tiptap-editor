@@ -149,9 +149,7 @@
   --tt-accent-contrast: 8%;
   --tt-destructive-contrast: 8%;
   --tt-foreground-contrast: 8%;
-}
 
-:root {
   /************************************************** 
       Global colors 
   **************************************************/
@@ -165,10 +163,8 @@
   --tt-selection-color: rgba(157, 138, 255, 0.2);
   --tt-card-bg-color: var(--white);
   --tt-card-border-color: var(--tt-gray-light-a-100);
-}
 
-/* Text colors */
-:root {
+  /* Text colors */
   --tt-text-color-gray: hsl(45, 2%, 46%);
   --tt-text-color-brown: hsl(19, 31%, 47%);
   --tt-text-color-orange: hsl(30, 89%, 45%);
@@ -187,9 +183,7 @@
   --tt-text-color-purple-contrast: hsla(274, 37%, 64%, 0.27);
   --tt-text-color-pink-contrast: hsla(331, 60%, 71%, 0.27);
   --tt-text-color-red-contrast: hsla(8, 79%, 79%, 0.4);
-}
 
-:root {
   --tt-highlight-yellow: #fef9c3;
   --tt-highlight-green: #dcfce7;
   --tt-highlight-blue: #e0f2fe;
@@ -252,6 +246,7 @@
 
 .tiptap.ProseMirror img {
   max-width: 100%;
+  cursor: pointer;
   height: auto;
   display: block;
 }

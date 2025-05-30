@@ -1,16 +1,39 @@
-import { useEditor } from "@tiptap/react";
-import { UseTiptapEditorProps, UseTiptapEditorReturn } from "ct-tiptap-editor/types";
+import { Editor, useEditor } from "@tiptap/react";
 import { TextSelection } from "prosemirror-state";
 import { useState } from "react";
 import extensions from "../extension";
 
+
+export interface UseTiptapEditorProps {
+  content: string;
+  editable?: boolean;
+  onSave?: (html: string) => void;
+  onUpdate?: (content: string) => void;
+  onImageUpload: (file: File) => Promise<string>;
+}
+
+export type UseTiptapEditorReturn = {
+  editor: Editor;
+  setCallback: (callback: () => void) => void;
+  setContent: (content: string) => void;
+
+  imageEditOpen: boolean;
+  setImageEditOpen: (open: boolean) => void;
+  imageFile: File | null;
+  setImageFile: (file: File | null) => void;
+  onImageUpload: (file: File) => Promise<string>;
+  handleImageEdit: (imageUrl: string, file?: File) => void;
+  previewImg: string;
+} | null
+
 const useTiptapEditor = ({
   content,
   editable = true,
-  onSave,
-  onUpdate,
-  onImageUpload
+  onSave = () => { },
+  onUpdate = () => { },
+  onImageUpload = async () => { return '' }
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
+  const [previewImg, setPreviewImg] = useState('');
   const [imageEditOpen, setImageEditOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [dropPosition, setDropPosition] = useState(-1);
@@ -25,6 +48,21 @@ const useTiptapEditor = ({
         autocorrect: "off",
         autocapitalize: "off",
         "aria-label": "Main content area, start typing to enter text.",
+      },
+      handleClick: (view, pos, event) => {
+        if (!editable) {
+          const target = event.target as HTMLElement;
+          if (target.tagName === 'IMG') {
+            const src = target.getAttribute('src');
+            if (src) {
+              setPreviewImg(src + '___preview___' + Date.now().toString());
+            } else {
+              setPreviewImg('');
+            }
+            return true;
+          }
+        }
+        return false;
       },
       handleKeyDown: (view, event) => {
         if ((event.metaKey || event.ctrlKey) && event.key === 's') {
@@ -114,12 +152,15 @@ const useTiptapEditor = ({
 
   return {
     editor: editor!,
+
     onImageUpload,
     imageEditOpen,
     setImageEditOpen,
     imageFile,
     setImageFile,
     handleImageEdit,
+    previewImg,
+
     setCallback,
     setContent,
   };

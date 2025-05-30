@@ -1,6 +1,6 @@
 import { Divider, Stack } from "@mui/material";
 import { ThemeProvider } from "ct-mui";
-import { UseTiptapEditorReturn } from "ct-tiptap-editor/types";
+import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React from "react";
 import EditorAlign from "./component/EditorAlign";
 import EditorFontSize from "./component/EditorFontSize";
