@@ -2,7 +2,7 @@ import { useEditor } from "@tiptap/react";
 import { UseTiptapEditorProps, UseTiptapEditorReturn } from "ct-tiptap-editor/types";
 import { TextSelection } from "prosemirror-state";
 import { useState } from "react";
-import extensions from "../Tiptap/extension";
+import extensions from "../extension";
 
 const useTiptapEditor = ({
   content,
@@ -114,7 +114,7 @@ const useTiptapEditor = ({
 
   return {
     editor: editor!,
-    onImageUpload: onImageUpload!,
+    onImageUpload,
     imageEditOpen,
     setImageEditOpen,
     imageFile,

@@ -5,7 +5,7 @@ export interface UseTiptapEditorProps {
   editable?: boolean;
   onSave?: (html: string) => void;
   onUpdate?: (content: string) => void;
-  onImageUpload?: (file: File) => Promise<string>;
+  onImageUpload: (file: File) => Promise<string>;
 }
 
 export type UseTiptapEditorReturn = {
