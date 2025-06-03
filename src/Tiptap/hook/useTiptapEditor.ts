@@ -186,6 +186,7 @@ const useTiptapEditor = ({
     return new Promise((resolve) => {
       if (editor) {
         const html = setHeadingsId(content || '');
+        console.log('setContent', html)
         editor.commands.setContent(html);
         resolve(getNavs());
       }
