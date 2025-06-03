@@ -181,11 +181,14 @@ const useTiptapEditor = ({
       if (hasHeadNoId) {
         const headings = await setContent(content);
         return headings;
-      } else {
-        return headings;
       }
+      return new Promise((resolve) => {
+        resolve(headings);
+      });
     }
-    return []
+    return new Promise((resolve) => {
+      resolve([]);
+    });
   }
 
   const setContent = (content: string): Promise<Nav[]> => {
