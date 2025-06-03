@@ -28,7 +28,7 @@ export function addOpacityToColor(color: string, opacity: number) {
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
 
-export function addIdToHeadings(html: string): string {
+export function setHeadingsId(html: string): string {
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
   const headings = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
@@ -39,4 +39,20 @@ export function addIdToHeadings(html: string): string {
     }
   });
   return doc.body.innerHTML;
+}
+
+export const extractHeadings = (html: string) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const headings = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  return Array.from(headings).map(heading => {
+    const level = parseInt(heading.tagName[1]);
+    const id = heading.id || `heading-${Math.random().toString(36).substring(2, 15)}`
+    return {
+      title: heading.textContent || '',
+      heading: level as 1 | 2 | 3 | 4 | 5 | 6,
+      id
+    };
+  });
 }

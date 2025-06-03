@@ -1,9 +1,14 @@
 import { Editor, useEditor } from "@tiptap/react";
-import { addIdToHeadings } from "ct-tiptap-editor/utils";
+import { extractHeadings, setHeadingsId } from "ct-tiptap-editor/utils";
 import { TextSelection } from "prosemirror-state";
 import { useState } from "react";
 import extensions from "../extension";
 
+export interface Nav {
+  id: string;
+  title: string;
+  heading: number;
+}
 
 export interface UseTiptapEditorProps {
   content: string;
@@ -25,6 +30,8 @@ export type UseTiptapEditorReturn = {
   onImageUpload?: (file: File) => Promise<string>;
   handleImageEdit: (imageUrl: string, file?: File) => void;
   previewImg: string;
+
+  getNavs: () => Nav[];
 } | null
 
 const useTiptapEditor = ({
@@ -113,7 +120,7 @@ const useTiptapEditor = ({
         const text = event.clipboardData?.getData('text/html') || event.clipboardData?.getData('text/plain');
         if (text) {
           event.preventDefault();
-          const processedContent = addIdToHeadings(text);
+          const processedContent = extractHeadings(text);
           editor?.commands.insertContent(processedContent);
           return true;
         }
@@ -141,7 +148,7 @@ const useTiptapEditor = ({
       },
     },
     extensions,
-    content: addIdToHeadings(content),
+    content: setHeadingsId(content),
     onUpdate: ({ editor }) => {
       onUpdate?.(editor.getHTML());
     },
@@ -168,8 +175,17 @@ const useTiptapEditor = ({
 
   const setContent = (content: string) => {
     if (editor) {
-      editor.commands.setContent(addIdToHeadings(content));
+      editor.commands.setContent(setHeadingsId(content));
     }
+  }
+
+  const getNavs = () => {
+    if (editor) {
+      const content = editor.getHTML();
+      const headings = extractHeadings(content);
+      return headings;
+    }
+    return []
   }
 
   if (!editor) {
@@ -190,6 +206,8 @@ const useTiptapEditor = ({
 
     setCallback,
     setContent,
+
+    getNavs,
   };
 };
 
