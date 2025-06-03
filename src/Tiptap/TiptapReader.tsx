@@ -7,6 +7,8 @@ import './index.css';
 const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
   if (!editorRef) return null;
 
+  const content = editorRef.editor.getHTML();
+
   const { previewImg } = editorRef;
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImgSrc, setPreviewImgSrc] = useState('');
@@ -21,7 +23,7 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
         table.classList.add('editor-table-editable');
       }
     });
-  }, [editorRef.editor]);
+  }, [content]);
 
   useEffect(() => {
     if (previewImg) {
