@@ -196,7 +196,7 @@ const useTiptapEditor = ({
       if (editor) {
         const html = setHeadingsId(content || '');
         editor.commands.setContent(html);
-        resolve(getNavs());
+        getNavs().then(resolve);
       }
     })
   }
