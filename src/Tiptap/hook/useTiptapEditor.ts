@@ -173,7 +173,7 @@ const useTiptapEditor = ({
     }
   };
 
-  const getNavs = async () => {
+  const getNavs = async (): Promise<Nav[]> => {
     if (editor) {
       const content = editor.getHTML();
       const headings = extractHeadings(content);

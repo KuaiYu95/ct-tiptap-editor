@@ -42,7 +42,12 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
       }
     }}>
       <EditorContent editor={editorRef.editor} />
-      <Dialog open={previewOpen} onClose={() => {
+      <Dialog sx={{
+        '.MuiDialog-paper': {
+          maxWidth: '80vw',
+          maxHeight: '80vh',
+        }
+      }} open={previewOpen} onClose={() => {
         setPreviewOpen(false)
       }}>
         <img onClick={() => {
