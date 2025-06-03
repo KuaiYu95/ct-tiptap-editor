@@ -27,3 +27,18 @@ export function addOpacityToColor(color: string, opacity: number) {
 
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
+
+export function addIdToHeadings(html: string): string {
+  console.log('addIdToHeadings', html)
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const headings = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  headings.forEach((heading) => {
+    if (!heading.id) {
+      heading.id = `heading-${Math.random().toString(36).substring(2, 15)}`;
+    }
+  });
+  console.log('addIdToHeadings', doc.body.innerHTML)
+  return doc.body.innerHTML;
+}
