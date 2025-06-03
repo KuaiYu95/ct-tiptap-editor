@@ -48,7 +48,7 @@ export const extractHeadings = (html: string) => {
 
   return Array.from(headings).map(heading => {
     const level = parseInt(heading.tagName[1]);
-    const id = heading.id || `heading-${Math.random().toString(36).substring(2, 15)}`
+    const id = heading.id
     return {
       title: heading.textContent || '',
       heading: level as 1 | 2 | 3 | 4 | 5 | 6,
