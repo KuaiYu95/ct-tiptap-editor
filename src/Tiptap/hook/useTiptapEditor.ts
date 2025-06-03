@@ -31,7 +31,7 @@ export type UseTiptapEditorReturn = {
   handleImageEdit: (imageUrl: string, file?: File) => void;
   previewImg: string;
 
-  getNavs: () => Nav[];
+  getNavs: () => Promise<Nav[]>;
 } | null
 
 const useTiptapEditor = ({
@@ -173,16 +173,16 @@ const useTiptapEditor = ({
     }
   };
 
-  const getNavs = () => {
+  const getNavs = async () => {
     if (editor) {
       const content = editor.getHTML();
       const headings = extractHeadings(content);
       const hasHeadNoId = headings.some(heading => !heading.id);
       if (hasHeadNoId) {
+        const headings = await setContent(content);
         return headings;
       } else {
-        setContent(content);
-        return getNavs();
+        return headings;
       }
     }
     return []
