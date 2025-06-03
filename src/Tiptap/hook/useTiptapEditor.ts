@@ -21,7 +21,7 @@ export interface UseTiptapEditorProps {
 export type UseTiptapEditorReturn = {
   editor: Editor;
   setCallback: (callback: () => void) => void;
-  setContent: (content: string) => void;
+  setContent: (content: string) => Promise<Nav[]>;
 
   imageEditOpen: boolean;
   setImageEditOpen: (open: boolean) => void;
@@ -148,7 +148,7 @@ const useTiptapEditor = ({
       },
     },
     extensions,
-    content: setHeadingsId(content),
+    content: content ? setHeadingsId(content) : '',
     onUpdate: ({ editor }) => {
       onUpdate?.(editor.getHTML());
     },
@@ -173,12 +173,6 @@ const useTiptapEditor = ({
     }
   };
 
-  const setContent = (content: string) => {
-    if (editor) {
-      editor.commands.setContent(setHeadingsId(content));
-    }
-  }
-
   const getNavs = () => {
     if (editor) {
       const content = editor.getHTML();
@@ -186,6 +180,16 @@ const useTiptapEditor = ({
       return headings;
     }
     return []
+  }
+
+  const setContent = (content: string): Promise<Nav[]> => {
+    return new Promise((resolve) => {
+      if (editor) {
+        const html = setHeadingsId(content || '');
+        editor.commands.setContent(html);
+        resolve(getNavs());
+      }
+    })
   }
 
   if (!editor) {
