@@ -1,6 +1,7 @@
 
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Color } from '@tiptap/extension-color';
+import { Heading } from '@tiptap/extension-heading';
 import { Highlight } from "@tiptap/extension-highlight";
 import { Image } from "@tiptap/extension-image";
 import { Subscript } from "@tiptap/extension-subscript";
@@ -81,6 +82,20 @@ const extensions = [
     HTMLAttributes: {
       class: 'highlight-marker'
     }
+  }),
+  Heading.configure({
+    HTMLAttributes: {
+      class: 'heading',
+    },
+  }).extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        id: {
+          default: null,
+        },
+      }
+    },
   }),
 ]
 
