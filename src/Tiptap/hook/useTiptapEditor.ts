@@ -102,7 +102,6 @@ const useTiptapEditor = ({
         const items = event.clipboardData?.items;
         if (!items || !items.length) return false;
 
-        // 检查是否有图片
         for (let i = 0; i < items.length; i++) {
           const item = items[i];
           if (item.type.indexOf('image') !== -1) {
@@ -114,15 +113,6 @@ const useTiptapEditor = ({
             setImageEditOpen(true);
             return true;
           }
-        }
-
-        // 处理文本内容
-        const text = event.clipboardData?.getData('text/html') || event.clipboardData?.getData('text/plain');
-        if (text) {
-          event.preventDefault();
-          const processedContent = extractHeadings(text);
-          editor?.commands.insertContent(processedContent);
-          return true;
         }
 
         return false;
