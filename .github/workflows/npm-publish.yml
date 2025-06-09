@@ -3,7 +3,7 @@ name: 发布 NPM 包
 on:
   push:
     tags:
-      - 'v*' # 当推送以 'v' 开头的标签时触发，如 v1.0.0
+      - 'v*'
 
 jobs:
   publish:
@@ -22,16 +22,25 @@ jobs:
         with:
           version: 8
 
-      - name: 缓存 node_modules
+      - name: 检查 pnpm 存储位置
+        run: pnpm store path
+
+      - name: 缓存 pnpm 依赖
         uses: actions/cache@v3
-        id: cache
+        id: pnpm-cache
         with:
           path: |
+            ~/.pnpm-store
             node_modules
-            .pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
+
+      - name: 调试路径
+        run: |
+          echo "当前目录: $(pwd)"
+          ls -la
+          echo "pnpm-lock.yaml 哈希: ${{ hashFiles('pnpm-lock.yaml') }}"
 
       - name: 安装依赖
         run: pnpm install --no-frozen-lockfile
