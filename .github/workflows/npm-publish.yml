@@ -22,25 +22,20 @@ jobs:
         with:
           version: 8
 
-      - name: 检查 pnpm 存储位置
-        run: pnpm store path
+      - name: 获取 pnpm 存储路径
+        id: pnpm-store
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - name: 缓存 pnpm 依赖
         uses: actions/cache@v3
         id: pnpm-cache
         with:
           path: |
-            ~/.pnpm-store
+            ${{ steps.pnpm-store.outputs.STORE_PATH }}
             node_modules
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
-
-      - name: 调试路径
-        run: |
-          echo "当前目录: $(pwd)"
-          ls -la
-          echo "pnpm-lock.yaml 哈希: ${{ hashFiles('pnpm-lock.yaml') }}"
 
       - name: 安装依赖
         run: pnpm install --no-frozen-lockfile
