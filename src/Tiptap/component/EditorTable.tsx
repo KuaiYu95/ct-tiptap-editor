@@ -107,7 +107,7 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
     <>
       <EditorToolbarButton
         tip='表格，单元格可右键操作'
-        icon={<TableIcon sx={{ fontSize: 16 }} />}
+        icon={<TableIcon sx={{ fontSize: 17 }} />}
         onClick={insertTable}
       />
       <Popover

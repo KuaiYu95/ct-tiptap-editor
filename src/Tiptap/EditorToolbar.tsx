@@ -3,6 +3,7 @@ import { ThemeProvider } from "ct-mui";
 import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React from "react";
 import EditorAlign from "./component/EditorAlign";
+import EditorAttachment from "./component/EditorAttachment";
 import EditorFontSize from "./component/EditorFontSize";
 import EditorHeading from "./component/EditorHeading";
 import HighlightButton from "./component/EditorHighlight";
@@ -28,9 +29,10 @@ import componentStyleOverrides from "./themes/override";
 
 type EditorToolbarProps = {
   editorRef: UseTiptapEditorReturn
+  onFileUpload?: (file: File) => Promise<string>;
 }
 
-const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
+const EditorToolbar = ({ editorRef, onFileUpload }: EditorToolbarProps) => {
   if (!editorRef) return null;
   const { editor } = editorRef;
   return <ThemeProvider
@@ -180,6 +182,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         editorRef.setImageFile(file)
         editorRef.setImageEditOpen(true)
       }} />
+      {onFileUpload && <EditorAttachment editor={editor} onFileUpload={onFileUpload} />}
     </Stack>
   </ThemeProvider>
 }

@@ -6,6 +6,24 @@ import { getMarkRange } from "@tiptap/react"
 export const Link = TiptapLink.extend({
   inclusive: false,
 
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      download: {
+        default: null,
+        parseHTML: element => element.getAttribute('download'),
+        renderHTML: attributes => {
+          if (!attributes.download) {
+            return {}
+          }
+          return {
+            download: attributes.download
+          }
+        }
+      }
+    }
+  },
+
   parseHTML() {
     return [
       {
