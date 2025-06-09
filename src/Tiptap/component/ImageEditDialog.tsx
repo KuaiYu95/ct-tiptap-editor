@@ -101,30 +101,28 @@ const ImageEditDialog = ({ open, onClose, imageFile, onConfirm }: ImageEditDialo
     title="编辑图片"
     onOk={handleCropComplete}
   >
-    <Stack spacing={2}>
-      <Stack alignItems="center" justifyContent="center" style={{
-        width: '704px',
-        height: '500px',
-      }}>
-        {imageSrc && (
-          <ReactCrop
-            crop={crop}
-            onChange={c => setCrop(c)}
-          >
-            <img
-              ref={imgRef}
-              src={imageSrc}
-              alt="裁切图片"
-              style={{
-                maxWidth: '704px',
-                maxHeight: '500px',
-                objectFit: 'contain'
-              }}
-              onLoad={onImageLoad}
-            />
-          </ReactCrop>
-        )}
-      </Stack>
+    <Stack alignItems="center" justifyContent="center" style={{
+      width: '100%',
+      height: '500px',
+    }}>
+      {imageSrc && (
+        <ReactCrop
+          crop={crop}
+          onChange={c => setCrop(c)}
+        >
+          <img
+            ref={imgRef}
+            src={imageSrc}
+            alt="裁切图片"
+            style={{
+              maxWidth: '704px',
+              maxHeight: '500px',
+              objectFit: 'contain'
+            }}
+            onLoad={onImageLoad}
+          />
+        </ReactCrop>
+      )}
     </Stack>
   </Modal>
 }

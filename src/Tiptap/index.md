@@ -72,14 +72,9 @@ export default () => {
         width={'100vw'}
         onCancel={() => setOpen(false)}
       >
-        <div
-          style={{
-            height: '78vh',
-            border: '1px solid #ccc',
-          }}
-        >
-          <div>
-            <TiptapToolbar editorRef={editorRef} />
+        <div style={{ border: '1px solid #ccc' }}>
+          <TiptapToolbar editorRef={editorRef} />
+          <div style={{ padding: 48, height: '50vh', overflow: 'auto' }}>
             <TiptapEditor editorRef={editorRef} />
           </div>
         </div>
@@ -102,8 +97,9 @@ export default () => {
   return (
     <div
       style={{
-        width: '100%',
+        width: 'calc(100% - 96px)',
         height: '500px',
+        padding: 48,
         overflow: 'auto',
         border: '1px solid #ccc',
       }}
