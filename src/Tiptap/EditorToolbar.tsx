@@ -29,12 +29,11 @@ import componentStyleOverrides from "./themes/override";
 
 type EditorToolbarProps = {
   editorRef: UseTiptapEditorReturn
-  onFileUpload?: (file: File) => Promise<string>;
 }
 
-const EditorToolbar = ({ editorRef, onFileUpload }: EditorToolbarProps) => {
+const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
   if (!editorRef) return null;
-  const { editor } = editorRef;
+  const { editor, onFileUpload } = editorRef;
   return <ThemeProvider
     colors={{ light }}
     mode="light"
@@ -182,7 +181,7 @@ const EditorToolbar = ({ editorRef, onFileUpload }: EditorToolbarProps) => {
         editorRef.setImageFile(file)
         editorRef.setImageEditOpen(true)
       }} />
-      {onFileUpload && <EditorAttachment editor={editor} onFileUpload={onFileUpload} />}
+      {editorRef.onFileUpload && <EditorAttachment editorRef={editorRef} />}
     </Stack>
   </ThemeProvider>
 }

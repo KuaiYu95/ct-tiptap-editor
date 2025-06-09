@@ -1,23 +1,23 @@
-import { Editor } from '@tiptap/core';
 import React, { useRef } from 'react';
+import { UseTiptapEditorReturn } from '../hook/useTiptapEditor';
 import { AttachmentIcon } from '../icons/attachment-icon';
 import EditorToolbarButton from './EditorToolbarButton';
 
 type EditorAttachmentProps = {
-  editor: Editor;
-  onFileUpload: (file: File) => Promise<string>;
+  editorRef: UseTiptapEditorReturn;
 }
 
-const EditorAttachment = ({ editor, onFileUpload }: EditorAttachmentProps) => {
+const EditorAttachment = ({ editorRef }: EditorAttachmentProps) => {
+  if (!editorRef) return null;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file || !editorRef.onFileUpload) return;
 
     try {
-      const fileUrl = await onFileUpload(file);
-      editor
+      const fileUrl = await editorRef.onFileUpload(file);
+      editorRef.editor
         .chain()
         .focus()
         .insertContent(`<a href="${fileUrl}" download="${file.name}">📎 ${file.name}</a>`)

@@ -16,12 +16,15 @@ export interface UseTiptapEditorProps {
   onSave?: (html: string) => void;
   onUpdate?: (content: string) => void;
   onImageUpload?: (file: File) => Promise<string>;
+  onFileUpload?: (file: File) => Promise<string>;
 }
 
 export type UseTiptapEditorReturn = {
   editor: Editor;
   setCallback: (callback: () => void) => void;
   setContent: (content: string) => Promise<Nav[]>;
+
+  onFileUpload?: (file: File) => Promise<string>;
 
   imageEditOpen: boolean;
   setImageEditOpen: (open: boolean) => void;
@@ -30,7 +33,6 @@ export type UseTiptapEditorReturn = {
   onImageUpload?: (file: File) => Promise<string>;
   handleImageEdit: (imageUrl: string, file?: File) => void;
   previewImg: string;
-
   getNavs: () => Promise<Nav[]>;
 } | null
 
@@ -40,6 +42,7 @@ const useTiptapEditor = ({
   onSave,
   onUpdate,
   onImageUpload,
+  onFileUpload,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
   const [imageEditOpen, setImageEditOpen] = useState(false);
@@ -131,6 +134,24 @@ const useTiptapEditor = ({
               setImageFile(file);
               setImageEditOpen(true);
               return true;
+            } else if (onFileUpload) {
+              event.preventDefault();
+              const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+              if (!coordinates) return false;
+              const dropPosition = coordinates.pos;
+              onFileUpload(file).then(fileUrl => {
+                if (editor) {
+                  const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
+                  editor.view.dispatch(tr);
+                  editor.chain()
+                    .focus()
+                    .insertContent(`<a href="${fileUrl}" download="${file.name}">📎 ${file.name}</a>`)
+                    .run();
+                  return true;
+                }
+                return false;
+              });
+              return true;
             }
           }
         }
@@ -199,6 +220,7 @@ const useTiptapEditor = ({
   return {
     editor: editor!,
 
+    onFileUpload,
     onImageUpload,
     imageEditOpen,
     setImageEditOpen,

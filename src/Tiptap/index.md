@@ -28,13 +28,6 @@ export default () => {
     console.log('onImageUpload', file);
   };
 
-  const editorRef = useTiptapEditor({
-    content: '',
-    onSave,
-    onUpdate,
-    // onImageUpload
-  });
-
   const handleFileUpload = async (file: File) => {
     return 'https://www.baidu.com';
     // 实现文件上传逻辑，返回文件URL
@@ -49,6 +42,14 @@ export default () => {
     const data = await response.json();
     return data.fileUrl;
   };
+
+  const editorRef = useTiptapEditor({
+    content: '',
+    onSave,
+    onUpdate,
+    onFileUpload: handleFileUpload,
+    // onImageUpload
+  });
 
   useEffect(() => {
     if (editorRef && open) {
@@ -78,10 +79,7 @@ export default () => {
           }}
         >
           <div>
-            <TiptapToolbar
-              editorRef={editorRef}
-              onFileUpload={handleFileUpload}
-            />
+            <TiptapToolbar editorRef={editorRef} />
             <TiptapEditor editorRef={editorRef} />
           </div>
         </div>
