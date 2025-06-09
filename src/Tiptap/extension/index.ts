@@ -1,4 +1,3 @@
-
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Color } from '@tiptap/extension-color';
 import { Heading } from '@tiptap/extension-heading';

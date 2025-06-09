@@ -20,7 +20,7 @@ const EditorAttachment = ({ editor, onFileUpload }: EditorAttachmentProps) => {
       editor
         .chain()
         .focus()
-        .insertContent(`<a href="${fileUrl}" download="${file.name}">${file.name}</a>`)
+        .insertContent(`<a href="${fileUrl}" download="${file.name}">📎 ${file.name}</a>`)
         .run();
     } catch (error) {
       console.error('文件上传失败:', error);
