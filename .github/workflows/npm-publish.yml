@@ -22,17 +22,13 @@ jobs:
         with:
           version: 8
 
-      - name: 获取 pnpm store 目录
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: 设置 pnpm 缓存
+      - name: 缓存 node_modules
         uses: actions/cache@v3
+        id: cache
         with:
           path: |
-            ${{ env.STORE_PATH }}
             node_modules
+            .pnpm-store
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
