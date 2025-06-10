@@ -14,7 +14,7 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
     editor
       .chain()
       .focus()
-      .insertTable({ rows: 3, cols: 6, withHeaderRow: false })
+      .insertTable({ rows: 3, cols: 6, withHeaderRow: true })
       .run();
   };
 

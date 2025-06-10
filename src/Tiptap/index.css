@@ -1011,8 +1011,17 @@
   cursor: pointer;
 }
 
-.editor-table td:hover,
-.editor-table th:hover {
+.editor-table th {
+  background-color: rgba(204, 204, 204, 0.3);
+}
+
+/* .editor-table td.selectedCell,
+.editor-table th.selectedCell {
+  background-color: rgba(138, 197, 255, 0.1);
+} */
+
+.editor-table td:not(.selectedCell):hover,
+.editor-table th:not(.selectedCell):hover {
   background-color: #F8F9FA;
 }
 

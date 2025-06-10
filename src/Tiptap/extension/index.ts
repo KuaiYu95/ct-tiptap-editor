@@ -1,20 +1,24 @@
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-import { Color } from '@tiptap/extension-color';
-import { Heading } from '@tiptap/extension-heading';
-import { Highlight } from "@tiptap/extension-highlight";
-import { Image } from "@tiptap/extension-image";
-import { Subscript } from "@tiptap/extension-subscript";
-import { Superscript } from "@tiptap/extension-superscript";
-import { Table } from '@tiptap/extension-table';
-import { TableCell } from '@tiptap/extension-table-cell';
-import { TableHeader } from '@tiptap/extension-table-header';
-import { TableRow } from '@tiptap/extension-table-row';
-import { TaskItem } from "@tiptap/extension-task-item";
-import { TaskList } from "@tiptap/extension-task-list";
-import { TextAlign } from "@tiptap/extension-text-align";
-import { TextStyle } from '@tiptap/extension-text-style';
-import { Typography } from "@tiptap/extension-typography";
-import { Underline } from "@tiptap/extension-underline";
+import Color from '@tiptap/extension-color';
+import Dropcursor from '@tiptap/extension-dropcursor';
+import Gapcursor from '@tiptap/extension-gapcursor';
+import HardBreak from '@tiptap/extension-hard-break';
+import Heading from '@tiptap/extension-heading';
+import Highlight from "@tiptap/extension-highlight";
+import HorizontalRule from '@tiptap/extension-horizontal-rule';
+import Image from "@tiptap/extension-image";
+import Subscript from "@tiptap/extension-subscript";
+import Superscript from "@tiptap/extension-superscript";
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
+import TaskItem from "@tiptap/extension-task-item";
+import TaskList from "@tiptap/extension-task-list";
+import TextAlign from "@tiptap/extension-text-align";
+import TextStyle from '@tiptap/extension-text-style';
+import Typography from "@tiptap/extension-typography";
+import Underline from "@tiptap/extension-underline";
 import { StarterKit } from "@tiptap/starter-kit";
 import { all, createLowlight } from 'lowlight';
 import { Markdown } from 'tiptap-markdown';
@@ -27,12 +31,19 @@ import TrailingNode from "./TrailingNode";
 const lowlight = createLowlight(all)
 const extensions = [
   StarterKit,
+  HardBreak,
+  HorizontalRule,
+  Gapcursor,
+  Dropcursor,
   Markdown,
   Color,
   Underline,
   TextStyle,
   TaskList,
-  Image,
+  Image.configure({
+    allowBase64: true,
+    inline: true,
+  }),
   Typography,
   Table.configure({
     resizable: true,
