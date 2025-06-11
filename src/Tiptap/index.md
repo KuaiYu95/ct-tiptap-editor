@@ -24,10 +24,6 @@ export default () => {
     console.log('onUpdate', value);
   };
 
-  const onImageUpload = (file) => {
-    console.log('onImageUpload', file);
-  };
-
   const handleFileUpload = async (file: File) => {
     return 'https://www.baidu.com';
     // 实现文件上传逻辑，返回文件URL
@@ -47,8 +43,7 @@ export default () => {
     content: '',
     onSave,
     onUpdate,
-    onFileUpload: handleFileUpload,
-    // onImageUpload
+    onUpload: handleFileUpload,
   });
 
   useEffect(() => {

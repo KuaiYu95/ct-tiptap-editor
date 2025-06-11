@@ -3,6 +3,7 @@ import { extractHeadings, setHeadingsId } from "ct-tiptap-editor/utils";
 import { TextSelection } from "prosemirror-state";
 import { useState } from "react";
 import extensions from "../extension";
+import { UploadFunction } from "../extension/VideoUpload";
 
 export interface Nav {
   id: string;
@@ -15,8 +16,7 @@ export interface UseTiptapEditorProps {
   editable?: boolean;
   onSave?: (html: string) => void;
   onUpdate?: (content: string) => void;
-  onImageUpload?: (file: File) => Promise<string>;
-  onFileUpload?: (file: File) => Promise<string>;
+  onUpload?: UploadFunction
 }
 
 export type UseTiptapEditorReturn = {
@@ -24,13 +24,12 @@ export type UseTiptapEditorReturn = {
   setCallback: (callback: () => void) => void;
   setContent: (content: string) => Promise<Nav[]>;
 
-  onFileUpload?: (file: File) => Promise<string>;
+  onUpload?: UploadFunction;
 
   imageEditOpen: boolean;
   setImageEditOpen: (open: boolean) => void;
   imageFile: File | null;
   setImageFile: (file: File | null) => void;
-  onImageUpload?: (file: File) => Promise<string>;
   handleImageEdit: (imageUrl: string, file?: File) => void;
   previewImg: string;
   getNavs: () => Promise<Nav[]>;
@@ -41,8 +40,7 @@ const useTiptapEditor = ({
   editable = true,
   onSave,
   onUpdate,
-  onImageUpload,
-  onFileUpload,
+  onUpload,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
   const [imageEditOpen, setImageEditOpen] = useState(false);
@@ -53,6 +51,11 @@ const useTiptapEditor = ({
   const editor = useEditor({
     immediatelyRender: false,
     editable,
+    extensions: extensions(onUpload),
+    content: content ? setHeadingsId(content) : '',
+    onUpdate: ({ editor }) => {
+      onUpdate?.(editor.getHTML());
+    },
     editorProps: {
       attributes: {
         autocomplete: "off",
@@ -134,12 +137,12 @@ const useTiptapEditor = ({
               setImageFile(file);
               setImageEditOpen(true);
               return true;
-            } else if (onFileUpload) {
+            } else if (onUpload) {
               event.preventDefault();
               const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
               if (!coordinates) return false;
               const dropPosition = coordinates.pos;
-              onFileUpload(file).then(fileUrl => {
+              onUpload(file).then(fileUrl => {
                 if (editor) {
                   const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
                   editor.view.dispatch(tr);
@@ -158,17 +161,12 @@ const useTiptapEditor = ({
         return false;
       },
     },
-    extensions,
-    content: content ? setHeadingsId(content) : '',
-    onUpdate: ({ editor }) => {
-      onUpdate?.(editor.getHTML());
-    },
   });
 
   const handleImageEdit = async (imageUrl: string, file?: File) => {
     let url = imageUrl;
-    if (file && onImageUpload) {
-      url = await onImageUpload(file);
+    if (file && onUpload) {
+      url = await onUpload(file);
     }
     setImageEditOpen(false);
     if (editor) {
@@ -220,8 +218,7 @@ const useTiptapEditor = ({
   return {
     editor: editor!,
 
-    onFileUpload,
-    onImageUpload,
+    onUpload,
     imageEditOpen,
     setImageEditOpen,
     imageFile,

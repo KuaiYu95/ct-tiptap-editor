@@ -13,10 +13,10 @@ const EditorAttachment = ({ editorRef }: EditorAttachmentProps) => {
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file || !editorRef.onFileUpload) return;
+    if (!file || !editorRef.onUpload) return;
 
     try {
-      const fileUrl = await editorRef.onFileUpload(file);
+      const fileUrl = await editorRef.onUpload(file);
       editorRef.editor
         .chain()
         .focus()

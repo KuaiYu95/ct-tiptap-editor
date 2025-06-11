@@ -27,9 +27,11 @@ import Link from "./Link";
 import Selection from "./Selection";
 import TabKeyExtension from "./TabKey";
 import TrailingNode from "./TrailingNode";
+import Video from './Video';
+import VideoUploadNode, { UploadFunction } from './VideoUpload';
 
 const lowlight = createLowlight(all)
-const extensions = [
+const extensions = (onUpload?: UploadFunction) => ([
   StarterKit,
   HardBreak,
   HorizontalRule,
@@ -43,6 +45,15 @@ const extensions = [
   Image.configure({
     allowBase64: true,
     inline: true,
+  }),
+  Video,
+  VideoUploadNode.configure({
+    accept: 'video/*',
+    maxSize: 1024 * 1024 * 10,
+    limit: 1,
+    upload: onUpload,
+    onError: (error) => console.error('Upload failed:', error),
+    onSuccess: (url) => console.log('Upload success:', url),
   }),
   Typography,
   Table.configure({
@@ -107,6 +118,6 @@ const extensions = [
       }
     },
   }),
-]
+])
 
 export default extensions;

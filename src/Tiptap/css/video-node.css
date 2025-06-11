@@ -1,0 +1,28 @@
+.tiptap.ProseMirror video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.tiptap.ProseMirror>video:not([data-type="emoji"] video) {
+  margin: 2rem 0;
+  outline: 0.125rem solid transparent;
+  border-radius: var(--tt-radius-xs, 0.25rem);
+}
+
+.tiptap.ProseMirror.ProseMirror-focused video:not([data-type="emoji"] video).ProseMirror-selectednode {
+  outline-color: var(--tt-brand-color-500);
+}
+
+.tiptap.ProseMirror .tiptap-thread:has(> video) {
+  margin: 2rem 0;
+}
+
+.tiptap.ProseMirror .tiptap-thread:has(> video) video {
+  outline: 0.125rem solid transparent;
+  border-radius: var(--tt-radius-xs, 0.25rem);
+}
+
+.tiptap.ProseMirror .tiptap-thread video {
+  margin: 0;
+}

@@ -13,6 +13,7 @@ import EditorListSelect from "./component/EditorListSelect";
 import EditorTable from "./component/EditorTable";
 import EditorTextColor from "./component/EditorTextColor";
 import EditorToolbarButton from "./component/EditorToolbarButton";
+import EditorVideo from "./component/EditorVideo";
 import { BlockQuoteIcon } from "./icons/block-quote-icon";
 import { BoldIcon } from "./icons/bold-icon";
 import { CodeBlockIcon } from "./icons/code-block-icon";
@@ -27,13 +28,15 @@ import { Undo2Icon } from "./icons/undo2-icon";
 import light from "./themes/light";
 import componentStyleOverrides from "./themes/override";
 
+import "./css/video-node.css";
+
 type EditorToolbarProps = {
   editorRef: UseTiptapEditorReturn
 }
 
 const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
   if (!editorRef) return null;
-  const { editor, onFileUpload } = editorRef;
+  const { editor, onUpload } = editorRef;
   return <ThemeProvider
     colors={{ light }}
     mode="light"
@@ -181,7 +184,12 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         editorRef.setImageFile(file)
         editorRef.setImageEditOpen(true)
       }} />
-      {editorRef.onFileUpload && <EditorAttachment editorRef={editorRef} />}
+      {onUpload && (
+        <>
+          <EditorVideo editor={editor} />
+          <EditorAttachment editorRef={editorRef} />
+        </>
+      )}
     </Stack>
   </ThemeProvider>
 }
