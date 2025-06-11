@@ -54,9 +54,15 @@ export default () => {
   useEffect(() => {
     if (editorRef && open) {
       editorRef
-        .setContent(
-          '',
-        )
+        .setContent(`<h1>
+        This is a very unique heading.
+      </h1>
+      <p>
+        This is a unique paragraph. It’s so unique, it even has an ID attached to it.
+      </p>
+      <p>
+        And this one, too.
+      </p>`)
         .then((res) => console.log(res));
     }
   }, [open]);

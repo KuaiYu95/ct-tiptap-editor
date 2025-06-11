@@ -3,7 +3,9 @@ import { EditorContent } from "@tiptap/react";
 import { ThemeProvider } from "ct-mui";
 import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React from "react";
+import DragHandle from "./component/DragHandler";
 import ImageEditDialog from "./component/ImageEditDialog";
+import { DragIcon } from "./icons/drag-icon";
 import './index.css';
 import light from "./themes/light";
 import componentStyleOverrides from "./themes/override";
@@ -24,6 +26,9 @@ const TiptapEditor = ({ editorRef }: TiptapEditorProps) => {
         components: componentStyleOverrides
       }}
     >
+      <DragHandle editor={editor}>
+        <DragIcon sx={{ width: 16, height: 16, color: 'text.auxiliary' }} />
+      </DragHandle>
       <Box className="editor-container" >
         <EditorContent editor={editor} />
       </Box>
