@@ -3,21 +3,16 @@ import { ThemeProvider } from "ct-mui";
 import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React from "react";
 import EditorAlign from "./component/EditorAlign";
-import EditorAttachment from "./component/EditorAttachment";
 import EditorFontSize from "./component/EditorFontSize";
 import EditorHeading from "./component/EditorHeading";
 import HighlightButton from "./component/EditorHighlight";
-import EditorImage from "./component/EditorImage";
 import EditorLink from "./component/EditorLink";
 import EditorListSelect from "./component/EditorListSelect";
 import EditorTable from "./component/EditorTable";
 import EditorTextColor from "./component/EditorTextColor";
 import EditorToolbarButton from "./component/EditorToolbarButton";
-import EditorVideo from "./component/EditorVideo";
 import { BlockQuoteIcon } from "./icons/block-quote-icon";
 import { BoldIcon } from "./icons/bold-icon";
-import { CodeBlockIcon } from "./icons/code-block-icon";
-import { Code2Icon } from "./icons/code2-icon";
 import { ItalicIcon } from "./icons/italic-icon";
 import { Redo2Icon } from "./icons/redo2-icon";
 import { StrikeIcon } from "./icons/strike-icon";
@@ -28,6 +23,8 @@ import { Undo2Icon } from "./icons/undo2-icon";
 import light from "./themes/light";
 import componentStyleOverrides from "./themes/override";
 
+import EditorCode from "./component/EditorCode";
+import EditorUpload from "./component/EditorUpload";
 import "./css/video-node.css";
 
 type EditorToolbarProps = {
@@ -148,20 +145,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
       <EditorTextColor editor={editor} />
       <EditorLink editor={editor} />
       <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
-      <EditorToolbarButton
-        tip={'代码块'}
-        icon={<CodeBlockIcon />}
-        shortcutKey={['ctrl', 'alt', 'C']}
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={editor.isActive("codeBlock") ? "active" : ""}
-      />
-      <EditorToolbarButton
-        tip={'代码'}
-        shortcutKey={['ctrl', 'E']}
-        icon={<Code2Icon />}
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        className={editor.isActive("code") ? "active" : ""}
-      />
+      <EditorCode editor={editor} />
       <EditorTable editor={editor} />
       <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
       <EditorToolbarButton
@@ -179,7 +163,11 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         className={editor.isActive("subscript") ? "active" : ""}
       />
       <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
-      <EditorImage imageUpload={(file: File, callback: () => void) => {
+      <EditorUpload editor={editor} onUpload={onUpload} imgEdit={(file: File) => {
+        editorRef.setImageFile(file)
+        editorRef.setImageEditOpen(true)
+      }} />
+      {/* <EditorImage imgEdit={(file: File, callback: () => void) => {
         editorRef.setCallback(callback)
         editorRef.setImageFile(file)
         editorRef.setImageEditOpen(true)
@@ -189,7 +177,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
           <EditorVideo editor={editor} />
           <EditorAttachment editorRef={editorRef} />
         </>
-      )}
+      )} */}
     </Stack>
   </ThemeProvider>
 }
