@@ -889,12 +889,6 @@
   top: -0.5em;
 }
 
-.editor-container table {
-  text-indent: 0;
-  border-color: inherit;
-  border-collapse: collapse;
-}
-
 .editor-container :-moz-focusring {
   outline: auto;
 }
@@ -1013,6 +1007,8 @@
 .editor-table {
   border-collapse: collapse;
   margin: 1rem 0;
+  text-indent: 0;
+  border-color: inherit;
 }
 
 .editor-table td,
@@ -1020,6 +1016,7 @@
   border: 1px solid #ddd;
   padding: 8px;
   min-width: 50px;
+  word-break: break-all;
   cursor: context-menu;
   position: relative;
   cursor: pointer;
@@ -1034,13 +1031,13 @@
   background-color: rgba(138, 197, 255, 0.1);
 } */
 
-.editor-table td:not(.selectedCell):hover,
-.editor-table th:not(.selectedCell):hover {
+.editor-table td:not(.selectedCell):not(.editor-table-read):hover,
+.editor-table th:not(.selectedCell):not(.editor-table-read):hover {
   background-color: #F8F9FA;
 }
 
-.editor-table:not(.editor-table-editable) td:hover::after,
-.editor-table:not(.editor-table-editable) th:hover::after {
+.editor-table:not(.editor-table-read) td:hover::after,
+.editor-table:not(.editor-table-read) th:hover::after {
   content: '右键点击可操作';
   position: absolute;
   bottom: -20px;

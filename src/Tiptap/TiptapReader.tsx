@@ -19,8 +19,8 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
       if (!table.classList.contains('editor-table')) {
         table.classList.add('editor-table');
       }
-      if (!table.classList.contains('editor-table-editable')) {
-        table.classList.add('editor-table-editable');
+      if (!table.classList.contains('editor-table-read')) {
+        table.classList.add('editor-table-read');
       }
     });
   }, [content]);
