@@ -3,6 +3,7 @@ import { ThemeProvider } from "ct-mui";
 import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React from "react";
 import EditorAlign from "./component/EditorAlign";
+import EditorCode from "./component/EditorCode";
 import EditorFontSize from "./component/EditorFontSize";
 import EditorHeading from "./component/EditorHeading";
 import HighlightButton from "./component/EditorHighlight";
@@ -11,6 +12,8 @@ import EditorListSelect from "./component/EditorListSelect";
 import EditorTable from "./component/EditorTable";
 import EditorTextColor from "./component/EditorTextColor";
 import EditorToolbarButton from "./component/EditorToolbarButton";
+import EditorUpload from "./component/EditorUpload";
+import "./css/video-node.css";
 import { BlockQuoteIcon } from "./icons/block-quote-icon";
 import { BoldIcon } from "./icons/bold-icon";
 import { ItalicIcon } from "./icons/italic-icon";
@@ -22,10 +25,6 @@ import { UnderlineIcon } from "./icons/underline-icon";
 import { Undo2Icon } from "./icons/undo2-icon";
 import light from "./themes/light";
 import componentStyleOverrides from "./themes/override";
-
-import EditorCode from "./component/EditorCode";
-import EditorUpload from "./component/EditorUpload";
-import "./css/video-node.css";
 
 type EditorToolbarProps = {
   editorRef: UseTiptapEditorReturn
@@ -167,17 +166,6 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         editorRef.setImageFile(file)
         editorRef.setImageEditOpen(true)
       }} />
-      {/* <EditorImage imgEdit={(file: File, callback: () => void) => {
-        editorRef.setCallback(callback)
-        editorRef.setImageFile(file)
-        editorRef.setImageEditOpen(true)
-      }} />
-      {onUpload && (
-        <>
-          <EditorVideo editor={editor} />
-          <EditorAttachment editorRef={editorRef} />
-        </>
-      )} */}
     </Stack>
   </ThemeProvider>
 }

@@ -44,7 +44,6 @@ export const Video = Node.create<VideoOptions>({
   renderHTML({ HTMLAttributes }) {
     return ["video", mergeAttributes(HTMLAttributes, {
       controls: true,
-      autoplay: false,
       loop: false,
       muted: false,
       playsinline: true,
