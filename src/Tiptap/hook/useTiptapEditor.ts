@@ -15,6 +15,7 @@ export interface UseTiptapEditorProps {
   content: string;
   editable?: boolean;
   onSave?: (html: string) => void;
+  size?: number
   onUpdate?: (content: string) => void;
   onUpload?: UploadFunction
   onError?: (error: Error) => void
@@ -39,6 +40,7 @@ export type UseTiptapEditorReturn = {
 
 const useTiptapEditor = ({
   content,
+  size,
   editable = true,
   onSave,
   onUpdate,
@@ -54,7 +56,7 @@ const useTiptapEditor = ({
   const editor = useEditor({
     immediatelyRender: false,
     editable,
-    extensions: extensions(onUpload, onError),
+    extensions: extensions(size || 20, onUpload, onError),
     content: content ? setHeadingsId(content) : '',
     onUpdate: ({ editor }) => {
       onUpdate?.(editor.getHTML());
