@@ -158,21 +158,6 @@
   color: var(--tiptap-video-upload-border-active);
 }
 
-.tiptap-video-upload .tiptap-video-upload-preview .tiptap-video-upload-actions .tiptap-video-upload-close-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  color: var(--tt-button-default-icon-color);
-  transition: color 200ms ease;
-}
-
-.tiptap-video-upload .tiptap-video-upload-preview .tiptap-video-upload-actions .tiptap-video-upload-close-btn svg {
-  width: 1rem;
-  height: 1rem;
-}
-
 .tiptap-video-upload .tiptap-video-upload-dragger {
   padding: 2rem 1.5rem;
   border: 1.5px dashed var(--tiptap-video-upload-border);

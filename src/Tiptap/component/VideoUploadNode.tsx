@@ -1,3 +1,4 @@
+import { Box, IconButton } from "@mui/material"
 import type { NodeViewProps } from "@tiptap/react"
 import { NodeViewWrapper } from "@tiptap/react"
 import * as React from "react"
@@ -233,14 +234,14 @@ const VideoUploadDragArea: React.FC<VideoUploadDragAreaProps> = ({
   }
 
   return (
-    <div
+    <Box
       className={`tiptap-video-upload-dragger ${dragover ? "tiptap-video-upload-dragger-active" : ""}`}
       onDrop={onDrop}
       onDragOver={onDragover}
       onDragLeave={onDragleave}
     >
       {children}
-    </div>
+    </Box>
   )
 }
 
@@ -266,65 +267,65 @@ const VideoUploadPreview: React.FC<VideoUploadPreviewProps> = ({
   }
 
   return (
-    <div className="tiptap-video-upload-preview">
+    <Box className="tiptap-video-upload-preview">
       {status === "uploading" && (
-        <div
+        <Box
           className="tiptap-video-upload-progress"
           style={{ width: `${progress}%` }}
         />
       )}
 
-      <div className="tiptap-video-upload-preview-content">
-        <div className="tiptap-video-upload-file-info">
-          <div className="tiptap-video-upload-file-icon">
+      <Box className="tiptap-video-upload-preview-content">
+        <Box className="tiptap-video-upload-file-info">
+          <Box className="tiptap-video-upload-file-icon">
             <CloudUploadIcon />
-          </div>
-          <div className="tiptap-video-upload-details">
-            <span className="tiptap-video-upload-text">{file.name}</span>
-            <span className="tiptap-video-upload-subtext">
+          </Box>
+          <Box className="tiptap-video-upload-details">
+            <Box component="span" className="tiptap-video-upload-text">{file.name}</Box>
+            <Box component="span" className="tiptap-video-upload-subtext">
               {formatFileSize(file.size)}
-            </span>
-          </div>
-        </div>
-        <div className="tiptap-video-upload-actions">
+            </Box>
+          </Box>
+        </Box>
+        <Box className="tiptap-video-upload-actions">
           {status === "uploading" && (
-            <span className="tiptap-video-upload-progress-text">
+            <Box component="span" className="tiptap-video-upload-progress-text">
               {progress}%
-            </span>
+            </Box>
           )}
-          <button
-            className="tiptap-video-upload-close-btn"
+          <IconButton
+            size="small"
             onClick={(e) => {
               e.stopPropagation()
               onRemove()
             }}
           >
             <CloseIcon />
-          </button>
-        </div>
-      </div>
-    </div>
+          </IconButton>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 
 const DropZoneContent: React.FC<{ maxSize: number }> = ({ maxSize }) => (
   <>
-    <div className="tiptap-video-upload-dropzone">
+    <Box className="tiptap-video-upload-dropzone">
       <FileIcon />
       <FileCornerIcon />
-      <div className="tiptap-video-upload-icon-container">
+      <Box className="tiptap-video-upload-icon-container">
         <CloudUploadIcon />
-      </div>
-    </div>
+      </Box>
+    </Box>
 
-    <div className="tiptap-video-upload-content">
-      <span className="tiptap-video-upload-text">
-        <em>Click to upload</em> or drag and drop
-      </span>
-      <span className="tiptap-video-upload-subtext">
-        Maximum file size {maxSize / 1024 / 1024}MB.
-      </span>
-    </div>
+    <Box className="tiptap-video-upload-content">
+      <Box component="span" className="tiptap-video-upload-text">
+        <em>点击此处上传</em> 或拖拽文件到此处
+      </Box>
+      <Box component="span" className="tiptap-video-upload-subtext">
+        最大文件大小 {maxSize / 1024 / 1024}MB.
+      </Box>
+    </Box>
   </>
 )
 

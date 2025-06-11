@@ -17,6 +17,7 @@ export interface UseTiptapEditorProps {
   onSave?: (html: string) => void;
   onUpdate?: (content: string) => void;
   onUpload?: UploadFunction
+  onError?: (error: Error) => void
 }
 
 export type UseTiptapEditorReturn = {
@@ -25,6 +26,7 @@ export type UseTiptapEditorReturn = {
   setContent: (content: string) => Promise<Nav[]>;
 
   onUpload?: UploadFunction;
+  onError?: (error: Error) => void
 
   imageEditOpen: boolean;
   setImageEditOpen: (open: boolean) => void;
@@ -41,6 +43,7 @@ const useTiptapEditor = ({
   onSave,
   onUpdate,
   onUpload,
+  onError,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
   const [imageEditOpen, setImageEditOpen] = useState(false);
@@ -51,7 +54,7 @@ const useTiptapEditor = ({
   const editor = useEditor({
     immediatelyRender: false,
     editable,
-    extensions: extensions(onUpload),
+    extensions: extensions(onUpload, onError),
     content: content ? setHeadingsId(content) : '',
     onUpdate: ({ editor }) => {
       onUpdate?.(editor.getHTML());
@@ -219,6 +222,7 @@ const useTiptapEditor = ({
     editor: editor!,
 
     onUpload,
+    onError,
     imageEditOpen,
     setImageEditOpen,
     imageFile,

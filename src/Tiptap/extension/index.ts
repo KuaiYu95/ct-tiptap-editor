@@ -31,7 +31,7 @@ import Video from './Video';
 import VideoUploadNode, { UploadFunction } from './VideoUpload';
 
 const lowlight = createLowlight(all)
-const extensions = (onUpload?: UploadFunction) => ([
+const extensions = (onUpload?: UploadFunction, onError?: (error: Error) => void) => ([
   StarterKit,
   HardBreak,
   HorizontalRule,
@@ -52,7 +52,7 @@ const extensions = (onUpload?: UploadFunction) => ([
     maxSize: 1024 * 1024 * 10,
     limit: 1,
     upload: onUpload,
-    onError: (error) => console.error('Upload failed:', error),
+    onError: onError,
     onSuccess: (url) => console.log('Upload success:', url),
   }),
   Typography,
