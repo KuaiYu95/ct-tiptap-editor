@@ -1,4 +1,3 @@
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Gapcursor from '@tiptap/extension-gapcursor';
@@ -22,6 +21,7 @@ import Underline from "@tiptap/extension-underline";
 import { StarterKit } from "@tiptap/starter-kit";
 import { all, createLowlight } from 'lowlight';
 import { Markdown } from 'tiptap-markdown';
+import { CodeBlock } from './CodeBlock';
 import FontSize from "./FontSize";
 import Link from "./Link";
 import Selection from "./Selection";
@@ -94,7 +94,7 @@ const extensions = (
   TrailingNode,
   FontSize,
   TabKeyExtension,
-  CodeBlockLowlight.configure({
+  CodeBlock.configure({
     lowlight,
   }),
   TextAlign.configure({

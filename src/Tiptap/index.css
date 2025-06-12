@@ -1076,3 +1076,31 @@
 .drag-handle:active {
   cursor: grabbing;
 }
+
+.tiptap.ProseMirror .code-block-wrapper {
+  position: relative;
+}
+
+.tiptap.ProseMirror .code-block-wrapper .copy-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+  user-select: none;
+}
+
+.tiptap.ProseMirror .code-block-wrapper:hover .copy-button {
+  opacity: 1;
+}
+
+.tiptap.ProseMirror .code-block-wrapper .copy-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
