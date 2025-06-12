@@ -26,9 +26,6 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.8.2
         version: 2.8.2(react@18.3.1)
-      '@tiptap-pro/extension-ai-advanced':
-        specifier: ^2.21.3
-        version: 2.21.3(@tiptap-pro/extension-ai@2.21.3(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))(@tiptap/extension-image@2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0)))(@tiptap/pm@2.12.0))(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))(@tiptap/extension-image@2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0)))(@tiptap/pm@2.12.0)
       '@tiptap/core':
         specifier: ^2.12.0
         version: 2.12.0(@tiptap/pm@2.12.0)
@@ -1776,21 +1773,6 @@ packages:
 
   '@swc/types@0.1.21':
     resolution: {integrity: sha512-2YEtj5HJVbKivud9N4bpPBAyZhj4S2Ipe5LkUG94alTpr7in/GU/EARgPAd3BwU+YOmFVJC2+kjqhGRi3r0ZpQ==}
-
-  '@tiptap-pro/extension-ai-advanced@2.21.3':
-    resolution: {integrity: sha512-y1DQ/fmAi8DEtD98/mXEjWu34g66/hD03ndPX9D6L/72sUbr8XNzuaGeYZX5NP7ZsCLUq8xAQDLuHDl6t9+QAw==}
-    peerDependencies:
-      '@tiptap-pro/extension-ai': ^2.8.9
-      '@tiptap/core': ^2.0.0
-      '@tiptap/extension-image': ^2.0.0
-      '@tiptap/pm': ^2.0.0
-
-  '@tiptap-pro/extension-ai@2.21.3':
-    resolution: {integrity: sha512-cCmcd6oXulyvQ4L64QZ4sM8lna+Uwv6qe7GwEmBR/q/8h/KaPmeqDchpSjowKA8Gq02KrMxdxCb8PED2VUzT+Q==}
-    peerDependencies:
-      '@tiptap/core': ^2.0.0
-      '@tiptap/extension-image': ^2.0.0
-      '@tiptap/pm': ^2.0.0
 
   '@tiptap/core@2.12.0':
     resolution: {integrity: sha512-3qX8oGVKFFZzQ0vit+ZolR6AJIATBzmEmjAA0llFhWk4vf3v64p1YcXcJsOBsr5scizJu5L6RYWEFatFwqckRg==}
@@ -5145,9 +5127,6 @@ packages:
     resolution: {integrity: sha512-UERzLsxzllchadvbPs5aolHh65ISpKpM+ccLbOJ8/vvpBKmAWf+la7dXFy7Mr0ySHbdHrFv5kGFCUHHe6GFEmw==}
     engines: {node: '>= 4.0.0'}
 
-  memoize-one@6.0.0:
-    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
-
   meow@8.1.2:
     resolution: {integrity: sha512-r85E3NdZ+mpYk1C6RjPFEMSE+s1iZMuHtsHAqY0DT3jZczl0diWUZ8g6oU7h0M9cD2EL+PzaYghhCLzR0ZNn5Q==}
     engines: {node: '>=10'}
@@ -7134,9 +7113,6 @@ packages:
   timers-browserify@2.0.12:
     resolution: {integrity: sha512-9phl76Cqm6FhSX9Xe1ZUAMLtm1BLkKj2Qd5ApyWkXzsMRaA7dgr81kf4wJmQf/hAvg8EEyJxDo3du/0KlhPiKQ==}
     engines: {node: '>=0.6.0'}
-
-  tiny-invariant@1.3.3:
-    resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
 
   tinyglobby@0.2.13:
     resolution: {integrity: sha512-mEwzpUgrLySlveBwEVDMKk5B57bhLPYovRfPAXD5gA/98Opn0rCDj3GtLwFvCvH5RK9uPCExUROW5NjDwvqkxw==}
@@ -9209,23 +9185,6 @@ snapshots:
   '@swc/types@0.1.21':
     dependencies:
       '@swc/counter': 0.1.3
-
-  '@tiptap-pro/extension-ai-advanced@2.21.3(@tiptap-pro/extension-ai@2.21.3(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))(@tiptap/extension-image@2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0)))(@tiptap/pm@2.12.0))(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))(@tiptap/extension-image@2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0)))(@tiptap/pm@2.12.0)':
-    dependencies:
-      '@tiptap-pro/extension-ai': 2.21.3(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))(@tiptap/extension-image@2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0)))(@tiptap/pm@2.12.0)
-      '@tiptap/core': 2.12.0(@tiptap/pm@2.12.0)
-      '@tiptap/extension-image': 2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))
-      '@tiptap/pm': 2.12.0
-      memoize-one: 6.0.0
-      tiny-invariant: 1.3.3
-
-  '@tiptap-pro/extension-ai@2.21.3(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))(@tiptap/extension-image@2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0)))(@tiptap/pm@2.12.0)':
-    dependencies:
-      '@tiptap/core': 2.12.0(@tiptap/pm@2.12.0)
-      '@tiptap/extension-image': 2.12.0(@tiptap/core@2.12.0(@tiptap/pm@2.12.0))
-      '@tiptap/pm': 2.12.0
-      memoize-one: 6.0.0
-      tiny-invariant: 1.3.3
 
   '@tiptap/core@2.12.0(@tiptap/pm@2.12.0)':
     dependencies:
@@ -13564,8 +13523,6 @@ snapshots:
     dependencies:
       fs-monkey: 1.0.6
 
-  memoize-one@6.0.0: {}
-
   meow@8.1.2:
     dependencies:
       '@types/minimist': 1.2.5
@@ -16043,8 +16000,6 @@ snapshots:
   timers-browserify@2.0.12:
     dependencies:
       setimmediate: 1.0.5
-
-  tiny-invariant@1.3.3: {}
 
   tinyglobby@0.2.13:
     dependencies:

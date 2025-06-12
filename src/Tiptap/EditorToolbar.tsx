@@ -2,6 +2,7 @@ import { Divider, Stack } from "@mui/material";
 import { ThemeProvider } from "ct-mui";
 import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React from "react";
+import EditorAIAssistant from "./component/EditorAIAssistant";
 import EditorAlign from "./component/EditorAlign";
 import EditorCode from "./component/EditorCode";
 import EditorFontSize from "./component/EditorFontSize";
@@ -32,7 +33,7 @@ type EditorToolbarProps = {
 
 const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
   if (!editorRef) return null;
-  const { editor, onUpload } = editorRef;
+  const { editor, onUpload, onAi } = editorRef;
   return <ThemeProvider
     colors={{ light }}
     mode="light"
@@ -166,6 +167,8 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         editorRef.setImageFile(file)
         editorRef.setImageEditOpen(true)
       }} />
+      <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
+      <EditorAIAssistant editor={editor} onAi={onAi} />
     </Stack>
   </ThemeProvider>
 }

@@ -41,6 +41,7 @@ export default () => {
 
   const editorRef = useTiptapEditor({
     content: '',
+    aiUrl: '/api/v1/creation/text',
     onSave,
     onUpdate,
     onUpload: handleFileUpload,
@@ -66,20 +67,12 @@ export default () => {
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>editor</button>
-      <Modal
-        title={'Editor'}
-        open={open}
-        width={'100vw'}
-        onCancel={() => setOpen(false)}
-      >
-        <div style={{ border: '1px solid #ccc' }}>
+      <div style={{ border: '1px solid #ccc' }}>
           <TiptapToolbar editorRef={editorRef} />
           <div style={{ padding: 48, height: '50vh', overflow: 'auto' }}>
             <TiptapEditor editorRef={editorRef} />
           </div>
         </div>
-      </Modal>
     </>
   );
 };

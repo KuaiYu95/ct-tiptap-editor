@@ -1,98 +1,83 @@
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import { Button, MenuItem, Popover } from '@mui/material';
-import { type Editor } from '@tiptap/core';
-import React, { useEffect, useState } from 'react';
-import { AiIcon } from '../icons/ai-icon';
+import { Box, MenuItem, Select, Stack } from "@mui/material";
+import { type Editor } from "@tiptap/react";
+import { Message } from "ct-mui";
+import React from "react";
+import { AiIcon } from "../icons/ai-icon";
+import { ArrowIcon } from "../icons/arrow-icon";
+import EditorToolbarButton from "./EditorToolbarButton";
 
-const EditorAIAssistant = ({ editor }: { editor: Editor }) => {
-  const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null);
-  const [selectedText, setSelectedText] = useState<string>('');
-  const [selectionPosition, setSelectionPosition] = useState<{ left: number; top: number } | null>(null);
+interface EditorAIAssistantProps {
+  editor: Editor
+  onAi?: (text: string, action: string) => Promise<string>
+}
 
-  useEffect(() => {
-    if (!editor) return;
-
-    const handleSelectionUpdate = () => {
-      const { from, to } = editor.state.selection;
-      const text = editor.state.doc.textBetween(from, to);
-
-      if (text && from !== to) {
-        setSelectedText(text);
-        // 获取选中文本的位置
-        const { view } = editor;
-        const start = view.coordsAtPos(from);
-        const end = view.coordsAtPos(to);
-
-        setSelectionPosition({
-          left: end.left - 26,
-          top: end.top - 200
-        });
-      } else {
-        setSelectionPosition(null);
-        setSelectedText('');
-      }
-    };
-
-    editor.on('selectionUpdate', handleSelectionUpdate);
-
-    return () => {
-      editor.off('selectionUpdate', handleSelectionUpdate);
-    };
-  }, [editor]);
-
-  const handleRephrase = () => {
-    if (selectedText) {
-      editor.chain().focus().aiRephrase({
-        text: selectedText,
-        stream: true,
-      }).run();
+const EditorAIAssistant = ({ editor, onAi }: EditorAIAssistantProps) => {
+  const UploadOptions = [
+    { id: 'rephrase', label: '重新润色' },
+  ];
+  const handleChange = async (e: { target: { value: string } }) => {
+    if (!onAi) {
+      Message.error('未配置 AI 回调')
+      return
     }
-    setPopoverAnchor(null);
+    const value = e.target.value;
+    if (value === 'rephrase') {
+      const { from, to } = editor.state.selection;
+      const selectedText = editor.state.doc.textBetween(from, to, "\n");
+      if (!selectedText) {
+        Message.error('请先选择文本')
+        return
+      }
+      const result = await onAi(selectedText, 'rephrase')
+      console.log(result)
+    }
   };
 
-  return (
-    <>
-      {selectionPosition && (
-        <Button
-          variant='contained'
-          sx={{
-            width: 32,
-            height: 32,
-            minWidth: 0,
-            position: 'absolute',
-            left: `${selectionPosition.left}px`,
-            top: `${selectionPosition.top}px`,
-            zIndex: 2000,
-            padding: '4px',
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            setPopoverAnchor(e.currentTarget);
-          }}
-        >
-          <AiIcon sx={{ fontSize: 16 }} />
-        </Button>
-      )}
-      <Popover
-        open={Boolean(popoverAnchor)}
-        anchorEl={popoverAnchor}
-        onClose={() => setPopoverAnchor(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <MenuItem onClick={handleRephrase}>
-          <AutoFixHighIcon sx={{ mr: 1, fontSize: 16 }} />
-          重写文本
+  return <>
+    <Select
+      value={'none'}
+      onChange={handleChange}
+      renderValue={() => {
+        return <EditorToolbarButton
+          tip={'AI'}
+          icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
+            <AiIcon sx={{ fontSize: 14 }} />
+          </Stack>}
+        />;
+      }}
+      IconComponent={({ className, ...rest }) => {
+        return (
+          <ArrowIcon
+            sx={{
+              position: 'absolute',
+              right: 0,
+              flexSelf: 'center',
+              fontSize: 14,
+              flexShrink: 0,
+              mr: 0,
+              transform: className?.includes('MuiSelect-iconOpen') ? 'rotate(-180deg)' : 'none',
+              transition: 'transform 0.3s',
+              cursor: 'pointer',
+              pointerEvents: 'none'
+            }}
+            {...rest}
+          />
+        );
+      }}
+    >
+      <MenuItem key={'none'} value={'none'} sx={{ display: 'none' }}>
+        <AiIcon sx={{ fontSize: 14 }} />
+        <Box sx={{ ml: 0.5 }}>无</Box>
+      </MenuItem>
+      {UploadOptions.map(it => {
+        return <MenuItem key={it.id} value={it.id}>
+          <Stack direction={'row'} alignItems={'center'} gap={0.5}>
+            <Box>{it.label}</Box>
+          </Stack>
         </MenuItem>
-      </Popover>
-    </>
-  );
-};
+      })}
+    </Select>
+  </>
+}
 
-export default EditorAIAssistant; 
+export default EditorAIAssistant

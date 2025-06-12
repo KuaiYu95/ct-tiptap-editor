@@ -4,7 +4,6 @@ import { ThemeProvider } from "ct-mui";
 import { type UseTiptapEditorReturn } from "ct-tiptap-editor";
 import React from "react";
 import DragHandle from "./component/DragHandler";
-import EditorAIAssistant from "./component/EditorAIAssistant";
 import ImageEditDialog from "./component/ImageEditDialog";
 import { DragIcon } from "./icons/drag-icon";
 import './index.css';
@@ -32,7 +31,6 @@ const TiptapEditor = ({ editorRef }: TiptapEditorProps) => {
       </DragHandle>
       <Box className="editor-container" >
         <EditorContent editor={editor} />
-        <EditorAIAssistant editor={editor} />
       </Box>
       <ImageEditDialog
         open={imageEditOpen}

@@ -1,4 +1,3 @@
-import Ai from '@tiptap-pro/extension-ai-advanced';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
 import Dropcursor from '@tiptap/extension-dropcursor';
@@ -36,16 +35,9 @@ type UploadOptions = {
   onUpload?: UploadFunction,
 }
 
-type AiOptions = {
-  apiUrl: string,
-  appId: string,
-  token: string,
-}
-
 const lowlight = createLowlight(all)
 const extensions = (
-  { ai, upload, onError }: {
-    ai: AiOptions,
+  { upload, onError }: {
     upload?: UploadOptions,
     onError?: (error: Error) => void
   }
@@ -63,27 +55,6 @@ const extensions = (
   Image.configure({
     allowBase64: true,
     inline: true,
-  }),
-  Ai.configure({
-    appId: ai.appId,
-    token: ai.token,
-    onError: onError,
-    aiStreamResolver: async ({ action, text, textOptions }) => {
-      const fetchOptions = {
-        method: 'POST',
-        headers: {
-          accept: 'application/json',
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...textOptions,
-          text,
-          action,
-        }),
-      }
-      const response = await fetch(ai.apiUrl, fetchOptions);
-      return response.body;
-    }
   }),
   Video,
   VideoUploadNode.configure({

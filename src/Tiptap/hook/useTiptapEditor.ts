@@ -12,15 +12,11 @@ export interface Nav {
 }
 
 export interface UseTiptapEditorProps {
-  ai: {
-    apiUrl: string;
-    appId: string;
-    token: string;
-  },
   content: string;
   editable?: boolean;
-  onSave?: (html: string) => void;
   size?: number
+  onAi?: (text: string, action: string) => Promise<string>
+  onSave?: (html: string) => void;
   onUpdate?: (content: string) => void;
   onUpload?: UploadFunction
   onError?: (error: Error) => void
@@ -28,11 +24,13 @@ export interface UseTiptapEditorProps {
 
 export type UseTiptapEditorReturn = {
   editor: Editor;
+
   setCallback: (callback: () => void) => void;
   setContent: (content: string) => Promise<Nav[]>;
 
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
+  onAi?: (text: string, action: string) => Promise<string>
 
   imageEditOpen: boolean;
   setImageEditOpen: (open: boolean) => void;
@@ -44,10 +42,10 @@ export type UseTiptapEditorReturn = {
 } | null
 
 const useTiptapEditor = ({
-  ai,
   content,
   size,
   editable = true,
+  onAi,
   onSave,
   onUpdate,
   onUpload,
@@ -63,7 +61,6 @@ const useTiptapEditor = ({
     immediatelyRender: false,
     editable,
     extensions: extensions({
-      ai,
       upload: {
         size: size || 20,
         onUpload,
@@ -235,6 +232,8 @@ const useTiptapEditor = ({
 
   return {
     editor: editor!,
+
+    onAi,
 
     onUpload,
     onError,
