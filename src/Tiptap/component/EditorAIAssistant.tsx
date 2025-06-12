@@ -16,6 +16,7 @@ interface EditorAIAssistantProps {
 
 const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
   const sseClientRef = useRef<SSEClient<string> | null>(null);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState('');
@@ -74,6 +75,12 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (dialogContentRef.current) {
+      dialogContentRef.current.scrollTop = dialogContentRef.current.scrollHeight;
+    }
+  }, [content]);
+
   return <>
     <Modal
       width={600}
@@ -103,17 +110,17 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
         readEditor?.setContent('')
       }}
     >
-      {readEditor?.editor && content.length > 0 && <Box sx={{
-        '.tiptap.ProseMirror': {
-          padding: '0px',
-          maxHeight: '50vh',
-          overflow: 'auto'
-        }
-      }}>
-        <EditorContent editor={readEditor.editor} />
-      </Box>}
-      {loading && <Skeleton variant="text" height={20} width={'100%'} />}
-      {loading && <Skeleton variant="text" height={20} width={'60%'} />}
+      <Box ref={dialogContentRef} sx={{ maxHeight: '60vh', overflow: 'auto' }}>
+        {readEditor?.editor && content.length > 0 && <Box sx={{
+          '.tiptap.ProseMirror': {
+            padding: '0px',
+          }
+        }}>
+          <EditorContent editor={readEditor.editor} />
+        </Box>}
+        {loading && <Skeleton variant="text" height={20} width={'100%'} />}
+        {loading && <Skeleton variant="text" height={20} width={'60%'} />}
+      </Box>
     </Modal>
     <Select
       value={'none'}
