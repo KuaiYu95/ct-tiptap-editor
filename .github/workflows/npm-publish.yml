@@ -17,16 +17,9 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org/'
 
-      - name: 设置环境变量
-        run: |
-          echo "TIPTAP_PRO_TOKEN=${{ secrets.TIPTAP_PRO_TOKEN }}" >> $GITHUB_ENV
-
       - name: 设置 .npmrc
         run: |
           echo "registry=https://registry.npmjs.org/" > .npmrc
-          echo "@tiptap-pro:registry=https://registry.tiptap.dev/" >> .npmrc
-          echo "@tiptap-cloud:registry=https://registry.tiptap.dev/" >> .npmrc
-          echo "//registry.tiptap.dev/:_authToken=${TIPTAP_PRO_TOKEN}" >> .npmrc
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v2
@@ -58,4 +51,3 @@ jobs:
         run: pnpm publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          TIPTAP_PRO_TOKEN: ${{ secrets.TIPTAP_PRO_TOKEN }}

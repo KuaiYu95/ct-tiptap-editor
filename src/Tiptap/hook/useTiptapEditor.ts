@@ -15,7 +15,7 @@ export interface UseTiptapEditorProps {
   content: string;
   editable?: boolean;
   size?: number
-  onAi?: (text: string, action: string) => Promise<string>
+  aiUrl?: string
   onSave?: (html: string) => void;
   onUpdate?: (content: string) => void;
   onUpload?: UploadFunction
@@ -30,7 +30,7 @@ export type UseTiptapEditorReturn = {
 
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
-  onAi?: (text: string, action: string) => Promise<string>
+  aiUrl?: string
 
   imageEditOpen: boolean;
   setImageEditOpen: (open: boolean) => void;
@@ -45,7 +45,7 @@ const useTiptapEditor = ({
   content,
   size,
   editable = true,
-  onAi,
+  aiUrl,
   onSave,
   onUpdate,
   onUpload,
@@ -233,7 +233,7 @@ const useTiptapEditor = ({
   return {
     editor: editor!,
 
-    onAi,
+    aiUrl,
 
     onUpload,
     onError,
