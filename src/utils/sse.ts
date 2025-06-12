@@ -14,13 +14,11 @@ class SSEClient<T> {
   private controller: AbortController;
   private reader: ReadableStreamDefaultReader<Uint8Array> | null;
   private textDecoder: TextDecoder;
-  private buffer: string;
 
   constructor(private options: SSEClientOptions) {
     this.controller = new AbortController();
     this.reader = null;
     this.textDecoder = new TextDecoder();
-    this.buffer = '';
   }
 
   public subscribe(body: BodyInit, onMessage: SSECallback<T>) {
@@ -80,15 +78,8 @@ class SSEClient<T> {
   private processChunk(chunk: Uint8Array | undefined, callback: SSECallback<T>) {
     if (!chunk) return;
 
-    this.buffer += this.textDecoder.decode(chunk, { stream: true });
-    const lines = this.buffer.split('\n');
-
-    for (let i = 0; i < lines.length - 1; i++) {
-      const line = lines[i].trim();
-      callback((line + '\n') as T);
-    }
-
-    this.buffer = lines[lines.length - 1];
+    const buffer = this.textDecoder.decode(chunk, { stream: true });
+    callback(buffer as T);
   }
 
   public unsubscribe() {

@@ -7,9 +7,17 @@ export default defineConfig({
     name: 'ct-tiptap-editor',
   },
   proxy: {
-    '/api': {
+    '/api/v1/creation/text': {
       target: 'http://localhost:9000',
       changeOrigin: true,
+      ws: true,
+      onProxyRes: function (proxyRes, req, res) {
+        proxyRes.headers['connection'] = 'keep-alive';
+        proxyRes.headers['cache-control'] = 'no-cache';
+        proxyRes.headers['content-type'] = 'text/event-stream';
+        proxyRes.headers['x-accel-buffering'] = 'no';
+        proxyRes.headers['transfer-encoding'] = 'chunked';
+      }
     },
   },
 });

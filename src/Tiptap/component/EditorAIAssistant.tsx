@@ -1,8 +1,10 @@
-import { Box, MenuItem, Select, Stack } from "@mui/material";
-import { type Editor } from "@tiptap/react";
+import ErrorIcon from '@mui/icons-material/Error';
+import { Box, CircularProgress, MenuItem, Select, Skeleton, Stack } from "@mui/material";
+import { EditorContent, type Editor } from "@tiptap/react";
 import { Message, Modal } from "ct-mui";
 import SSEClient from "ct-tiptap-editor/utils/sse";
 import React, { useEffect, useRef, useState } from "react";
+import useTiptapEditor from '../hook/useTiptapEditor';
 import { AiIcon } from "../icons/ai-icon";
 import { ArrowIcon } from "../icons/arrow-icon";
 import EditorToolbarButton from "./EditorToolbarButton";
@@ -15,13 +17,21 @@ interface EditorAIAssistantProps {
 const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
   const sseClientRef = useRef<SSEClient<string> | null>(null);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [content, setContent] = useState('');
 
+  const readEditor = useTiptapEditor({
+    content,
+    editable: false,
+  })
+
   const UploadOptions = [
-    { id: 'rephrase', label: '重新润色' },
+    { id: 'rephrase', label: '文本润色' },
   ];
 
   const handleChange = async (e: { target: { value: string } }) => {
+    readEditor?.setContent('');
+    setContent('');
     if (!aiUrl) {
       Message.error('未配置 AI 地址');
       return;
@@ -36,12 +46,17 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
       }
       if (!sseClientRef.current) return
       setOpen(true)
+      setLoading(true)
       sseClientRef.current.subscribe(JSON.stringify({
         text: selectedText,
         action: 'rephrase',
         stream: true,
       }), (data) => {
-        setContent((prev) => prev + data);
+        setContent((prev) => {
+          const newContent = prev + data;
+          readEditor?.setContent(newContent);
+          return newContent;
+        });
       });
     }
   };
@@ -53,29 +68,52 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      onComplete: () => {
+        setLoading(false)
+      }
     });
   }, []);
 
   return <>
     <Modal
+      width={600}
       open={open}
       onCancel={() => {
+        sseClientRef.current?.unsubscribe();
         setContent('')
         setOpen(false)
+        readEditor?.setContent('')
       }}
-      title={'AI 润色'}
-      okText={'确定'}
+      title={loading ? <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: '28px' }}>
+        <CircularProgress size={16} />
+        <Box>AI 润色中...</Box>
+      </Stack> : <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: '28px' }}>
+        <ErrorIcon sx={{ fontSize: 20, color: 'warning.main' }} />
+        <Box>是否使用以下文本替换选中内容</Box>
+        <Box sx={{ color: 'text.disabled', fontSize: 12 }}>({content.length} 字)</Box>
+      </Stack>}
+      okText={'替换'}
       cancelText={'取消'}
+      okButtonProps={{ disabled: loading }}
       onOk={() => {
         const { from, to } = editor.state.selection;
         editor.commands.insertContentAt({ from, to }, content);
         setOpen(false);
         setContent('');
+        readEditor?.setContent('')
       }}
     >
-      <Box sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', fontSize: 14, maxHeight: '50vh', overflowY: 'auto' }}>
-        {content}
-      </Box>
+      {readEditor?.editor && content.length > 0 && <Box sx={{
+        '.tiptap.ProseMirror': {
+          padding: '0px',
+          maxHeight: '50vh',
+          overflow: 'auto'
+        }
+      }}>
+        <EditorContent editor={readEditor.editor} />
+      </Box>}
+      {loading && <Skeleton variant="text" height={20} width={'100%'} />}
+      {loading && <Skeleton variant="text" height={20} width={'60%'} />}
     </Modal>
     <Select
       value={'none'}
