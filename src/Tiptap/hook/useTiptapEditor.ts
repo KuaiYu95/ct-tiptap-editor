@@ -12,6 +12,11 @@ export interface Nav {
 }
 
 export interface UseTiptapEditorProps {
+  ai: {
+    apiUrl: string;
+    appId: string;
+    token: string;
+  },
   content: string;
   editable?: boolean;
   onSave?: (html: string) => void;
@@ -39,6 +44,7 @@ export type UseTiptapEditorReturn = {
 } | null
 
 const useTiptapEditor = ({
+  ai,
   content,
   size,
   editable = true,
@@ -56,7 +62,14 @@ const useTiptapEditor = ({
   const editor = useEditor({
     immediatelyRender: false,
     editable,
-    extensions: extensions(size || 20, onUpload, onError),
+    extensions: extensions({
+      ai,
+      upload: {
+        size: size || 20,
+        onUpload,
+      },
+      onError
+    }),
     content: content ? setHeadingsId(content) : '',
     onUpdate: ({ editor }) => {
       onUpdate?.(editor.getHTML());

@@ -31,18 +31,24 @@ import TrailingNode from "./TrailingNode";
 import Video from './Video';
 import VideoUploadNode, { UploadFunction } from './VideoUpload';
 
+type UploadOptions = {
+  size?: number,
+  onUpload?: UploadFunction,
+}
+
+type AiOptions = {
+  apiUrl: string,
+  appId: string,
+  token: string,
+}
+
 const lowlight = createLowlight(all)
 const extensions = (
-  ai: {
-    apiUrl: string,
-    appId: string,
-    token: string,
-  },
-  upload?: {
-    size?: number,
-    onUpload?: UploadFunction,
-  },
-  onError?: (error: Error) => void
+  { ai, upload, onError }: {
+    ai: AiOptions,
+    upload?: UploadOptions,
+    onError?: (error: Error) => void
+  }
 ) => ([
   StarterKit,
   HardBreak,
