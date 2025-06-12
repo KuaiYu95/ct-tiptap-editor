@@ -1,6 +1,6 @@
 {
   "name": "ct-tiptap-editor",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "description": "基于 Tiptap 二次开发的编辑器组件",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -94,6 +94,7 @@
     "@mui/lab": "7.0.0-beta.12",
     "@mui/material": "^7.1.0",
     "@reduxjs/toolkit": "^2.8.2",
+    "@tiptap-pro/extension-ai-advanced": "^2.21.3",
     "@tiptap/core": "^2.12.0",
     "@tiptap/extension-code-block-lowlight": "^2.12.0",
     "@tiptap/extension-collaboration": "^2.14.0",

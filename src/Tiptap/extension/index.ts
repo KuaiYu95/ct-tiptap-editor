@@ -1,3 +1,4 @@
+import Ai from '@tiptap-pro/extension-ai-advanced';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
 import Dropcursor from '@tiptap/extension-dropcursor';
@@ -31,7 +32,18 @@ import Video from './Video';
 import VideoUploadNode, { UploadFunction } from './VideoUpload';
 
 const lowlight = createLowlight(all)
-const extensions = (size: number, onUpload?: UploadFunction, onError?: (error: Error) => void) => ([
+const extensions = (
+  ai: {
+    apiUrl: string,
+    appId: string,
+    token: string,
+  },
+  upload?: {
+    size?: number,
+    onUpload?: UploadFunction,
+  },
+  onError?: (error: Error) => void
+) => ([
   StarterKit,
   HardBreak,
   HorizontalRule,
@@ -46,12 +58,33 @@ const extensions = (size: number, onUpload?: UploadFunction, onError?: (error: E
     allowBase64: true,
     inline: true,
   }),
+  Ai.configure({
+    appId: ai.appId,
+    token: ai.token,
+    onError: onError,
+    aiStreamResolver: async ({ action, text, textOptions }) => {
+      const fetchOptions = {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...textOptions,
+          text,
+          action,
+        }),
+      }
+      const response = await fetch(ai.apiUrl, fetchOptions);
+      return response.body;
+    }
+  }),
   Video,
   VideoUploadNode.configure({
     accept: 'video/*',
-    maxSize: 1024 * 1024 * size,
+    maxSize: 1024 * 1024 * (upload?.size || 20),
     limit: 1,
-    upload: onUpload,
+    upload: upload?.onUpload,
     onError: onError,
     onSuccess: (url) => console.log('Upload success:', url),
   }),
