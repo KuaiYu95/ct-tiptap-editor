@@ -1,7 +1,8 @@
 import ErrorIcon from '@mui/icons-material/Error';
-import { Box, CircularProgress, MenuItem, Select, Skeleton, Stack } from "@mui/material";
+import { Box, CircularProgress, Divider, MenuItem, Select, Skeleton, Stack } from "@mui/material";
 import { EditorContent, type Editor } from "@tiptap/react";
 import { Message, Modal } from "ct-mui";
+import getSelectedHTML from 'ct-tiptap-editor/utils/selection-html';
 import SSEClient from "ct-tiptap-editor/utils/sse";
 import React, { useEffect, useRef, useState } from "react";
 import useTiptapEditor from '../hook/useTiptapEditor';
@@ -26,19 +27,25 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
     editable: false,
   })
 
+  const defaultEditor = useTiptapEditor({
+    content: '',
+    editable: false,
+  })
+
   const UploadOptions = [
     { id: 'rephrase', label: '文本润色' },
   ];
 
   const handleChange = async (e: { target: { value: string } }) => {
-    readEditor?.setContent('');
-    setContent('');
     if (!aiUrl) {
       Message.error('未配置 AI 地址');
       return;
     }
     const value = e.target.value;
     if (value === 'rephrase') {
+      const selectedHtml = getSelectedHTML(editor);
+      console.log(selectedHtml)
+      defaultEditor?.setContent(selectedHtml)
       const { from, to } = editor.state.selection;
       const selectedText = editor.state.doc.textBetween(from, to, "\n");
       if (!selectedText) {
@@ -83,12 +90,13 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
 
   return <>
     <Modal
-      width={600}
+      width={1000}
       open={open}
       onCancel={() => {
         sseClientRef.current?.unsubscribe();
         setContent('')
         setOpen(false)
+        defaultEditor?.setContent('')
         readEditor?.setContent('')
       }}
       title={loading ? <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: '28px' }}>
@@ -107,21 +115,32 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
         editor.commands.insertContentAt({ from, to }, content);
         setOpen(false);
         setContent('');
+        defaultEditor?.setContent('')
         readEditor?.setContent('')
       }}
     >
       <Box ref={dialogContentRef} sx={{ maxHeight: '60vh', overflow: 'auto' }}>
-        {readEditor?.editor && content.length > 0 && <Box sx={{
-          '.tiptap.ProseMirror': {
-            padding: '0px',
-          }
-        }}>
-          <EditorContent editor={readEditor.editor} />
-        </Box>}
-        {loading && <Skeleton variant="text" height={20} width={'100%'} />}
-        {loading && <Skeleton variant="text" height={20} width={'60%'} />}
-      </Box>
-    </Modal>
+        <Stack direction={'row'}>
+          <Box sx={{ width: '50%', flex: 1, paddingRight: 1 }}>
+            {defaultEditor?.editor && <Box className="editor-container" >
+              <EditorContent editor={defaultEditor.editor} />
+            </Box>}
+          </Box>
+          <Divider orientation="vertical" flexItem />
+          <Box sx={{ width: '50%', flex: 1, paddingLeft: 1 }}>
+            {readEditor?.editor && content.length > 0 && <Box className="editor-container" sx={{
+              '.tiptap.ProseMirror': {
+                padding: '0px',
+              }
+            }}>
+              <EditorContent editor={readEditor.editor} />
+            </Box>}
+            {loading && <Skeleton variant="text" height={20} width={'100%'} />}
+            {loading && <Skeleton variant="text" height={20} width={'60%'} />}
+          </Box>
+        </Stack>
+      </Box >
+    </Modal >
     <Select
       value={'none'}
       onChange={handleChange}
