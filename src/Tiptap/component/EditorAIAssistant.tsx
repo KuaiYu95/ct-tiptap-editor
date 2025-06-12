@@ -41,6 +41,7 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
         action: 'rephrase',
         stream: true,
       }), (data) => {
+        console.log(data)
         setContent((prev) => prev + data)
       })
     }
