@@ -35,6 +35,7 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
         return
       }
       if (!sseClientRef.current) return
+      setOpen(true)
       sseClientRef.current.subscribe(JSON.stringify({
         text: selectedText,
         action: 'rephrase',
