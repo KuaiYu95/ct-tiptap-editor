@@ -6,6 +6,12 @@ export default defineConfig({
   themeConfig: {
     name: 'ct-tiptap-editor',
   },
+  proxy: {
+    '/api': {
+      target: 'http://localhost:9000',
+      changeOrigin: true,
+    },
+  },
 });
 
 declare module '@tiptap/core' {

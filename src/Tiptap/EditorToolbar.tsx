@@ -33,7 +33,7 @@ type EditorToolbarProps = {
 
 const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
   if (!editorRef) return null;
-  const { editor, onUpload, onAi } = editorRef;
+  const { editor, onUpload, aiUrl } = editorRef;
   return <ThemeProvider
     colors={{ light }}
     mode="light"
@@ -168,7 +168,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         editorRef.setImageEditOpen(true)
       }} />
       <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
-      <EditorAIAssistant editor={editor} onAi={onAi} />
+      <EditorAIAssistant editor={editor} aiUrl={aiUrl} />
     </Stack>
   </ThemeProvider>
 }

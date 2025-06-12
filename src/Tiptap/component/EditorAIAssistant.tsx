@@ -1,39 +1,82 @@
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { type Editor } from "@tiptap/react";
-import { Message } from "ct-mui";
-import React from "react";
+import { Message, Modal } from "ct-mui";
+import SSEClient from "ct-tiptap-editor/utils/sse";
+import React, { useEffect, useRef, useState } from "react";
 import { AiIcon } from "../icons/ai-icon";
 import { ArrowIcon } from "../icons/arrow-icon";
 import EditorToolbarButton from "./EditorToolbarButton";
 
 interface EditorAIAssistantProps {
   editor: Editor
-  onAi?: (text: string, action: string) => Promise<string>
+  aiUrl?: string
 }
 
-const EditorAIAssistant = ({ editor, onAi }: EditorAIAssistantProps) => {
+const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
+  const sseClientRef = useRef<SSEClient<string> | null>(null);
+  const [open, setOpen] = useState(false);
+  const [content, setContent] = useState('');
+
   const UploadOptions = [
     { id: 'rephrase', label: '重新润色' },
   ];
+
   const handleChange = async (e: { target: { value: string } }) => {
-    if (!onAi) {
-      Message.error('未配置 AI 回调')
-      return
+    if (!aiUrl) {
+      Message.error('未配置 AI 地址');
+      return;
     }
     const value = e.target.value;
     if (value === 'rephrase') {
       const { from, to } = editor.state.selection;
       const selectedText = editor.state.doc.textBetween(from, to, "\n");
       if (!selectedText) {
-        Message.error('请先选择文本')
-        return
+        Message.error('请先选择文本');
+        return;
       }
-      const result = await onAi(selectedText, 'rephrase')
-      console.log(result)
+      if (!sseClientRef.current) return
+      setOpen(true)
+      sseClientRef.current.subscribe(JSON.stringify({
+        text: selectedText,
+        action: 'rephrase',
+        stream: true,
+      }), (data) => {
+        setContent((prev) => prev + data);
+      });
     }
   };
 
+  useEffect(() => {
+    if (!aiUrl) return
+    sseClientRef.current = new SSEClient({
+      url: aiUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }, []);
+
   return <>
+    <Modal
+      open={open}
+      onCancel={() => {
+        setContent('')
+        setOpen(false)
+      }}
+      title={'AI 润色'}
+      okText={'确定'}
+      cancelText={'取消'}
+      onOk={() => {
+        const { from, to } = editor.state.selection;
+        editor.commands.insertContentAt({ from, to }, content);
+        setOpen(false);
+        setContent('');
+      }}
+    >
+      <Box sx={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all', fontSize: 14, maxHeight: '50vh', overflowY: 'auto' }}>
+        {content}
+      </Box>
+    </Modal>
     <Select
       value={'none'}
       onChange={handleChange}
