@@ -23,27 +23,33 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
 
   const handleChange = async (e: { target: { value: string } }) => {
     if (!aiUrl) {
-      Message.error('未配置 AI 地址')
-      return
+      Message.error('未配置 AI 地址');
+      return;
     }
     const value = e.target.value;
     if (value === 'rephrase') {
       const { from, to } = editor.state.selection;
       const selectedText = editor.state.doc.textBetween(from, to, "\n");
       if (!selectedText) {
-        Message.error('请先选择文本')
-        return
+        Message.error('请先选择文本');
+        return;
       }
+      console.log('selectedText', selectedText)
       if (!sseClientRef.current) return
       setOpen(true)
+      console.log('sseClientRef.current', sseClientRef.current)
       sseClientRef.current.subscribe(JSON.stringify({
         text: selectedText,
         action: 'rephrase',
         stream: true,
       }), (data) => {
-        console.log(data)
-        setContent((prev) => prev + data)
-      })
+        console.log('Received data:', data);
+        setContent((prev) => {
+          const newContent = prev + data;
+          console.log('Updated content:', newContent);
+          return newContent;
+        });
+      });
     }
   };
 
@@ -60,7 +66,10 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
   return <>
     <Modal
       open={open}
-      onCancel={() => setOpen(false)}
+      onCancel={() => {
+        setContent('')
+        setOpen(false)
+      }}
       title={'AI 润色'}
       okText={'确定'}
       cancelText={'取消'}
