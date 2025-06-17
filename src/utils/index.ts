@@ -35,7 +35,7 @@ export function setHeadingsId(html: string): string {
 
   headings.forEach((heading) => {
     if (!heading.id) {
-      heading.id = `heading-${Math.random().toString(36).substring(2, 15)}`;
+      heading.id = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     }
   });
   return doc.body.innerHTML;
