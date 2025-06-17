@@ -1,3 +1,4 @@
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
 import Dropcursor from '@tiptap/extension-dropcursor';
 import Gapcursor from '@tiptap/extension-gapcursor';
@@ -36,8 +37,13 @@ type UploadOptions = {
 }
 
 const lowlight = createLowlight(all)
+
 const extensions = (
-  { upload, onError }: {
+  {
+    editable,
+    upload, onError
+  }: {
+    editable?: boolean,
     upload?: UploadOptions,
     onError?: (error: Error) => void
   }
@@ -94,9 +100,11 @@ const extensions = (
   TrailingNode,
   FontSize,
   TabKeyExtension,
-  CodeBlock.configure({
+  ...(!editable ? [CodeBlock.configure({
     lowlight,
-  }),
+  })] : [CodeBlockLowlight.configure({
+    lowlight,
+  })]),
   TextAlign.configure({
     types: ["heading", "paragraph"],
     alignments: ['left', 'center', 'right', 'justify']

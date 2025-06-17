@@ -56,7 +56,6 @@ export const CodeBlock = CodeBlockLowlight.extend({
                 const pre = wrapper?.querySelector('pre')
                 if (pre) {
                   const code = pre.textContent || ''
-                  console.log(code)
                   try {
                     if (navigator.clipboard) {
                       navigator.clipboard.writeText(code).then(() => {

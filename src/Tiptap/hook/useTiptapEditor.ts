@@ -61,6 +61,7 @@ const useTiptapEditor = ({
     immediatelyRender: false,
     editable,
     extensions: extensions({
+      editable,
       upload: {
         size: size || 20,
         onUpload,
