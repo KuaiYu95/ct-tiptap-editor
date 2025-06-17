@@ -227,7 +227,7 @@ const useTiptapEditor = ({
   }
 
   if (!editor) {
-    console.error('editor is not initialized')
+    console.log('editor is not initialized')
     return null
   }
 
