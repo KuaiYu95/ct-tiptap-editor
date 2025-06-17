@@ -34,7 +34,7 @@ export function setHeadingsId(html: string): string {
   const headings = doc.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
   headings.forEach((heading) => {
-    if (!heading.id) {
+    if (!heading.id || heading.id.length !== 22) {
       heading.id = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
     }
   });
