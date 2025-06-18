@@ -1,5 +1,4 @@
-import { Stack } from "@mui/material"
-import { Modal } from "ct-mui"
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from "@mui/material"
 import React, { useEffect, useRef, useState } from "react"
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
@@ -83,48 +82,58 @@ const ImageEditDialog = ({ open, onClose, imageFile, onConfirm }: ImageEditDialo
     }
   }
 
+  const handleClose = () => {
+    setImageSrc('')
+    setCrop({
+      unit: '%',
+      width: 50,
+      height: 50,
+      x: 25,
+      y: 25
+    })
+    onClose()
+  }
+
   if (!imageFile) return null
-  return <Modal
-    open={open}
-    onCancel={() => {
-      setImageSrc('')
-      setCrop({
-        unit: '%',
-        width: 50,
-        height: 50,
-        x: 25,
-        y: 25
-      })
-      onClose()
-    }}
-    width={800}
-    title="编辑图片"
-    onOk={handleCropComplete}
-  >
-    <Stack alignItems="center" justifyContent="center" style={{
-      width: '100%',
-      height: '500px',
-    }}>
-      {imageSrc && (
-        <ReactCrop
-          crop={crop}
-          onChange={c => setCrop(c)}
-        >
-          <img
-            ref={imgRef}
-            src={imageSrc}
-            alt="裁切图片"
-            style={{
-              maxWidth: '704px',
-              maxHeight: '500px',
-              objectFit: 'contain'
-            }}
-            onLoad={onImageLoad}
-          />
-        </ReactCrop>
-      )}
-    </Stack>
-  </Modal>
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      maxWidth={false}
+      PaperProps={{ sx: { width: 800, borderRadius: '10px' } }}
+    >
+      <DialogTitle>编辑图片</DialogTitle>
+      <DialogContent sx={{ p: 0 }}>
+        <Stack alignItems="center" justifyContent="center" style={{
+          width: '100%',
+          height: 500,
+        }}>
+          {imageSrc && (
+            <ReactCrop
+              crop={crop}
+              onChange={c => setCrop(c)}
+            >
+              <img
+                ref={imgRef}
+                src={imageSrc}
+                alt="裁切图片"
+                style={{
+                  maxWidth: '704px',
+                  maxHeight: '500px',
+                  objectFit: 'contain'
+                }}
+                onLoad={onImageLoad}
+              />
+            </ReactCrop>
+          )}
+        </Stack>
+      </DialogContent>
+      <DialogActions sx={{ p: 3 }}>
+        <Button onClick={handleClose}>取消</Button>
+        <Button variant="contained" onClick={handleCropComplete}>确定</Button>
+      </DialogActions>
+    </Dialog>
+  )
 }
 
 export default ImageEditDialog

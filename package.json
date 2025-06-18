@@ -1,6 +1,6 @@
 {
   "name": "ct-tiptap-editor",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "基于 Tiptap 二次开发的编辑器组件",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -122,7 +122,6 @@
     "@tiptap/pm": "^2.12.0",
     "@tiptap/react": "^2.12.0",
     "@tiptap/starter-kit": "^2.12.0",
-    "ct-mui": "1.0.1-beta.3",
     "highlight.js": "^11.11.1",
     "lowlight": "^3.3.0",
     "prosemirror-model": "^1.25.1",

@@ -1,7 +1,11 @@
 import ErrorIcon from '@mui/icons-material/Error';
 import { Box, CircularProgress, Divider, MenuItem, Select, Skeleton, Stack } from "@mui/material";
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import { EditorContent, type Editor } from "@tiptap/react";
-import { Message, Modal } from "ct-mui";
 import getSelectedHTML from 'ct-tiptap-editor/utils/selection-html';
 import SSEClient from "ct-tiptap-editor/utils/sse";
 import React, { useEffect, useRef, useState } from "react";
@@ -13,9 +17,10 @@ import EditorToolbarButton from "./EditorToolbarButton";
 interface EditorAIAssistantProps {
   editor: Editor
   aiUrl?: string
+  onError?: (error: Error) => void
 }
 
-const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
+const EditorAIAssistant = ({ editor, aiUrl, onError }: EditorAIAssistantProps) => {
   const sseClientRef = useRef<SSEClient<string> | null>(null);
   const dialogContentRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -38,18 +43,17 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
 
   const handleChange = async (e: { target: { value: string } }) => {
     if (!aiUrl) {
-      Message.error('未配置 AI 地址');
+      onError?.(new Error('未配置 AI 地址'));
       return;
     }
     const value = e.target.value;
     if (value === 'rephrase') {
       const selectedHtml = getSelectedHTML(editor);
-      console.log(selectedHtml)
       defaultEditor?.setContent(selectedHtml)
       const { from, to } = editor.state.selection;
       const selectedText = editor.state.doc.textBetween(from, to, "\n");
       if (!selectedText) {
-        Message.error('请先选择文本');
+        onError?.(new Error('请先选择文本'));
         return;
       }
       if (!sseClientRef.current) return
@@ -69,6 +73,14 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
     }
   };
 
+  const handleClose = () => {
+    sseClientRef.current?.unsubscribe();
+    setContent('')
+    setOpen(false)
+    defaultEditor?.setContent('')
+    readEditor?.setContent('')
+  }
+
   useEffect(() => {
     if (!aiUrl) return
     sseClientRef.current = new SSEClient({
@@ -77,6 +89,9 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
         'Content-Type': 'application/json',
       },
       onComplete: () => {
+        setLoading(false)
+      },
+      onError: (error) => {
         setLoading(false)
       }
     });
@@ -89,58 +104,65 @@ const EditorAIAssistant = ({ editor, aiUrl }: EditorAIAssistantProps) => {
   }, [content]);
 
   return <>
-    <Modal
-      width={1000}
+    <Dialog
       open={open}
-      onCancel={() => {
-        sseClientRef.current?.unsubscribe();
-        setContent('')
-        setOpen(false)
-        defaultEditor?.setContent('')
-        readEditor?.setContent('')
-      }}
-      title={loading ? <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: '28px' }}>
-        <CircularProgress size={16} />
-        <Box>AI 润色中...</Box>
-      </Stack> : <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: '28px' }}>
-        <ErrorIcon sx={{ fontSize: 20, color: 'warning.main' }} />
-        <Box>是否使用以下文本替换选中内容</Box>
-        <Box sx={{ color: 'text.disabled', fontSize: 12 }}>({content.length} 字)</Box>
-      </Stack>}
-      okText={'替换'}
-      cancelText={'取消'}
-      okButtonProps={{ disabled: loading }}
-      onOk={() => {
-        const { from, to } = editor.state.selection;
-        editor.commands.insertContentAt({ from, to }, content);
-        setOpen(false);
-        setContent('');
-        defaultEditor?.setContent('')
-        readEditor?.setContent('')
-      }}
+      onClose={handleClose}
+      maxWidth={false}
+      PaperProps={{ sx: { width: 1000, borderRadius: '10px' } }}
     >
-      <Box ref={dialogContentRef} sx={{ maxHeight: '60vh', overflow: 'auto' }}>
-        <Stack direction={'row'}>
-          <Box sx={{ width: '50%', flex: 1, paddingRight: 1 }}>
-            {defaultEditor?.editor && <Box className="editor-container" >
-              <EditorContent editor={defaultEditor.editor} />
-            </Box>}
-          </Box>
-          <Divider orientation="vertical" flexItem />
-          <Box sx={{ width: '50%', flex: 1, paddingLeft: 1 }}>
-            {readEditor?.editor && content.length > 0 && <Box className="editor-container" sx={{
-              '.tiptap.ProseMirror': {
-                padding: '0px',
-              }
-            }}>
-              <EditorContent editor={readEditor.editor} />
-            </Box>}
-            {loading && <Skeleton variant="text" height={20} width={'100%'} />}
-            {loading && <Skeleton variant="text" height={20} width={'60%'} />}
-          </Box>
-        </Stack>
-      </Box >
-    </Modal >
+      <DialogTitle sx={{ p: 0, pb: 2 }}>
+        {loading ? (
+          <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: '28px', pl: 3, pt: 3 }}>
+            <CircularProgress size={16} />
+            <Box>AI 润色中...</Box>
+          </Stack>
+        ) : (
+          <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: '28px', pl: 3, pt: 3 }}>
+            <ErrorIcon sx={{ fontSize: 20, color: 'warning.main' }} />
+            <Box>是否使用以下文本替换选中内容</Box>
+            <Box sx={{ color: 'text.disabled', fontSize: 12 }}>({content.length} 字)</Box>
+          </Stack>
+        )}
+      </DialogTitle>
+      <DialogContent sx={{ p: 0, px: 3 }}>
+        <Box ref={dialogContentRef} sx={{ maxHeight: '60vh', overflow: 'auto' }}>
+          <Stack direction={'row'}>
+            <Box sx={{ width: '50%', flex: 1, paddingRight: 1 }}>
+              {defaultEditor?.editor && <Box className="editor-container" >
+                <EditorContent editor={defaultEditor.editor} />
+              </Box>}
+            </Box>
+            <Divider orientation="vertical" flexItem />
+            <Box sx={{ width: '50%', flex: 1, paddingLeft: 1 }}>
+              {readEditor?.editor && content.length > 0 && <Box className="editor-container" sx={{
+                '.tiptap.ProseMirror': {
+                  padding: '0px',
+                }
+              }}>
+                <EditorContent editor={readEditor.editor} />
+              </Box>}
+              {loading && <Skeleton variant="text" height={20} width={'100%'} />}
+              {loading && <Skeleton variant="text" height={20} width={'60%'} />}
+            </Box>
+          </Stack>
+        </Box>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 3 }}>
+        <Button onClick={handleClose}>
+          取消
+        </Button>
+        <Button variant="contained" onClick={() => {
+          const { from, to } = editor.state.selection;
+          editor.commands.insertContentAt({ from, to }, content);
+          setOpen(false);
+          setContent('');
+          defaultEditor?.setContent('')
+          readEditor?.setContent('')
+        }} disabled={loading}>
+          替换
+        </Button>
+      </DialogActions>
+    </Dialog>
     <Select
       value={'none'}
       onChange={handleChange}

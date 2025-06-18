@@ -10,7 +10,6 @@ import {
   useTiptapEditor,
 } from 'ct-tiptap-editor';
 import { useState, useEffect } from 'react';
-import { Modal } from 'ct-mui';
 
 export default () => {
   const [open, setOpen] = useState(false);
@@ -44,6 +43,9 @@ export default () => {
     aiUrl: '/api/v1/creation/text',
     onSave,
     onUpdate,
+    onError: (error) => {
+      console.log(error.message)
+    },
     onUpload: handleFileUpload,
   });
 

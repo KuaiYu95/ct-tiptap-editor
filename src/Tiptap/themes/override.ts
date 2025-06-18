@@ -23,33 +23,6 @@ declare module "@mui/material/ButtonGroup" {
 
 const componentStyleOverrides = (theme: ThemeColor) => {
   return {
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          borderRadius: '10px !important',
-          overflow: 'hidden',
-          minHeight: '36px',
-          height: '36px',
-          padding: '0px !important',
-        },
-        indicator: {
-          borderRadius: '0px !important',
-          overflow: 'hidden',
-          backgroundColor: '#21222D !important'
-        }
-      }
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          borderRadius: '0px !important',
-          fontWeight: 'normal',
-          fontSize: '14px !important',
-          lineHeight: '34px',
-          padding: '0 16px !important',
-        }
-      }
-    },
     MuiButton: {
       styleOverrides: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -107,106 +80,6 @@ const componentStyleOverrides = (theme: ThemeColor) => {
         }
       },
     },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          padding: '4px 12px',
-          backgroundColor: theme.text.primary,
-          fontSize: "12px",
-          color: theme.primary.contrastText,
-        },
-        arrow: {
-          color: theme.text.primary,
-        }
-      },
-    },
-    MuiFormHelperText: {
-      styleOverrides: {
-        root: {
-          color: theme.error.main,
-        },
-      },
-    },
-    MuiFormControl: {
-      styleOverrides: {
-        root: {
-          ".MuiFormLabel-asterisk": {
-            color: theme.error.main,
-          },
-        },
-      },
-    },
-    MuiFormControlLabel: {
-      styleOverrides: {
-        root: {
-          marginLeft: '0 !important',
-        },
-      },
-    },
-    MuiTableBody: {
-      styleOverrides: {
-        root: {
-          ".MuiTableRow-root:hover": {
-            ".MuiTableCell-root:not(.cx-table-empty-td)": {
-              backgroundColor: theme.table.row.hoverColor,
-              overflowX: 'hidden',
-              ".primary-color": {
-                color: theme.primary.main,
-              },
-              ".no-title-url": {
-                color: `${theme.primary.main} !important`,
-              },
-              ".error-color": {
-                opacity: 1,
-              },
-            },
-          },
-        },
-      },
-    },
-    MuiTableCell: {
-      styleOverrides: {
-        root: {
-          background: theme.background.paper,
-          lineHeight: 1.5,
-          height: theme.table.cell.height,
-          fontSize: "14px",
-          paddingTop: "16px !important",
-          paddingBottom: "16px !important",
-          paddingLeft: 0,
-          "&:first-of-type": {
-            paddingLeft: "0px",
-          },
-          "&:not(:first-of-type)": {
-            paddingLeft: "0px",
-          },
-          '.MuiCheckbox-root': {
-            color: '#CCCCCC',
-            svg: {
-              fontSize: '16px',
-            },
-            '&.Mui-checked': {
-              color: theme.text.primary,
-            }
-          },
-        },
-        head: {
-          backgroundColor: theme.background.paper2,
-          color: theme.table.head.color,
-          fontSize: "12px",
-          height: theme.table.head.height,
-          paddingTop: '0 !important',
-          paddingBottom: '0 !important',
-          borderSpacing: '12px',
-          zIndex: 100,
-        },
-        body: {
-          borderBottom: '1px dashed',
-          borderColor: theme.table.cell.borderColor,
-          borderSpacing: '12px',
-        }
-      },
-    },
     MuiMenu: {
       styleOverrides: {
         paper: {
@@ -238,69 +111,6 @@ const componentStyleOverrides = (theme: ThemeColor) => {
             color: theme.primary.main,
           },
         },
-      },
-    },
-    MuiPaper: {
-      defaultProps: {
-        elevation: 1,
-      },
-      styleOverrides: {
-        root: ({ ownerState }: { ownerState: { elevation?: number } }) => {
-          return {
-            ...(ownerState.elevation === 0 && {
-              backgroundColor: theme.background.paper0,
-            }),
-            ...(ownerState.elevation === 2 && {
-              backgroundColor: theme.background.paper2,
-            }),
-            backgroundImage: "none",
-          };
-        },
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        root: ({ ownerState }: { ownerState: any }) => {
-          return {
-            height: '24px',
-            lineHeight: '24px',
-            borderRadius: "8px",
-            '.MuiChip-label': {
-              padding: '0 8px 0 4px',
-            },
-            ...(ownerState.color === "default" && {
-              backgroundColor: theme.background.chip,
-              borderColor: theme.text.disabled,
-              ".Mui-focusVisible": {
-                backgroundColor: theme.background.chip,
-              },
-            }),
-            ...(ownerState.color === "error" && {
-              backgroundColor: addOpacityToColor(theme.error.main, 0.1),
-            })
-          }
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        label: ({ ownerState }: { ownerState: any }) => {
-          return {
-            padding: "0 14px",
-            fontSize: "14px",
-            lineHeight: '24px',
-            ...(ownerState.color === "default" && {
-              color: theme.text.primary,
-            })
-          }
-        },
-        deleteIcon: {
-          fontSize: "14px",
-          color: theme.text.disabled,
-        },
-      },
-    },
-    MuiAppBar: {
-      defaultProps: {
-        elevation: 1,
       },
     },
     MuiDialog: {
@@ -347,32 +157,6 @@ const componentStyleOverrides = (theme: ThemeColor) => {
             top: '20px',
           }
         }
-      },
-    },
-    MuiAlert: {
-      styleOverrides: {
-        root: {
-          lineHeight: '22px',
-          paddingTop: '1px',
-          paddingBottom: '1px',
-          borderRadius: '10px',
-          boxShadow: 'none',
-        },
-        icon: {
-          padding: '10px 0',
-        },
-        standardInfo: {
-          backgroundColor: addOpacityToColor(theme.primary.main, 0.1),
-          color: theme.text.primary,
-        },
-      },
-    },
-    MuiRadio: {
-      styleOverrides: {
-        root: {
-          padding: 0,
-          paddingRight: '8px',
-        },
       },
     },
     MuiTextField: {

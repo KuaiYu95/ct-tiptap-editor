@@ -24,7 +24,12 @@ const EditorToolbarButton = React.forwardRef<HTMLButtonElement, EditorToolbarBut
         </Stack>
       } arrow>
         <Box>
-          <Button ref={ref} onClick={onClick} sx={{ ...sx, textTransform: 'none' }} {...rest} >
+          <Button
+            ref={ref}
+            onClick={onClick}
+            sx={{ ...sx, textTransform: 'none' }}
+            {...rest}
+          >
             {icon}
           </Button>
         </Box>
