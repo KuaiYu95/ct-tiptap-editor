@@ -1026,8 +1026,8 @@
   background-color: rgba(204, 204, 204, 0.3);
 }
 
-.editor-table td:not(.selectedCell):not(.editor-table-read):hover,
-.editor-table th:not(.selectedCell):not(.editor-table-read):hover {
+.editor-table:not(.editor-table-read) td:not(.selectedCell):hover,
+.editor-table:not(.editor-table-read) th:not(.selectedCell):hover {
   background-color: #F8F9FA;
 }
 
