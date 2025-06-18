@@ -23,8 +23,6 @@ import { SuperscriptIcon } from "./icons/superscript-icon";
 import { UnderlineIcon } from "./icons/underline-icon";
 import { Undo2Icon } from "./icons/undo2-icon";
 
-import "./css/video-node.css";
-
 type EditorToolbarProps = {
   editorRef: UseTiptapEditorReturn
 }
@@ -48,7 +46,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         p: 1,
         color: 'text.primary',
         '&.active': {
-          bgcolor: 'background.paper',
+          bgcolor: 'background.paper0',
           color: 'primary.main',
         },
         '&[disabled]': {
@@ -65,7 +63,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
           display: 'none',
         },
         '&.active': {
-          bgcolor: 'background.paper',
+          bgcolor: 'background.paper0',
           color: 'primary.main',
           button: {
             color: 'primary.main',

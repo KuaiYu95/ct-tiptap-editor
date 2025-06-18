@@ -1026,11 +1026,6 @@
   background-color: rgba(204, 204, 204, 0.3);
 }
 
-/* .editor-table td.selectedCell,
-.editor-table th.selectedCell {
-  background-color: rgba(138, 197, 255, 0.1);
-} */
-
 .editor-table td:not(.selectedCell):not(.editor-table-read):hover,
 .editor-table th:not(.selectedCell):not(.editor-table-read):hover {
   background-color: #F8F9FA;
@@ -1103,4 +1098,33 @@
 
 .tiptap.ProseMirror .code-block-wrapper .copy-button:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.tiptap.ProseMirror video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.tiptap.ProseMirror>video:not([data-type="emoji"] video) {
+  margin: 2rem 0;
+  outline: 1px solid transparent;
+  border-radius: '10px';
+}
+
+.tiptap.ProseMirror.ProseMirror-focused video:not([data-type="emoji"] video).ProseMirror-selectednode {
+  outline-color: var(--tt-brand-color-500);
+}
+
+.tiptap.ProseMirror .tiptap-thread:has(> video) {
+  margin: 2rem 0;
+}
+
+.tiptap.ProseMirror .tiptap-thread:has(> video) video {
+  outline: 1px solid transparent;
+  border-radius: '10px';
+}
+
+.tiptap.ProseMirror .tiptap-thread video {
+  margin: 0;
 }

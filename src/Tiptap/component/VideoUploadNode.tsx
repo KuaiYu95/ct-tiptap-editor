@@ -1,8 +1,7 @@
-import { Box, IconButton } from "@mui/material"
+import { Box, IconButton, Stack } from "@mui/material"
 import type { NodeViewProps } from "@tiptap/react"
 import { NodeViewWrapper } from "@tiptap/react"
 import * as React from "react"
-import "../css/video-upload-node.css"
 import { CloseIcon } from "../icons/close-icon"
 
 export interface FileItem {
@@ -150,8 +149,8 @@ function useFileUpload(options: UploadOptions) {
 
 const CloudUploadIcon: React.FC = () => (
   <svg
-    width="24"
-    height="24"
+    width="16"
+    height="16"
     viewBox="0 0 24 24"
     className="tiptap-video-upload-icon"
     fill="currentColor"
@@ -235,7 +234,20 @@ const VideoUploadDragArea: React.FC<VideoUploadDragAreaProps> = ({
 
   return (
     <Box
-      className={`tiptap-video-upload-dragger ${dragover ? "tiptap-video-upload-dragger-active" : ""}`}
+      sx={{
+        p: '16px 12px',
+        border: '1.5px dashed',
+        borderColor: dragover ? 'primary.main' : 'divider',
+        borderRadius: 2,
+        textAlign: 'center',
+        cursor: 'pointer',
+        position: 'relative',
+        overflow: 'hidden',
+        transition: 'border-color 0.2s',
+        '&:hover': {
+          borderColor: 'primary.main',
+        },
+      }}
       onDrop={onDrop}
       onDragOver={onDragover}
       onDragLeave={onDragleave}
@@ -267,65 +279,71 @@ const VideoUploadPreview: React.FC<VideoUploadPreviewProps> = ({
   }
 
   return (
-    <Box className="tiptap-video-upload-preview">
+    <Box sx={{ position: 'relative', overflow: 'hidden' }}>
       {status === "uploading" && (
         <Box
-          className="tiptap-video-upload-progress"
-          style={{ width: `${progress}%` }}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            bgcolor: 'primary.lighter',
+            width: `${progress}%`,
+            transition: 'all 300ms ease-out',
+            zIndex: 1,
+          }}
         />
       )}
-
-      <Box className="tiptap-video-upload-preview-content">
-        <Box className="tiptap-video-upload-file-info">
-          <Box className="tiptap-video-upload-file-icon">
+      <Stack direction="row" justifyContent="space-between" alignItems="center"
+        sx={{
+          position: 'relative',
+          border: '1.5px dashed',
+          borderColor: 'divider',
+          borderRadius: '10px',
+          p: 2,
+          zIndex: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, height: 16 }}>
+          <Box sx={{ p: 1, bgcolor: 'primary.main', borderRadius: 2, color: 'white' }}>
             <CloudUploadIcon />
           </Box>
-          <Box className="tiptap-video-upload-details">
-            <Box component="span" className="tiptap-video-upload-text">{file.name}</Box>
-            <Box component="span" className="tiptap-video-upload-subtext">
-              {formatFileSize(file.size)}
-            </Box>
-          </Box>
+          <Stack>
+            <Box component="span" sx={{ color: 'text.primary', fontSize: 14 }}>{file.name}</Box>
+            <Box component="span" sx={{ color: 'text.disabled', fontSize: 12 }}>{formatFileSize(file.size)}</Box>
+          </Stack>
         </Box>
-        <Box className="tiptap-video-upload-actions">
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
           {status === "uploading" && (
-            <Box component="span" className="tiptap-video-upload-progress-text">
-              {progress}%
-            </Box>
+            <Box component="span" sx={{ fontSize: 12, color: 'primary.main', mr: 1 }}>{progress}%</Box>
           )}
-          <IconButton
-            size="small"
-            onClick={(e) => {
-              e.stopPropagation()
-              onRemove()
-            }}
-          >
+          <IconButton size="small" onClick={(e) => { e.stopPropagation(); onRemove(); }}>
             <CloseIcon />
           </IconButton>
         </Box>
-      </Box>
+      </Stack>
     </Box>
   )
 }
 
 const DropZoneContent: React.FC<{ maxSize: number }> = ({ maxSize }) => (
   <>
-    <Box className="tiptap-video-upload-dropzone">
+    <Stack sx={{ position: 'relative', color: 'text.disabled', width: 43, height: 57, userSelect: 'none', display: 'inline-flex' }}>
       <FileIcon />
-      <FileCornerIcon />
-      <Box className="tiptap-video-upload-icon-container">
+      <Box sx={{ position: 'absolute', top: 1, right: 1, zIndex: 2 }}>
+        <FileCornerIcon />
+      </Box>
+      <Stack direction="row" justifyContent="center" alignItems="center"
+        sx={{ position: 'absolute', width: 25, height: 25, bottom: -4, right: -4, bgcolor: 'primary.main', borderRadius: 2, color: 'white' }}>
         <CloudUploadIcon />
+      </Stack>
+    </Stack>
+    <Stack justifyContent="center" alignItems="center" sx={{ userSelect: 'none', mt: 1 }}>
+      <Box component="span" sx={{ color: 'text.secondary', fontSize: 14 }}>
+        <em style={{ fontStyle: 'normal', textDecoration: 'underline' }}>点击此处上传</em> 或拖拽文件到此处
       </Box>
-    </Box>
-
-    <Box className="tiptap-video-upload-content">
-      <Box component="span" className="tiptap-video-upload-text">
-        <em>点击此处上传</em> 或拖拽文件到此处
-      </Box>
-      <Box component="span" className="tiptap-video-upload-subtext">
+      <Box component="span" sx={{ color: 'text.disabled', fontSize: 12 }}>
         最大文件大小 {maxSize / 1024 / 1024}MB.
       </Box>
-    </Box>
+    </Stack>
   </>
 )
 
@@ -384,9 +402,9 @@ export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
 
   return (
     <NodeViewWrapper
-      className="tiptap-video-upload"
       tabIndex={0}
       onClick={handleClick}
+      sx={{ my: 2 }}
     >
       {!fileItem && (
         <VideoUploadDragArea onFile={handleUpload}>
@@ -410,6 +428,7 @@ export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
         type="file"
         onChange={handleChange}
         onClick={(e: React.MouseEvent<HTMLInputElement>) => e.stopPropagation()}
+        style={{ display: 'none' }}
       />
     </NodeViewWrapper>
   )
