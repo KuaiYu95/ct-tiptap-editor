@@ -48,7 +48,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
         p: 1,
         color: 'text.primary',
         '&.active': {
-          bgcolor: 'background.paper0',
+          bgcolor: 'background.paper',
           color: 'primary.main',
         },
         '&[disabled]': {
@@ -57,7 +57,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
       },
       '.MuiSelect-root': {
         minWidth: '36px',
-        bgcolor: 'background.paper0',
+        bgcolor: 'background.paper',
         '.MuiSelect-select': {
           p: '0 !important',
         },
@@ -65,7 +65,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
           display: 'none',
         },
         '&.active': {
-          bgcolor: 'background.paper0',
+          bgcolor: 'background.paper',
           color: 'primary.main',
           button: {
             color: 'primary.main',
