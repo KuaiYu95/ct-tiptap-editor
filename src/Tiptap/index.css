@@ -1,239 +1,79 @@
 @import 'highlight.js/styles/atom-one-dark.css';
 
+/* 
+  MUI CSS Variables Compatibility Layer
+  Ensures compatibility between MUI v5 and v6
+  In v6, these are automatically generated when cssVariables: true is set
+  In v5, we provide fallback values
+*/
 :root {
-  /****************** 
-  Basics
-  ******************/
+  /* MUI v5/v6 Palette Variables - Primary */
+  --mui-palette-primary-main: #6E73FE;
+  --mui-palette-primary-light: #42a5f5;
+
+  /* MUI v5/v6 Palette Variables - Common */
+  --mui-palette-common-white: #ffffff;
+  --mui-palette-common-black: #000000;
+
+  /* MUI v5/v6 Palette Variables - Text */
+  --mui-palette-text-primary: #21222D;
+  --mui-palette-text-secondary: 'rgba(33,34,45, 0.7)';
+  --mui-palette-text-auxiliary: 'rgba(33,34,45, 0.5)';
+  --mui-palette-text-tertiary: 'rgba(33,34,45, 0.5)';
+  --mui-palette-text-disabled: 'rgba(33,34,45, 0.5)';
+
+  /* MUI v5/v6 Palette Variables - Background */
+  --mui-palette-background-default: #ffffff;
+  --mui-palette-background-paper: #F8F9FA;
+
+  /* MUI v5/v6 Palette Variables - Warning */
+  --mui-palette-warning-main: #ed6c02;
+  --mui-palette-warning-light: #ff9800;
+
+  --mui-palette-error-main: #F64E54;
+  --mui-palette-success-main: #00DF98;
+
+  /* MUI v5/v6 Other Variables */
+  --mui-palette-divider: #ECEEF1;
+
+  /* MUI v5/v6 Shape Variables */
+  --mui-shape-borderRadius: 10px;
+
+  /* MUI v5/v6 Transitions Variables */
+  --mui-transitions-duration-short: 250ms;
+  --mui-transitions-duration-standard: 300ms;
+  --mui-transitions-easing-easeOut: cubic-bezier(0.0, 0, 0.2, 1);
+  --mui-transitions-easing-easeInOut: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:root {
   overflow-wrap: break-word;
   text-size-adjust: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /****************** 
-  Colors variables
-  ******************/
-  /* Gray alpha (light mode) */
-  --tt-gray-light-a-50: rgba(56, 56, 56, 0.04);
-  --tt-gray-light-a-100: rgba(15, 22, 36, 0.05);
-  --tt-gray-light-a-200: rgba(37, 39, 45, 0.1);
-  --tt-gray-light-a-300: rgba(47, 50, 55, 0.2);
-  --tt-gray-light-a-400: rgba(40, 44, 51, 0.42);
-  --tt-gray-light-a-500: rgba(52, 55, 60, 0.64);
-  --tt-gray-light-a-600: rgba(36, 39, 46, 0.78);
-  --tt-gray-light-a-700: rgba(35, 37, 42, 0.87);
-  --tt-gray-light-a-800: rgba(30, 32, 36, 0.95);
-  --tt-gray-light-a-900: rgba(29, 30, 32, 0.98);
-  /* Gray (light mode) */
-  --tt-gray-light-50: rgba(250, 250, 250, 1);
-  --tt-gray-light-100: rgba(244, 244, 245, 1);
-  --tt-gray-light-200: rgba(234, 234, 235, 1);
-  --tt-gray-light-300: rgba(213, 214, 215, 1);
-  --tt-gray-light-400: rgba(166, 167, 171, 1);
-  --tt-gray-light-500: rgba(125, 127, 130, 1);
-  --tt-gray-light-600: rgba(83, 86, 90, 1);
-  --tt-gray-light-700: rgba(64, 65, 69, 1);
-  --tt-gray-light-800: rgba(44, 45, 48, 1);
-  --tt-gray-light-900: rgba(34, 35, 37, 1);
-  /* Gray alpha (dark mode) */
-  --tt-gray-dark-a-50: rgba(232, 232, 253, 0.05);
-  --tt-gray-dark-a-100: rgba(231, 231, 243, 0.07);
-  --tt-gray-dark-a-200: rgba(238, 238, 246, 0.11);
-  --tt-gray-dark-a-300: rgba(239, 239, 245, 0.22);
-  --tt-gray-dark-a-400: rgba(244, 244, 255, 0.37);
-  --tt-gray-dark-a-500: rgba(236, 238, 253, 0.5);
-  --tt-gray-dark-a-600: rgba(247, 247, 253, 0.64);
-  --tt-gray-dark-a-700: rgba(251, 251, 254, 0.75);
-  --tt-gray-dark-a-800: rgba(253, 253, 253, 0.88);
-  --tt-gray-dark-a-900: rgba(255, 255, 255, 0.96);
-  /* Gray (dark mode) */
-  --tt-gray-dark-50: rgba(25, 25, 26, 1);
-  --tt-gray-dark-100: rgba(32, 32, 34, 1);
-  --tt-gray-dark-200: rgba(45, 45, 47, 1);
-  --tt-gray-dark-300: rgba(70, 70, 73, 1);
-  --tt-gray-dark-400: rgba(99, 99, 105, 1);
-  --tt-gray-dark-500: rgba(124, 124, 131, 1);
-  --tt-gray-dark-600: rgba(163, 163, 168, 1);
-  --tt-gray-dark-700: rgba(192, 192, 195, 1);
-  --tt-gray-dark-800: rgba(224, 224, 225, 1);
-  --tt-gray-dark-900: rgba(245, 245, 245, 1);
-  /* Brand colors */
-  --tt-brand-color-50: rgba(239, 238, 255, 1);
-  --tt-brand-color-100: rgba(222, 219, 255, 1);
-  --tt-brand-color-200: rgba(195, 189, 255, 1);
-  --tt-brand-color-300: rgba(157, 138, 255, 1);
-  --tt-brand-color-400: rgba(122, 82, 255, 1);
-  --tt-brand-color-500: rgba(25, 118, 210, 1);
-  --tt-brand-color-600: rgba(84, 0, 229, 1);
-  --tt-brand-color-700: rgba(75, 0, 204, 1);
-  --tt-brand-color-800: rgba(56, 0, 153, 1);
-  --tt-brand-color-900: rgba(43, 25, 102, 1);
-  --tt-brand-color-950: hsla(257, 100%, 9%, 1);
-  /* Green */
-  --tt-color-green-inc-5: hsla(129, 100%, 97%, 1);
-  --tt-color-green-inc-4: hsla(129, 100%, 92%, 1);
-  --tt-color-green-inc-3: hsla(131, 100%, 86%, 1);
-  --tt-color-green-inc-2: hsla(133, 98%, 78%, 1);
-  --tt-color-green-inc-1: hsla(137, 99%, 70%, 1);
-  --tt-color-green-base: hsla(147, 99%, 50%, 1);
-  --tt-color-green-dec-1: hsla(147, 97%, 41%, 1);
-  --tt-color-green-dec-2: hsla(146, 98%, 32%, 1);
-  --tt-color-green-dec-3: hsla(146, 100%, 24%, 1);
-  --tt-color-green-dec-4: hsla(144, 100%, 16%, 1);
-  --tt-color-green-dec-5: hsla(140, 100%, 9%, 1);
-  /* Yellow */
-  --tt-color-yellow-inc-5: hsla(50, 100%, 97%, 1);
-  --tt-color-yellow-inc-4: hsla(50, 100%, 91%, 1);
-  --tt-color-yellow-inc-3: hsla(50, 100%, 84%, 1);
-  --tt-color-yellow-inc-2: hsla(50, 100%, 77%, 1);
-  --tt-color-yellow-inc-1: hsla(50, 100%, 68%, 1);
-  --tt-color-yellow-base: hsla(52, 100%, 50%, 1);
-  --tt-color-yellow-dec-1: hsla(52, 100%, 41%, 1);
-  --tt-color-yellow-dec-2: hsla(52, 100%, 32%, 1);
-  --tt-color-yellow-dec-3: hsla(52, 100%, 24%, 1);
-  --tt-color-yellow-dec-4: hsla(51, 100%, 16%, 1);
-  --tt-color-yellow-dec-5: hsla(50, 100%, 9%, 1);
-  /* Red */
-  --tt-color-red-inc-5: hsla(11, 100%, 96%, 1);
-  --tt-color-red-inc-4: hsla(11, 100%, 88%, 1);
-  --tt-color-red-inc-3: hsla(10, 100%, 80%, 1);
-  --tt-color-red-inc-2: hsla(9, 100%, 73%, 1);
-  --tt-color-red-inc-1: hsla(7, 100%, 64%, 1);
-  --tt-color-red-base: hsla(7, 100%, 54%, 1);
-  --tt-color-red-dec-1: hsla(7, 100%, 41%, 1);
-  --tt-color-red-dec-2: hsla(5, 100%, 32%, 1);
-  --tt-color-red-dec-3: hsla(4, 100%, 24%, 1);
-  --tt-color-red-dec-4: hsla(3, 100%, 16%, 1);
-  --tt-color-red-dec-5: hsla(1, 100%, 9%, 1);
-  /* Basic colors */
-  --white: rgba(255, 255, 255, 1);
-  --black: rgba(14, 14, 17, 1);
-  --transparent: rgba(255, 255, 255, 0);
-  /****************** 
-  Shadow variables
-  ******************/
-  /* Shadows Light */
-  --tt-shadow-elevated-md:
-    0px 16px 48px 0px rgba(17, 24, 39, 0.04),
-    0px 12px 24px 0px rgba(17, 24, 39, 0.04),
-    0px 6px 8px 0px rgba(17, 24, 39, 0.02),
-    0px 2px 3px 0px rgba(17, 24, 39, 0.02);
-  /************************************************** 
-       Radius variables 
-    **************************************************/
-  --tt-radius-xxs: 0.125rem;
-  /* 2px */
-  --tt-radius-xs: 0.25rem;
-  /* 4px */
-  --tt-radius-sm: 0.375rem;
-  /* 6px */
-  --tt-radius-md: 0.5rem;
-  /* 8px */
-  --tt-radius-lg: 0.75rem;
-  /* 12px */
-  --tt-radius-xl: 1rem;
-  /* 16px */
-  /************************************************** 
-       Transition variables 
-    **************************************************/
-  --tt-transition-duration-short: 0.1s;
-  --tt-transition-duration-default: 0.2s;
-  --tt-transition-duration-long: 0.64s;
-  --tt-transition-easing-default: cubic-bezier(0.46, 0.03, 0.52, 0.96);
-  --tt-transition-easing-cubic: cubic-bezier(0.65, 0.05, 0.36, 1);
-  --tt-transition-easing-quart: cubic-bezier(0.77, 0, 0.18, 1);
-  --tt-transition-easing-circ: cubic-bezier(0.79, 0.14, 0.15, 0.86);
-  --tt-transition-easing-back: cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  /****************** 
-  Contrast variables
-  ******************/
-  --tt-accent-contrast: 8%;
-  --tt-destructive-contrast: 8%;
-  --tt-foreground-contrast: 8%;
-
-  /************************************************** 
-      Global colors 
-  **************************************************/
-  /* Global colors - Light mode */
-  --tt-bg-color: var(--white);
-  --tt-border-color: var(--tt-gray-light-a-200);
-  --tt-border-color-tint: var(--tt-gray-light-a-100);
-  --tt-sidebar-bg-color: var(--tt-gray-light-100);
-  --tt-scrollbar-color: var(--tt-gray-light-a-200);
-  --tt-cursor-color: var(--tt-brand-color-500);
-  --tt-selection-color: rgba(157, 138, 255, 0.2);
-  --tt-card-bg-color: var(--white);
-  --tt-card-border-color: var(--tt-gray-light-a-100);
-
-  /* Text colors */
-  --tt-text-color-gray: hsl(45, 2%, 46%);
-  --tt-text-color-brown: hsl(19, 31%, 47%);
-  --tt-text-color-orange: hsl(30, 89%, 45%);
-  --tt-text-color-yellow: hsl(38, 62%, 49%);
-  --tt-text-color-green: hsl(148, 32%, 39%);
-  --tt-text-color-blue: hsl(202, 54%, 43%);
-  --tt-text-color-purple: hsl(274, 32%, 54%);
-  --tt-text-color-pink: hsl(328, 49%, 53%);
-  --tt-text-color-red: hsl(2, 62%, 55%);
-  --tt-text-color-gray-contrast: hsla(39, 26%, 26%, 0.15);
-  --tt-text-color-brown-contrast: hsla(18, 43%, 69%, 0.35);
-  --tt-text-color-orange-contrast: hsla(24, 73%, 55%, 0.27);
-  --tt-text-color-yellow-contrast: hsla(44, 82%, 59%, 0.39);
-  --tt-text-color-green-contrast: hsla(126, 29%, 60%, 0.27);
-  --tt-text-color-blue-contrast: hsla(202, 54%, 59%, 0.27);
-  --tt-text-color-purple-contrast: hsla(274, 37%, 64%, 0.27);
-  --tt-text-color-pink-contrast: hsla(331, 60%, 71%, 0.27);
-  --tt-text-color-red-contrast: hsla(8, 79%, 79%, 0.4);
-
-  --tt-highlight-yellow: #fef9c3;
-  --tt-highlight-green: #dcfce7;
-  --tt-highlight-blue: #e0f2fe;
-  --tt-highlight-purple: #f3e8ff;
-  --tt-highlight-red: #ffe4e6;
-  --tt-highlight-gray: rgb(248, 248, 247);
-  --tt-highlight-brown: rgb(244, 238, 238);
-  --tt-highlight-orange: rgb(251, 236, 221);
-  --tt-highlight-pink: rgb(252, 241, 246);
-  --tt-highlight-yellow-contrast: #fbe604;
-  --tt-highlight-green-contrast: #c7fad8;
-  --tt-highlight-blue-contrast: #ceeafd;
-  --tt-highlight-purple-contrast: #e4ccff;
-  --tt-highlight-red-contrast: #ffccd0;
-  --tt-highlight-gray-contrast: rgba(84, 72, 49, 0.15);
-  --tt-highlight-brown-contrast: rgba(210, 162, 141, 0.35);
-  --tt-highlight-orange-contrast: rgba(224, 124, 57, 0.27);
-  --tt-highlight-pink-contrast: rgba(225, 136, 179, 0.27);
-}
-
-.tiptap.ProseMirror {
-  --tt-inline-code-bg-color: var(--tt-gray-light-a-100);
-  --tt-inline-code-text-color: var(--tt-gray-light-a-700);
-  --tt-inline-code-border-color: var(--tt-gray-light-a-200);
-  --tt-codeblock-bg: var(--tt-gray-light-a-50);
-  --tt-codeblock-text: var(--tt-gray-light-a-800);
-  --tt-codeblock-border: var(--tt-gray-light-a-200);
 }
 
 .tiptap.ProseMirror code {
   display: inline-block;
-  background-color: rgba(232, 234, 246, 0.6);
-  color: rgb(40, 53, 147);
+  color: var(--mui-palette-primary-main);
+  background-color: var(--mui-palette-background-paper);
   padding: 0 5px;
   line-height: 22px;
   word-break: break-all;
   font-family: "JetBrains Mono NL", monospace;
   font-size: 0.875em;
-  border-radius: 3px;
+  border-radius: var(--mui-shape-borderRadius);
 }
 
 .tiptap.ProseMirror pre {
-  background-color: var(--black);
-  color: var(--white);
-  margin-top: 1.5em;
+  background-color: var(--mui-palette-background-paper);
+  margin-top: 1em;
   font-family: 'JetBrainsMono', monospace;
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
   padding: 1em;
   font-size: 1rem;
-  border-radius: 6px/0.375rem;
+  border-radius: var(--mui-shape-borderRadius);
 }
 
 .tiptap.ProseMirror pre code {
@@ -246,8 +86,8 @@
 .tiptap.ProseMirror img {
   max-width: 100%;
   padding: 5px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: var(--mui-shape-borderRadius);
   margin-top: 10px;
   margin-bottom: 10px;
   cursor: pointer;
@@ -258,11 +98,11 @@
 .tiptap.ProseMirror>img:not([data-type="emoji"] img) {
   margin: 2rem 0;
   outline: 0.125rem solid transparent;
-  border-radius: var(--tt-radius-xs, 0.25rem);
+  border-radius: var(--mui-shape-borderRadius);
 }
 
 .tiptap.ProseMirror.ProseMirror-focused img:not([data-type="emoji"] img).ProseMirror-selectednode {
-  outline-color: var(--tt-brand-color-500);
+  outline-color: var(--mui-palette-primary-main);
 }
 
 .tiptap.ProseMirror .tiptap-thread:has(> img) {
@@ -271,20 +111,11 @@
 
 .tiptap.ProseMirror .tiptap-thread:has(> img) img {
   outline: 0.125rem solid transparent;
-  border-radius: var(--tt-radius-xs, 0.25rem);
+  border-radius: var(--mui-shape-borderRadius);
 }
 
 .tiptap.ProseMirror .tiptap-thread img {
   margin: 0;
-}
-
-.tiptap.ProseMirror {
-  --tt-checklist-bg-color: var(--tt-gray-light-a-100);
-  --tt-checklist-bg-active-color: var(--tt-gray-light-a-900);
-  --tt-checklist-border-color: var(--tt-gray-light-a-200);
-  --tt-checklist-border-active-color: var(--tt-gray-light-a-900);
-  --tt-checklist-check-icon-color: var(--white);
-  --tt-checklist-text-active: var(--tt-gray-light-a-500);
 }
 
 .tiptap.ProseMirror ol,
@@ -381,11 +212,11 @@
   display: block;
   width: 1em;
   height: 1em;
-  border: 1px solid var(--tt-checklist-border-color);
-  border-radius: var(--tt-radius-xs, 0.25rem);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 4px;
   position: relative;
   cursor: pointer;
-  background-color: var(--tt-checklist-bg-color);
+  background-color: var(--mui-palette-background-paper);
   transition: background-color 80ms ease-out, border-color 80ms ease-out;
 }
 
@@ -397,15 +228,10 @@
   transform: translate(-50%, -50%);
   width: 0.75em;
   height: 0.75em;
-  background-color: var(--tt-checklist-check-icon-color);
+  background-color: var(--mui-palette-primary-main);
   opacity: 0;
   -webkit-mask: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22currentColor%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M21.4142%204.58579C22.1953%205.36683%2022.1953%206.63317%2021.4142%207.41421L10.4142%2018.4142C9.63317%2019.1953%208.36684%2019.1953%207.58579%2018.4142L2.58579%2013.4142C1.80474%2012.6332%201.80474%2011.3668%202.58579%2010.5858C3.36683%209.80474%204.63317%209.80474%205.41421%2010.5858L9%2014.1716L18.5858%204.58579C19.3668%203.80474%2020.6332%203.80474%2021.4142%204.58579Z%22%20fill%3D%22currentColor%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22currentColor%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M21.4142%204.58579C22.1953%205.36683%2022.1953%206.63317%2021.4142%207.41421L10.4142%2018.4142C9.63317%2019.1953%208.36684%2019.1953%207.58579%2018.4142L2.58579%2013.4142C1.80474%2012.6332%201.80474%2011.3668%202.58579%2010.5858C3.36683%209.80474%204.63317%209.80474%205.41421%2010.5858L9%2014.1716L18.5858%204.58579C19.3668%203.80474%2020.6332%203.80474%2021.4142%204.58579Z%22%20fill%3D%22currentColor%22%2F%3E%3C%2Fsvg%3E") center/contain no-repeat;
-}
-
-.tiptap.ProseMirror ul[data-type="taskList"] li label input[type="checkbox"]:checked+span {
-  background: var(--tt-checklist-bg-active-color);
-  border-color: var(--tt-checklist-border-active-color);
 }
 
 .tiptap.ProseMirror ul[data-type="taskList"] li label input[type="checkbox"]:checked+span::before {
@@ -418,19 +244,9 @@
 }
 
 .tiptap.ProseMirror {
-  --blockquote-bg-color: var(--tt-gray-light-900);
-  --link-text-color: var(--tt-brand-color-500);
-  --separator-color: var(--tt-gray-light-a-200);
-  --thread-text: var(--tt-gray-light-900);
-  --placeholder-color: var(--tt-gray-light-a-400);
-  --tiptap-mathematics-bg-color: var(--tt-gray-light-a-200);
-  --tiptap-mathematics-border-color: var(--tt-brand-color-500);
-}
-
-.tiptap.ProseMirror {
   white-space: pre-wrap;
   outline: none;
-  color: #424242;
+  color: var(--mui-palette-text-primary);
 }
 
 .tiptap.ProseMirror p:not(:first-child) {
@@ -441,7 +257,7 @@
 }
 
 .tiptap.ProseMirror:not(.readonly):not(.ProseMirror-hideselection) ::selection {
-  background-color: var(--tt-selection-color);
+  background-color: var(--mui-palette-divider);
 }
 
 .tiptap.ProseMirror:not(.readonly):not(.ProseMirror-hideselection) .selection::selection {
@@ -450,7 +266,7 @@
 
 .tiptap.ProseMirror .selection {
   display: inline;
-  background-color: var(--tt-selection-color);
+  background-color: var(--mui-palette-divider);
 }
 
 .tiptap.ProseMirror .ProseMirror-hideselection {
@@ -460,7 +276,7 @@
 .tiptap.ProseMirror>p.is-editor-empty::before {
   content: attr(data-placeholder);
   pointer-events: none;
-  color: var(--placeholder-color);
+  color: var(--mui-palette-text-disabled);
   float: left;
   height: 0;
 }
@@ -482,7 +298,7 @@
   position: absolute;
   top: 1em;
   width: 1.25em;
-  border-top: 1px solid black;
+  border-top: 1px solid var(--mui-palette-text-primary);
   animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite;
 }
 
@@ -503,8 +319,8 @@
   padding-top: 0.375em;
   padding-bottom: 0.375em;
   margin: 1.5rem 0;
-  color: var(--tt-gray-light-500);
-  background-color: var(--tt-gray-light-50);
+  color: var(--mui-palette-text-primary);
+  background-color: var(--mui-palette-background-paper);
 }
 
 .tiptap.ProseMirror blockquote p {
@@ -519,7 +335,7 @@
   top: 0;
   height: 100%;
   width: 0.25em;
-  background-color: var(--tt-gray-light-500);
+  background-color: var(--mui-palette-divider);
   content: "";
   border-radius: 0;
 }
@@ -535,7 +351,7 @@
 }
 
 .tiptap.ProseMirror .collaboration-cursor__label {
-  border-radius: 0.25rem;
+  border-radius: var(--mui-shape-borderRadius);
   border-bottom-left-radius: 0;
   font-size: 0.75rem;
   font-weight: 600;
@@ -565,15 +381,15 @@
   color: inherit;
   font-style: inherit;
   padding-bottom: 0.25em;
-  border-bottom: 1px solid var(--tt-gray-light-a-300);
+  border-bottom: 1px solid var(--mui-palette-divider);
 }
 
 .tiptap.ProseMirror h1 {
   font-size: 2.2em;
   font-weight: 700;
   margin-top: 0.7em;
-  color: var(--tt-brand-color-500);
-  border-bottom: 2px solid var(--tt-brand-color-500);
+  color: var(--mui-palette-primary-main);
+  border-bottom: 2px solid var(--mui-palette-primary-main);
 }
 
 .tiptap.ProseMirror h2 {
@@ -597,14 +413,14 @@
 .tiptap.ProseMirror h5 {
   font-size: 1em;
   font-weight: 600;
-  color: var(--tt-gray-light-500);
+  color: var(--mui-palette-text-secondary);
   margin-top: 0.7em;
 }
 
 .tiptap.ProseMirror h6 {
   font-size: 0.9em;
   font-weight: 600;
-  color: var(--tt-gray-light-500);
+  color: var(--mui-palette-text-secondary);
   margin-top: 0.7em;
 }
 
@@ -618,7 +434,7 @@
 
 .tiptap.ProseMirror.ProseMirror-focused hr.ProseMirror-selectednode {
   border-radius: 9999px;
-  outline: 3px solid var(--tt-brand-color-500);
+  outline: 3px solid var(--mui-palette-primary-main);
   outline-offset: 2px;
 }
 
@@ -628,32 +444,32 @@
 
 .tiptap.ProseMirror [data-type="mention"] {
   display: inline-block;
-  color: var(--tt-brand-color-500);
+  color: var(--mui-palette-primary-main);
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--inline {
   transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
   color: var(--thread-text);
-  border-bottom: 2px dashed var(--tt-color-yellow-base);
+  border-bottom: 2px dashed var(--mui-palette-warning-main);
   font-weight: 600;
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--inline.tiptap-thread--selected,
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--inline.tiptap-thread--hovered {
-  background-color: var(--tt-color-yellow-inc-2);
+  background-color: var(--mui-palette-warning-light);
   border-bottom-color: transparent;
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--block:has(img) {
-  outline: 0.125rem solid var(--tt-color-yellow-base);
-  border-radius: var(--tt-radius-xs, 0.25rem);
+  outline: 0.125rem solid var(--mui-palette-warning-main);
+  border-radius: var(--mui-shape-borderRadius);
   overflow: hidden;
   width: fit-content;
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--block:has(img).tiptap-thread--selected {
   outline-width: 0.25rem;
-  outline-color: var(--tt-color-yellow-base);
+  outline-color: var(--mui-palette-warning-main);
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--block:has(img).tiptap-thread--hovered {
@@ -661,20 +477,20 @@
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--block:not(:has(img)) {
-  border-radius: 0.25rem;
-  border-bottom: 0.125rem dashed var(--tt-color-yellow-base);
+  border-radius: var(--mui-shape-borderRadius);
+  border-bottom: 0.125rem dashed var(--mui-palette-warning-main);
   padding-bottom: 0.5rem;
   outline: 0.25rem solid transparent;
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--block:not(:has(img)).tiptap-thread--hovered,
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--unresolved.tiptap-thread--block:not(:has(img)).tiptap-thread--selected {
-  background-color: var(--tt-color-yellow-base);
-  outline-color: var(--tt-color-yellow-base);
+  background-color: var(--mui-palette-warning-main);
+  outline-color: var(--mui-palette-warning-main);
 }
 
 .tiptap.ProseMirror .tiptap-thread.tiptap-thread--resolved.tiptap-thread--inline.tiptap-thread--selected {
-  background-color: var(--tt-color-yellow-base);
+  background-color: var(--mui-palette-warning-main);
   border-color: transparent;
   opacity: 0.5;
 }
@@ -687,7 +503,7 @@
 .tiptap.ProseMirror .Tiptap-mathematics-editor {
   padding: 0 0.25rem;
   margin: 0 0.25rem;
-  border: 1px solid var(--tiptap-mathematics-border-color);
+  border: 1px solid var(--mui-palette-divider);
   font-family: monospace;
   font-size: 0.875rem;
 }
@@ -702,12 +518,12 @@
 }
 
 .tiptap.ProseMirror .Tiptap-mathematics-render--editable:hover {
-  background: var(--tiptap-mathematics-bg-color);
+  background: var(--mui-palette-background-default);
 }
 
 .tiptap.ProseMirror .Tiptap-mathematics-editor,
 .tiptap.ProseMirror .Tiptap-mathematics-render {
-  border-radius: var(--tt-radius-xs);
+  border-radius: var(--mui-shape-borderRadius);
   display: inline-block;
 }
 
@@ -986,8 +802,8 @@
   max-width: 100%;
   height: auto;
   padding: 5px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: var(--mui-shape-borderRadius);
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -1013,7 +829,7 @@
 
 .editor-table td,
 .editor-table th {
-  border: 1px solid #ddd;
+  border: 1px solid var(--mui-palette-divider);
   padding: 8px;
   min-width: 50px;
   word-break: break-all;
@@ -1023,26 +839,27 @@
 }
 
 .editor-table th {
-  background-color: rgba(204, 204, 204, 0.3);
+  background-color: var(--mui-palette-background-paper);
 }
 
 .editor-table:not(.editor-table-read) td:not(.selectedCell):hover,
 .editor-table:not(.editor-table-read) th:not(.selectedCell):hover {
-  background-color: #F8F9FA;
+  background-color: var(--mui-palette-background-paper);
 }
 
 .editor-table:not(.editor-table-read) td:hover::after,
 .editor-table:not(.editor-table-read) th:hover::after {
   content: '右键点击可操作';
   position: absolute;
-  bottom: -20px;
+  bottom: -24px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
+  background-color: var(--mui-palette-background-default);
+  color: var(--mui-palette-text-primary);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--mui-shape-borderRadius);
   font-size: 12px;
+  font-weight: normal;
   white-space: nowrap;
   z-index: 1000;
   pointer-events: none;
@@ -1054,18 +871,14 @@
 
 .drag-handle {
   align-items: center;
-  background: #fefefe;
-  border-radius: .25rem;
-  border: 1px solid #e0e0e0;
+  background: var(--mui-palette-background-paper);
+  border-radius: 4px;
+  border: 1px solid var(--mui-palette-divider);
   cursor: grab;
   display: flex;
   height: 1.25rem;
   justify-content: center;
   width: 1.25rem;
-}
-
-.drag-handle:hover {
-  background: #f0f0f0;
 }
 
 .drag-handle:active {
@@ -1080,11 +893,11 @@
   position: absolute;
   right: 10px;
   top: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  background: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
+  color: var(--mui-palette-text-primary);
   padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: var(--mui-shape-borderRadius);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -1097,7 +910,7 @@
 }
 
 .tiptap.ProseMirror .code-block-wrapper .copy-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  color: var(--mui-palette-primary-main)
 }
 
 .tiptap.ProseMirror video {
@@ -1109,11 +922,11 @@
 .tiptap.ProseMirror>video:not([data-type="emoji"] video) {
   margin: 2rem 0;
   outline: 1px solid transparent;
-  border-radius: '10px';
+  border-radius: var(--mui-shape-borderRadius);
 }
 
 .tiptap.ProseMirror.ProseMirror-focused video:not([data-type="emoji"] video).ProseMirror-selectednode {
-  outline-color: var(--tt-brand-color-500);
+  outline-color: var(--mui-palette-primary-main);
 }
 
 .tiptap.ProseMirror .tiptap-thread:has(> video) {
@@ -1122,7 +935,7 @@
 
 .tiptap.ProseMirror .tiptap-thread:has(> video) video {
   outline: 1px solid transparent;
-  border-radius: '10px';
+  border-radius: var(--mui-shape-borderRadius);
 }
 
 .tiptap.ProseMirror .tiptap-thread video {
