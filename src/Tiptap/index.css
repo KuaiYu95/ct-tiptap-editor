@@ -429,7 +429,7 @@
   margin-bottom: 3em;
   border: none;
   height: 1px;
-  background-color: var(--separator-color);
+  background-color: var(--mui-palette-divider);
 }
 
 .tiptap.ProseMirror.ProseMirror-focused hr.ProseMirror-selectednode {
@@ -439,7 +439,7 @@
 }
 
 .tiptap.ProseMirror a {
-  color: var(--link-text-color);
+  color: var(--mui-palette-primary-main);
 }
 
 .tiptap.ProseMirror [data-type="mention"] {
