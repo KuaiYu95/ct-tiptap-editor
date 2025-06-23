@@ -80,6 +80,7 @@ const ImageEditDialog = ({ open, onClose, imageFile, onConfirm }: ImageEditDialo
       })
       onClose()
     }
+    onClose()
   }
 
   const handleClose = () => {

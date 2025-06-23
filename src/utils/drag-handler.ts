@@ -1,3 +1,4 @@
+'use client'
 import { Editor, Extension } from "@tiptap/core";
 import { isChangeOrigin } from "@tiptap/extension-collaboration";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
