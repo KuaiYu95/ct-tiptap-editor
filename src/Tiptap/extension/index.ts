@@ -1,11 +1,7 @@
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
-import Dropcursor from '@tiptap/extension-dropcursor';
-import Gapcursor from '@tiptap/extension-gapcursor';
-import HardBreak from '@tiptap/extension-hard-break';
 import Heading from '@tiptap/extension-heading';
 import Highlight from "@tiptap/extension-highlight";
-import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import Image from "@tiptap/extension-image";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
@@ -48,11 +44,10 @@ const extensions = (
     onError?: (error: Error) => void
   }
 ) => ([
-  StarterKit,
-  HardBreak,
-  HorizontalRule,
-  Gapcursor,
-  Dropcursor,
+  StarterKit.configure({
+    codeBlock: false,
+    heading: false,
+  }),
   Markdown,
   Color,
   Underline,

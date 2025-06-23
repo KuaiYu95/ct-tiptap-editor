@@ -107,7 +107,7 @@ export default () => {
 ```
 
 
-# MUI CSS Variables 兼容性指南
+## MUI CSS Variables 兼容性指南
 
 本指南解释如何确保 Tiptap Editor 在 MUI v5 和 v6 中都能正确使用 CSS 变量。
 
