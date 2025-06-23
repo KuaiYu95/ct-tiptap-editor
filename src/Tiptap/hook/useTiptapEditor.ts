@@ -217,11 +217,15 @@ const useTiptapEditor = ({
   }
 
   const setContent = (content: string): Promise<Nav[]> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (editor) {
-        const html = setHeadingsId(content || '');
-        editor.commands.setContent(html);
-        getNavs().then(resolve);
+        try {
+          const html = setHeadingsId(content || '');
+          editor.commands.setContent(html);
+          getNavs().then(resolve);
+        } catch (error) {
+          reject(error);
+        }
       }
     })
   }
