@@ -17,7 +17,6 @@ import Typography from "@tiptap/extension-typography";
 import Underline from "@tiptap/extension-underline";
 import { StarterKit } from "@tiptap/starter-kit";
 import { all, createLowlight } from 'lowlight';
-import { Markdown } from 'tiptap-markdown';
 import { CodeBlock } from './CodeBlock';
 import FontSize from "./FontSize";
 import Link from "./Link";
@@ -48,7 +47,6 @@ const extensions = (
     codeBlock: false,
     heading: false,
   }),
-  Markdown,
   Color,
   Underline,
   TextStyle,
