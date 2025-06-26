@@ -267,7 +267,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
       const { width: imgWidth, height: imgHeight } = imageRef.current.getBoundingClientRect()
       setCrop({
         unit: 'px',
-        width: imgWidth - 10,
+        width: imgWidth - 12,
         height: imgHeight - 12,
         x: 0,
         y: 0

@@ -33,8 +33,18 @@ export const Video = Node.create<VideoOptions>({
       width: {
         default: null,
         parseHTML: element => {
+          // 优先从width属性读取
           const width = element.getAttribute('width')
-          return width ? parseInt(width) : null
+          if (width) return parseInt(width)
+
+          // 其次从style中读取
+          const style = element.getAttribute('style')
+          if (style) {
+            const widthMatch = style.match(/width:\s*(\d+)px/)
+            if (widthMatch) return parseInt(widthMatch[1])
+          }
+
+          return null
         },
         renderHTML: attributes => {
           if (!attributes.width) return {}
@@ -44,8 +54,18 @@ export const Video = Node.create<VideoOptions>({
       height: {
         default: null,
         parseHTML: element => {
+          // 优先从height属性读取
           const height = element.getAttribute('height')
-          return height ? parseInt(height) : null
+          if (height) return parseInt(height)
+
+          // 其次从style中读取
+          const style = element.getAttribute('style')
+          if (style) {
+            const heightMatch = style.match(/height:\s*(\d+)px/)
+            if (heightMatch) return parseInt(heightMatch[1])
+          }
+
+          return null
         },
         renderHTML: attributes => {
           if (!attributes.height) return {}

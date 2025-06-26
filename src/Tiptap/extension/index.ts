@@ -71,8 +71,18 @@ const extensions = (
           width: {
             default: null,
             parseHTML: element => {
+              // 优先从width属性读取
               const width = element.getAttribute('width')
-              return width ? parseInt(width) : null
+              if (width) return parseInt(width)
+
+              // 其次从style中读取
+              const style = element.getAttribute('style')
+              if (style) {
+                const widthMatch = style.match(/width:\s*(\d+)px/)
+                if (widthMatch) return parseInt(widthMatch[1])
+              }
+
+              return null
             },
             renderHTML: attributes => {
               if (!attributes.width) return {}
@@ -82,8 +92,18 @@ const extensions = (
           height: {
             default: null,
             parseHTML: element => {
+              // 优先从height属性读取
               const height = element.getAttribute('height')
-              return height ? parseInt(height) : null
+              if (height) return parseInt(height)
+
+              // 其次从style中读取
+              const style = element.getAttribute('style')
+              if (style) {
+                const heightMatch = style.match(/height:\s*(\d+)px/)
+                if (heightMatch) return parseInt(heightMatch[1])
+              }
+
+              return null
             },
             renderHTML: attributes => {
               if (!attributes.height) return {}
@@ -98,6 +118,11 @@ const extensions = (
 
         if (width) styleObject.width = `${width}px`;
         if (height) styleObject.height = `${height}px`;
+
+        if (!width && !height) {
+          styleObject.width = '100%';
+          styleObject.height = 'auto';
+        }
 
         const style = Object.entries(styleObject)
           .map(([key, value]) => `${key}: ${value}`)

@@ -792,7 +792,7 @@
 
 .editor-container img,
 .editor-container video {
-  max-width: calc(100% - 14px);
+  max-width: 100%;
   height: auto;
   padding: 5px;
   border: 1px solid var(--mui-palette-divider);
