@@ -25,7 +25,7 @@ export interface UseTiptapEditorProps {
 export type UseTiptapEditorReturn = {
   editor: Editor;
 
-  setContent: (content: string) => void;
+  setContent: (content: string) => Promise<Nav[]>;
 
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
@@ -58,7 +58,7 @@ const useTiptapEditor = ({
       },
       onError
     }),
-    content: content ? setHeadingsId(content) : '',
+    content: content ? setHeadingsId(replacePreCode(content)) : '',
     onUpdate: ({ editor }) => {
       onUpdate?.(editor.getHTML());
     },
@@ -223,15 +223,18 @@ const useTiptapEditor = ({
     });
   }
 
-  const setContent = (content: string): void => {
-    if (editor) {
-      try {
-        const html = setHeadingsId(replacePreCode(content || ''));
-        editor.commands.setContent(html);
-      } catch (error) {
-        onError?.(error as Error);
+  const setContent = (content: string): Promise<Nav[]> => {
+    return new Promise((resolve, reject) => {
+      if (editor) {
+        try {
+          const html = setHeadingsId(replacePreCode(content || ''));
+          editor.commands.setContent(html);
+          resolve(getNavs());
+        } catch (error) {
+          reject(error);
+        }
       }
-    }
+    })
   }
 
   if (!editor) {
