@@ -139,8 +139,9 @@ export const ResizableVideoNode: React.FC<NodeViewProps> = (props) => {
         newWidth = Math.round(newHeight / aspectRatio)
       }
 
-      // 限制最大尺寸
-      const maxWidth = containerRef.current?.clientWidth || 1200
+      // 限制最大尺寸 - 使用编辑器容器或合理的最大宽度
+      const editorContainer = containerRef.current?.closest('.editor-container, .ProseMirror')
+      const maxWidth = (editorContainer as HTMLElement)?.clientWidth || 1200
       if (newWidth > maxWidth) {
         newWidth = maxWidth
         newHeight = Math.round(newWidth * aspectRatio)

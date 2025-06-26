@@ -217,8 +217,9 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
         newWidth = Math.round(newHeight / aspectRatio)
       }
 
-      // 限制最大尺寸
-      const maxWidth = containerRef.current?.clientWidth || 1200
+      // 限制最大尺寸 - 使用编辑器容器或合理的最大宽度
+      const editorContainer = containerRef.current?.closest('.editor-container, .ProseMirror')
+      const maxWidth = (editorContainer as HTMLElement)?.clientWidth || 1200
       if (newWidth > maxWidth) {
         newWidth = maxWidth
         newHeight = Math.round(newWidth * aspectRatio)
@@ -412,10 +413,6 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
             border: '1px solid',
             borderColor: 'divider',
             borderRadius: 'var(--mui-shape-borderRadius)',
-            img: {
-              p: 0,
-              lineHeight: 1,
-            }
           }}>
             <ReactCrop
               crop={crop}
@@ -427,9 +424,10 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
                 alt={title || ''}
                 crossOrigin="anonymous"
                 style={{
-                  width: dimensions.width ? `${dimensions.width}px` : '100%',
+                  padding: 0,
+                  width: dimensions.width ? `${dimensions.width - 12}px` : '100%',
                   maxWidth: '100%',
-                  height: dimensions.height ? `${dimensions.height}px` : 'auto',
+                  height: dimensions.height ? `${dimensions.height - 12}px` : 'auto',
                 }}
               />
             </ReactCrop>
