@@ -152,7 +152,7 @@ const CloudUploadIcon: React.FC = () => (
     width="16"
     height="16"
     viewBox="0 0 24 24"
-    className="tiptap-video-upload-icon"
+    className="tiptap-image-upload-icon"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -173,7 +173,7 @@ const FileIcon: React.FC = () => (
     height="57"
     viewBox="0 0 43 57"
     fill="currentColor"
-    className="tiptap-video-upload-dropzone-rect-primary"
+    className="tiptap-image-upload-dropzone-rect-primary"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
@@ -190,7 +190,7 @@ const FileCornerIcon: React.FC = () => (
   <svg
     width="10"
     height="10"
-    className="tiptap-video-upload-dropzone-rect-secondary"
+    className="tiptap-image-upload-dropzone-rect-secondary"
     viewBox="0 0 10 10"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -202,12 +202,12 @@ const FileCornerIcon: React.FC = () => (
   </svg>
 )
 
-interface VideoUploadDragAreaProps {
+interface ImageUploadDragAreaProps {
   onFile: (files: File[]) => void
   children?: React.ReactNode
 }
 
-const VideoUploadDragArea: React.FC<VideoUploadDragAreaProps> = ({
+const ImageUploadDragArea: React.FC<ImageUploadDragAreaProps> = ({
   onFile,
   children,
 }) => {
@@ -257,14 +257,14 @@ const VideoUploadDragArea: React.FC<VideoUploadDragAreaProps> = ({
   )
 }
 
-interface VideoUploadPreviewProps {
+interface ImageUploadPreviewProps {
   file: File
   progress: number
   status: "uploading" | "success" | "error"
   onRemove: () => void
 }
 
-const VideoUploadPreview: React.FC<VideoUploadPreviewProps> = ({
+const ImageUploadPreview: React.FC<ImageUploadPreviewProps> = ({
   file,
   progress,
   status,
@@ -324,7 +324,7 @@ const VideoUploadPreview: React.FC<VideoUploadPreviewProps> = ({
   )
 }
 
-const DropZoneContent: React.FC<{ maxSize: number }> = ({ maxSize }) => (
+const DropZoneContent: React.FC<{ maxSize: number; hasUpload: boolean }> = ({ maxSize, hasUpload }) => (
   <>
     <Stack sx={{ position: 'relative', color: 'text.disabled', width: 43, height: 57, userSelect: 'none', display: 'inline-flex' }}>
       <FileIcon />
@@ -338,16 +338,18 @@ const DropZoneContent: React.FC<{ maxSize: number }> = ({ maxSize }) => (
     </Stack>
     <Stack justifyContent="center" alignItems="center" sx={{ userSelect: 'none', mt: 1 }}>
       <Box component="span" sx={{ color: 'text.secondary', fontSize: 14 }}>
-        <em style={{ fontStyle: 'normal', textDecoration: 'underline' }}>点击此处上传</em> 或拖拽视频到此处
+        <em style={{ fontStyle: 'normal', textDecoration: 'underline' }}>点击此处{hasUpload ? '上传' : '选择'}</em> 或拖拽图片到此处
       </Box>
-      <Box component="span" sx={{ color: 'text.disabled', fontSize: 12 }}>
-        最大文件大小 {maxSize / 1024 / 1024}MB.
-      </Box>
+      {hasUpload && (
+        <Box component="span" sx={{ color: 'text.disabled', fontSize: 12 }}>
+          最大文件大小 {maxSize / 1024 / 1024}MB.
+        </Box>
+      )}
     </Stack>
   </>
 )
 
-export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
+export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
   const { accept, limit, maxSize, pendingFile } = props.node.attrs
   const inputRef = React.useRef<HTMLInputElement>(null)
   const extension = props.extension
@@ -380,24 +382,77 @@ export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
   }
 
   const handleUpload = async (files: File[]) => {
-    const url = await uploadFiles(files)
-
-    if (url) {
-      const pos = props.getPos()
-      const filename = files[0]?.name.replace(/\.[^/.]+$/, "") || "unknown"
-
-      props.editor
-        .chain()
-        .focus()
-        .deleteRange({ from: pos, to: pos + 1 })
-        .insertContentAt(pos, [
-          {
-            type: "resizableVideo",
-            attrs: { src: url, alt: filename, title: filename },
-          },
-        ])
-        .run()
+    if (!files || files.length === 0) {
+      extension.options.onError?.(new Error("No file selected"))
+      return
     }
+
+    const file = files[0]
+    if (!file) {
+      extension.options.onError?.(new Error("File is undefined"))
+      return
+    }
+
+    // 检查文件类型
+    if (!file.type.startsWith('image/')) {
+      extension.options.onError?.(new Error("选择的文件不是图片格式"))
+      return
+    }
+
+    let url: string | null = null
+
+    // 如果没有upload函数，直接转换为base64
+    if (!extension.options.upload) {
+      try {
+        url = await convertFileToBase64(file)
+
+        if (url) {
+          insertImageNode(url, file)
+        }
+
+      } catch (error) {
+        extension.options.onError?.(error instanceof Error ? error : new Error("转换图片失败"))
+        return
+      }
+    } else {
+      // 有upload函数时，使用原有的上传逻辑
+      url = await uploadFiles(files)
+      if (url) {
+        insertImageNode(url, file)
+      }
+    }
+  }
+
+  // 插入图片节点的辅助函数
+  const insertImageNode = (url: string, file: File) => {
+    const pos = props.getPos()
+    const filename = file.name.replace(/\.[^/.]+$/, "") || "unknown"
+
+    props.editor
+      .chain()
+      .focus()
+      .deleteRange({ from: pos, to: pos + 1 })
+      .insertContentAt(pos, [
+        {
+          type: "resizableImage",
+          attrs: { src: url, alt: filename, title: filename },
+        },
+      ])
+      .run()
+  }
+
+  // 将文件转换为base64的辅助函数
+  const convertFileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        resolve(reader.result as string)
+      }
+      reader.onerror = () => {
+        reject(new Error("读取文件失败"))
+      }
+      reader.readAsDataURL(file)
+    })
   }
 
   const handleClick = () => {
@@ -413,13 +468,13 @@ export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
       onClick={handleClick}
     >
       {!fileItem && (
-        <VideoUploadDragArea onFile={handleUpload}>
-          <DropZoneContent maxSize={maxSize} />
-        </VideoUploadDragArea>
+        <ImageUploadDragArea onFile={handleUpload}>
+          <DropZoneContent maxSize={maxSize} hasUpload={!!extension.options.upload} />
+        </ImageUploadDragArea>
       )}
 
       {fileItem && (
-        <VideoUploadPreview
+        <ImageUploadPreview
           file={fileItem.file}
           progress={fileItem.progress}
           status={fileItem.status}
@@ -438,4 +493,4 @@ export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
       />
     </NodeViewWrapper>
   )
-}
+} 

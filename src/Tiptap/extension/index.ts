@@ -2,7 +2,6 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
 import Heading from '@tiptap/extension-heading';
 import Highlight from "@tiptap/extension-highlight";
-import Image from "@tiptap/extension-image";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import Table from '@tiptap/extension-table';
@@ -20,7 +19,10 @@ import { all, createLowlight } from 'lowlight';
 import { Markdown } from 'tiptap-markdown';
 import { CodeBlock } from './CodeBlock';
 import FontSize from "./FontSize";
+import ImageUploadNode from './ImageUpload';
 import Link from "./Link";
+import ResizableImage from './ResizableImage';
+import ResizableVideo from './ResizableVideo';
 import Selection from "./Selection";
 import TabKeyExtension from "./TabKey";
 import TrailingNode from "./TrailingNode";
@@ -57,18 +59,24 @@ const extensions = (
   Underline,
   TextStyle,
   TaskList,
-  Image.configure({
-    allowBase64: true,
-    inline: true,
+  ResizableImage,
+  ImageUploadNode.configure({
+    accept: 'image/*',
+    maxSize: 1024 * 1024 * (upload?.size || 20),
+    limit: 1,
+    upload: upload?.onUpload,
+    onError: onError,
+    onSuccess: (url) => console.log('Image upload success:', url),
   }),
   Video,
+  ResizableVideo,
   VideoUploadNode.configure({
     accept: 'video/*',
     maxSize: 1024 * 1024 * (upload?.size || 20),
     limit: 1,
     upload: upload?.onUpload,
     onError: onError,
-    onSuccess: (url) => console.log('Upload success:', url),
+    onSuccess: (url) => console.log('Video upload success:', url),
   }),
   Typography,
   Table.configure({
@@ -122,19 +130,8 @@ const extensions = (
     }
   }),
   Heading.configure({
-    HTMLAttributes: {
-      class: 'heading',
-    },
-  }).extend({
-    addAttributes() {
-      return {
-        ...this.parent?.(),
-        id: {
-          default: null,
-        },
-      }
-    },
+    levels: [1, 2, 3, 4, 5, 6],
   }),
-])
+]);
 
 export default extensions;

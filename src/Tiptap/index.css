@@ -19,7 +19,7 @@
   --mui-palette-text-primary: #21222D;
   --mui-palette-text-secondary: 'rgba(33,34,45, 0.7)';
   --mui-palette-text-auxiliary: 'rgba(33,34,45, 0.5)';
-  --mui-palette-text-tertiary: 'rgba(33,34,45, 0.5)';
+  --mui-palette-text-tertiary: var(--ct-color-text-auxiliary);
   --mui-palette-text-disabled: 'rgba(33,34,45, 0.5)';
 
   /* MUI v5/v6 Palette Variables - Background */
@@ -84,14 +84,7 @@
 }
 
 .tiptap.ProseMirror img {
-  max-width: 100%;
-  padding: 5px;
-  border: 1px solid var(--mui-palette-divider);
-  border-radius: var(--mui-shape-borderRadius);
-  margin-top: 10px;
-  margin-bottom: 10px;
   cursor: pointer;
-  height: auto;
   display: block;
 }
 
@@ -799,17 +792,15 @@
 
 .editor-container img,
 .editor-container video {
-  max-width: 100%;
+  max-width: calc(100% - 14px);
   height: auto;
   padding: 5px;
   border: 1px solid var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 
 .editor-container video {
-  width: 100%;
+  min-width: 300px;
 }
 
 .editor-container [hidden]:where(:not([hidden="until-found"])) {

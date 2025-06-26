@@ -32,11 +32,6 @@ export type UseTiptapEditorReturn = {
   onError?: (error: Error) => void
   aiUrl?: string
 
-  imageEditOpen: boolean;
-  setImageEditOpen: (open: boolean) => void;
-  imageFile: File | null;
-  setImageFile: (file: File | null) => void;
-  handleImageEdit: (imageUrl: string, file?: File) => void;
   previewImg: string;
   getNavs: () => Promise<Nav[]>;
 } | null
@@ -52,8 +47,6 @@ const useTiptapEditor = ({
   onError,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
-  const [imageEditOpen, setImageEditOpen] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [dropPosition, setDropPosition] = useState(-1);
   const [callback, setCallback] = useState<() => void>(() => { });
 
@@ -130,18 +123,20 @@ const useTiptapEditor = ({
             event.preventDefault();
             const file = item.getAsFile();
             if (!file) continue;
-            setDropPosition(-1);
-            setImageFile(file);
-            setImageEditOpen(true);
+            if (editor) {
+              editor.chain()
+                .focus()
+                .setImageUploadNode({
+                  pendingFile: file
+                })
+                .run();
+            }
             return true;
           } else if (item.type.indexOf('video') !== -1) {
-            // 处理粘贴视频文件，使用 VideoUploadNode 展示上传进度
             event.preventDefault();
             const file = item.getAsFile();
             if (!file) continue;
-
             if (editor) {
-              // 插入 VideoUploadNode 并传递文件
               editor.chain()
                 .focus()
                 .setVideoUploadNode({
@@ -157,41 +152,43 @@ const useTiptapEditor = ({
       },
       handleDrop: (view, event) => {
         if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+          event.preventDefault();
           const files = event.dataTransfer.files;
           for (let i = 0; i < files.length; i++) {
             const file = files[i];
             if (file.type.startsWith('image/')) {
-              event.preventDefault();
-              const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
-              if (!coordinates) return false;
-              const dropPosition = coordinates.pos;
-              setDropPosition(dropPosition);
-              setImageFile(file);
-              setImageEditOpen(true);
-              return true;
-            } else if (file.type.startsWith('video/')) {
-              // 处理视频文件拖拽，使用 VideoUploadNode 展示上传进度
-              event.preventDefault();
               const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
               if (!coordinates) return false;
               const dropPosition = coordinates.pos;
 
               if (editor) {
-                // 设置光标位置到拖拽位置
                 const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
                 editor.view.dispatch(tr);
+                editor.chain()
+                  .focus()
+                  .setImageUploadNode({
+                    pendingFile: file
+                  })
+                  .run();
+              }
+              return true;
+            } else if (file.type.startsWith('video/')) {
+              const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+              if (!coordinates) return false;
+              const dropPosition = coordinates.pos;
 
-                // 插入 VideoUploadNode 并存储文件引用
+              if (editor) {
+                const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
+                editor.view.dispatch(tr);
                 editor.chain()
                   .focus()
                   .setVideoUploadNode({
-                    pendingFile: file // 传递文件到节点属性中
+                    pendingFile: file
                   })
                   .run();
               }
               return true;
             } else if (onUpload) {
-              event.preventDefault();
               const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
               if (!coordinates) return false;
               const dropPosition = coordinates.pos;
@@ -215,25 +212,6 @@ const useTiptapEditor = ({
       },
     },
   });
-
-  const handleImageEdit = async (imageUrl: string, file?: File) => {
-    let url = imageUrl;
-    if (file && onUpload) {
-      url = await onUpload(file);
-    }
-    setImageEditOpen(false);
-    if (editor) {
-      if (dropPosition === -1) {
-        editor.chain().focus().setImage({ src: url }).run();
-        callback?.();
-      } else {
-        const { state } = editor.view;
-        const tr = state.tr.setSelection(TextSelection.near(state.doc.resolve(dropPosition)));
-        editor.view.dispatch(tr);
-        editor.chain().focus().setImage({ src: url }).run();
-      }
-    }
-  };
 
   const getNavs = async (): Promise<Nav[]> => {
     if (editor) {
@@ -279,11 +257,6 @@ const useTiptapEditor = ({
 
     onUpload,
     onError,
-    imageEditOpen,
-    setImageEditOpen,
-    imageFile,
-    setImageFile,
-    handleImageEdit,
     previewImg,
 
     setCallback,

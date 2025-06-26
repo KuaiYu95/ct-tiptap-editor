@@ -4,53 +4,6 @@ This is an example component.
 
 ## 问题测试用例
 
-```jsx
-import { TiptapReader, useTiptapEditor } from 'ct-tiptap-editor';
-
-export default () => {
-  const content = `<pre><code>var a = 1;\n\n\nconsole.log(a)</code></pre><p></p>`;
-  
-  const editorRef = useTiptapEditor({
-    content,
-    editable: false,
-  });
-  
-  if (!editorRef) return <div>加载中...</div>;
-  
-  return (
-    <div>
-      <h3>输入内容:</h3>
-      <pre style={{ background: '#f5f5f5', padding: '10px', fontSize: '12px' }}>
-        {content}
-      </pre>
-      
-      <h3>渲染结果:</h3>
-      <div
-        style={{
-          width: 'calc(100% - 96px)',
-          height: '300px',
-          padding: 24,
-          overflow: 'auto',
-          border: '1px solid #ccc',
-        }}
-      >
-        <TiptapReader editorRef={editorRef} />
-      </div>
-      
-      <h3>编辑器 HTML 输出:</h3>
-      <div style={{ 
-        background: '#f5f5f5', 
-        padding: '10px', 
-        fontSize: '12px',
-        wordBreak: 'break-all',
-      }}>
-        {editorRef.editor.getHTML()}
-      </div>
-    </div>
-  );
-};
-```
-
 ```tsx
 import {
   TiptapEditor,
@@ -73,7 +26,7 @@ export default () => {
   };
 
   const handleFileUpload = async (file: File) => {
-    return 'https://www.baidu.com';
+    return 'https://pandawiki.docs.baizhi.cloud/static-file/ff56bd46-7cd4-4ebc-bf75-07303d4d2c5c/8088b9cf-e12e-4eec-9f05-313c70935286.png';
     // 实现文件上传逻辑，返回文件URL
     const formData = new FormData();
     formData.append('file', file);
@@ -125,6 +78,53 @@ export default () => {
           </div>
         </div>
     </>
+  );
+};
+```
+
+```jsx
+import { TiptapReader, useTiptapEditor } from 'ct-tiptap-editor';
+
+export default () => {
+  const content = `<pre><code>var a = 1;\n\n\nconsole.log(a)</code></pre><p></p>`;
+  
+  const editorRef = useTiptapEditor({
+    content,
+    editable: false,
+  });
+  
+  if (!editorRef) return <div>加载中...</div>;
+  
+  return (
+    <div>
+      <h3>输入内容:</h3>
+      <pre style={{ background: '#f5f5f5', padding: '10px', fontSize: '12px' }}>
+        {content}
+      </pre>
+      
+      <h3>渲染结果:</h3>
+      <div
+        style={{
+          width: 'calc(100% - 96px)',
+          height: '300px',
+          padding: 24,
+          overflow: 'auto',
+          border: '1px solid #ccc',
+        }}
+      >
+        <TiptapReader editorRef={editorRef} />
+      </div>
+      
+      <h3>编辑器 HTML 输出:</h3>
+      <div style={{ 
+        background: '#f5f5f5', 
+        padding: '10px', 
+        fontSize: '12px',
+        wordBreak: 'break-all',
+      }}>
+        {editorRef.editor.getHTML()}
+      </div>
+    </div>
   );
 };
 ```

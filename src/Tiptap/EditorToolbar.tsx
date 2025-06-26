@@ -153,10 +153,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
       className={editor.isActive("subscript") ? "active" : ""}
     />
     <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
-    <EditorUpload editor={editor} onUpload={onUpload} imgEdit={(file: File) => {
-      editorRef.setImageFile(file)
-      editorRef.setImageEditOpen(true)
-    }} />
+    <EditorUpload editor={editor} onUpload={onUpload} />
     <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
     <EditorAIAssistant editor={editor} aiUrl={aiUrl} onError={onError} />
   </Stack>

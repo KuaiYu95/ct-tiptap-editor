@@ -12,14 +12,11 @@ import EditorToolbarButton from "./EditorToolbarButton";
 
 interface EditorUploadProps {
   editor: Editor
-  extensionName?: string
   onUpload?: UploadFunction
-  imgEdit: (files: File) => void
 }
 
-const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUploadProps) => {
+const EditorUpload = ({ editor, onUpload }: EditorUploadProps) => {
   const [selectedValue, setSelectedValue] = useState<string>("none");
-  const imgInputRef = useRef<HTMLInputElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const UploadOptions = [
@@ -27,11 +24,6 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
     { id: 'video', icon: <VideoIcon sx={{ fontSize: 18 }} />, label: '上传视频' },
     { id: 'file', icon: <AttachmentIcon sx={{ fontSize: 17 }} />, label: '上传附件' },
   ];
-
-  const inputImg = (files: File[]) => {
-    const file = files[0];
-    imgEdit(file);
-  }
 
   const inputFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -53,17 +45,25 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
     }
   };
 
+  const handleImageClick = React.useCallback((e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    if (!e.defaultPrevented) {
+      editor
+        .chain()
+        .focus()
+        .setImageUploadNode()
+        .run()
+    }
+  }, [editor])
+
   const handleVideoClick = React.useCallback((e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
     if (!e.defaultPrevented) {
       editor
         .chain()
         .focus()
-        .insertContent({
-          type: extensionName,
-        })
+        .setVideoUploadNode()
         .run()
     }
-  }, [editor, extensionName])
+  }, [editor])
 
   const updateSelection = () => {
     if (editor.isActive('imageUpload')) {
@@ -89,7 +89,7 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
 
   const handleChange = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, value: string) => {
     if (value === 'image') {
-      imgInputRef.current?.click()
+      handleImageClick(e)
     } else if (value === 'video') {
       handleVideoClick(e)
     } else if (value === 'file') {
@@ -145,18 +145,6 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
     </Select>
     <input
       type='file'
-      ref={imgInputRef}
-      hidden
-      accept='image/*'
-      multiple={false}
-      onChange={e => {
-        if (e.target.files) {
-          inputImg(Array.from(e.target.files))
-        }
-      }}
-    />
-    <input
-      type='file'
       ref={fileInputRef}
       hidden
       accept='*/*'
@@ -166,4 +154,4 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
   </>
 }
 
-export default EditorUpload
+export default EditorUpload;
