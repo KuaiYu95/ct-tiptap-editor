@@ -348,7 +348,7 @@ const DropZoneContent: React.FC<{ maxSize: number }> = ({ maxSize }) => (
 )
 
 export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
-  const { accept, limit, maxSize } = props.node.attrs
+  const { accept, limit, maxSize, pendingFile } = props.node.attrs
   const inputRef = React.useRef<HTMLInputElement>(null)
   const extension = props.extension
 
@@ -362,6 +362,13 @@ export const VideoUploadNode: React.FC<NodeViewProps> = (props) => {
   }
 
   const { fileItem, uploadFiles, clearFileItem } = useFileUpload(uploadOptions)
+
+  // 当有pendingFile时自动开始上传
+  React.useEffect(() => {
+    if (pendingFile && !fileItem) {
+      handleUpload([pendingFile]);
+    }
+  }, [pendingFile, fileItem]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files

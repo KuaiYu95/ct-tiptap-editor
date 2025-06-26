@@ -35,6 +35,10 @@ export interface VideoUploadNodeOptions {
    * Callback for successful uploads.
    */
   onSuccess?: (url: string) => void
+  /**
+   * Pending file to upload (used when file is dropped externally)
+   */
+  pendingFile?: File
 }
 
 declare module "@tiptap/react" {
@@ -81,6 +85,9 @@ export const VideoUploadNode = Node.create<VideoUploadNodeOptions>({
       },
       maxSize: {
         default: this.options.maxSize,
+      },
+      pendingFile: {
+        default: null,
       },
     }
   },

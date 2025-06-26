@@ -134,6 +134,22 @@ const useTiptapEditor = ({
             setImageFile(file);
             setImageEditOpen(true);
             return true;
+          } else if (item.type.indexOf('video') !== -1) {
+            // 处理粘贴视频文件，使用 VideoUploadNode 展示上传进度
+            event.preventDefault();
+            const file = item.getAsFile();
+            if (!file) continue;
+
+            if (editor) {
+              // 插入 VideoUploadNode 并传递文件
+              editor.chain()
+                .focus()
+                .setVideoUploadNode({
+                  pendingFile: file
+                })
+                .run();
+            }
+            return true;
           }
         }
 
@@ -152,6 +168,27 @@ const useTiptapEditor = ({
               setDropPosition(dropPosition);
               setImageFile(file);
               setImageEditOpen(true);
+              return true;
+            } else if (file.type.startsWith('video/')) {
+              // 处理视频文件拖拽，使用 VideoUploadNode 展示上传进度
+              event.preventDefault();
+              const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+              if (!coordinates) return false;
+              const dropPosition = coordinates.pos;
+
+              if (editor) {
+                // 设置光标位置到拖拽位置
+                const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
+                editor.view.dispatch(tr);
+
+                // 插入 VideoUploadNode 并存储文件引用
+                editor.chain()
+                  .focus()
+                  .setVideoUploadNode({
+                    pendingFile: file // 传递文件到节点属性中
+                  })
+                  .run();
+              }
               return true;
             } else if (onUpload) {
               event.preventDefault();
