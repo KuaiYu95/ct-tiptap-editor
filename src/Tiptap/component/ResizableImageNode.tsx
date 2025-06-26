@@ -62,7 +62,8 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({ onMouseDown, isVisible }) =
       justifyContent: 'center',
       color: 'white',
       opacity: isVisible ? 1 : 0,
-      transition: 'opacity 0.2s ease, transform 0.1s ease',
+      visibility: isVisible ? 'visible' : 'hidden',
+      transition: 'opacity 0.2s ease, transform 0.1s ease, visibility 0.2s ease',
       userSelect: 'none',
       zIndex: 10,
       '&:hover': {
@@ -101,7 +102,8 @@ const CropButton: React.FC<CropButtonProps> = ({ onClick, isVisible }) => (
       justifyContent: 'center',
       color: 'white',
       opacity: isVisible ? 1 : 0,
-      transition: 'opacity 0.2s ease, transform 0.1s ease',
+      visibility: isVisible ? 'visible' : 'hidden',
+      transition: 'opacity 0.2s ease, transform 0.1s ease, visibility 0.2s ease',
       userSelect: 'none',
       zIndex: 10,
       '&:hover': {
@@ -123,6 +125,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
   const [isHovered, setIsHovered] = React.useState(false)
   const [isResizing, setIsResizing] = React.useState(false)
   const [isCropping, setIsCropping] = React.useState(false)
+  const isEditable = props.editor.isEditable
   const [dimensions, setDimensions] = React.useState({
     width: width || null,
     height: height || null
@@ -197,6 +200,9 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
     document.body.style.userSelect = 'none'
     document.body.style.cursor = 'nw-resize'
 
+    // 使用ref来存储最新的尺寸值，避免闭包问题
+    let currentDimensions = { width: startWidth, height: startHeight }
+
     const handleMouseMove = (e: MouseEvent) => {
       const deltaX = e.clientX - startX
       const deltaY = e.clientY - startY
@@ -218,6 +224,9 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
         newHeight = Math.round(newWidth * aspectRatio)
       }
 
+      // 更新当前尺寸变量
+      currentDimensions = { width: newWidth, height: newHeight }
+
       setDimensions({
         width: newWidth,
         height: newHeight
@@ -231,10 +240,16 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
       document.body.style.userSelect = ''
       document.body.style.cursor = ''
 
-      // 更新节点属性
+      // 使用最新的尺寸值更新节点属性
       props.updateAttributes({
-        width: dimensions.width,
-        height: dimensions.height
+        width: currentDimensions.width,
+        height: currentDimensions.height
+      })
+
+      // 确保状态和属性同步
+      setDimensions({
+        width: currentDimensions.width,
+        height: currentDimensions.height
       })
 
       document.removeEventListener('mousemove', handleMouseMove)
@@ -387,8 +402,8 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
           position: 'relative',
           display: 'inline-block',
         }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => !isResizing && !isCropping && setIsHovered(false)}
+        onMouseEnter={() => isEditable && setIsHovered(true)}
+        onMouseLeave={() => isEditable && !isResizing && !isCropping && setIsHovered(false)}
       >
         {isCropping ? (
           <Box sx={{
@@ -469,15 +484,19 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
               }}
             />
 
-            <CropButton
-              onClick={handleCropClick}
-              isVisible={isHovered || isResizing}
-            />
+            {isEditable && (
+              <CropButton
+                onClick={handleCropClick}
+                isVisible={isHovered || isResizing}
+              />
+            )}
 
-            <ResizeHandle
-              onMouseDown={handleMouseDown}
-              isVisible={isHovered || isResizing}
-            />
+            {isEditable && (
+              <ResizeHandle
+                onMouseDown={handleMouseDown}
+                isVisible={isHovered || isResizing}
+              />
+            )}
           </>
         )}
       </Box>

@@ -30,6 +30,28 @@ export const Video = Node.create<VideoOptions>({
       title: {
         default: null,
       },
+      width: {
+        default: null,
+        parseHTML: element => {
+          const width = element.getAttribute('width')
+          return width ? parseInt(width) : null
+        },
+        renderHTML: attributes => {
+          if (!attributes.width) return {}
+          return { width: attributes.width }
+        },
+      },
+      height: {
+        default: null,
+        parseHTML: element => {
+          const height = element.getAttribute('height')
+          return height ? parseInt(height) : null
+        },
+        renderHTML: attributes => {
+          if (!attributes.height) return {}
+          return { height: attributes.height }
+        },
+      },
     }
   },
 
@@ -42,15 +64,30 @@ export const Video = Node.create<VideoOptions>({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["video", mergeAttributes(HTMLAttributes, {
+    const { width, height, ...otherAttrs } = HTMLAttributes;
+    const styleObject: Record<string, string> = {};
+
+    if (width) styleObject.width = `${width}px`;
+    if (height) styleObject.height = `${height}px`;
+
+    if (!width && !height) {
+      styleObject.width = '100%';
+      styleObject.height = 'auto';
+    }
+
+    // 将样式对象转换为CSS字符串
+    const style = Object.entries(styleObject)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('; ');
+
+    return ["video", mergeAttributes(otherAttrs, {
+      style,
       controls: true,
       loop: false,
       muted: false,
       playsinline: true,
-      style: {
-        width: '100%',
-        height: 'auto',
-      },
+      width: width || undefined,
+      height: height || undefined
     })]
   },
 

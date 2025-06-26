@@ -40,8 +40,18 @@ export const ResizableImage = Node.create<ResizableImageOptions>({
       width: {
         default: null,
         parseHTML: element => {
+          // 优先从width属性读取
           const width = element.getAttribute('width')
-          return width ? parseInt(width) : null
+          if (width) return parseInt(width)
+
+          // 其次从style中读取
+          const style = element.getAttribute('style')
+          if (style) {
+            const widthMatch = style.match(/width:\s*(\d+)px/)
+            if (widthMatch) return parseInt(widthMatch[1])
+          }
+
+          return null
         },
         renderHTML: attributes => {
           if (!attributes.width) return {}
@@ -51,8 +61,18 @@ export const ResizableImage = Node.create<ResizableImageOptions>({
       height: {
         default: null,
         parseHTML: element => {
+          // 优先从height属性读取
           const height = element.getAttribute('height')
-          return height ? parseInt(height) : null
+          if (height) return parseInt(height)
+
+          // 其次从style中读取
+          const style = element.getAttribute('style')
+          if (style) {
+            const heightMatch = style.match(/height:\s*(\d+)px/)
+            if (heightMatch) return parseInt(heightMatch[1])
+          }
+
+          return null
         },
         renderHTML: attributes => {
           if (!attributes.height) return {}
@@ -72,17 +92,26 @@ export const ResizableImage = Node.create<ResizableImageOptions>({
 
   renderHTML({ HTMLAttributes }) {
     const { width, height, ...otherAttrs } = HTMLAttributes;
-    const style: Record<string, any> = {};
+    const styleObject: Record<string, string> = {};
 
-    if (width) style.width = `${width}px`;
-    if (height) style.height = `${height}px`;
+    if (width) styleObject.width = `${width}px`;
+    if (height) styleObject.height = `${height}px`;
 
     if (!width && !height) {
-      style.width = '100%';
-      style.height = 'auto';
+      styleObject.width = '100%';
+      styleObject.height = 'auto';
     }
 
-    return ["img", mergeAttributes(otherAttrs, style)]
+    // 将样式对象转换为CSS字符串
+    const style = Object.entries(styleObject)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('; ');
+
+    return ["img", mergeAttributes(otherAttrs, {
+      style,
+      width: width || undefined,
+      height: height || undefined
+    })]
   },
 
   addNodeView() {

@@ -40,8 +40,18 @@ export const ResizableVideo = Node.create<ResizableVideoOptions>({
       width: {
         default: null,
         parseHTML: element => {
+          // 优先从width属性读取
           const width = element.getAttribute('width')
-          return width ? parseInt(width) : null
+          if (width) return parseInt(width)
+
+          // 其次从style中读取
+          const style = element.getAttribute('style')
+          if (style) {
+            const widthMatch = style.match(/width:\s*(\d+)px/)
+            if (widthMatch) return parseInt(widthMatch[1])
+          }
+
+          return null
         },
         renderHTML: attributes => {
           if (!attributes.width) return {}
@@ -51,8 +61,18 @@ export const ResizableVideo = Node.create<ResizableVideoOptions>({
       height: {
         default: null,
         parseHTML: element => {
+          // 优先从height属性读取
           const height = element.getAttribute('height')
-          return height ? parseInt(height) : null
+          if (height) return parseInt(height)
+
+          // 其次从style中读取
+          const style = element.getAttribute('style')
+          if (style) {
+            const heightMatch = style.match(/height:\s*(\d+)px/)
+            if (heightMatch) return parseInt(heightMatch[1])
+          }
+
+          return null
         },
         renderHTML: attributes => {
           if (!attributes.height) return {}
@@ -72,22 +92,30 @@ export const ResizableVideo = Node.create<ResizableVideoOptions>({
 
   renderHTML({ HTMLAttributes }) {
     const { width, height, ...otherAttrs } = HTMLAttributes;
-    const style: Record<string, any> = {
+    const styleObject: Record<string, string> = {};
+
+    if (width) styleObject.width = `${width}px`;
+    if (height) styleObject.height = `${height}px`;
+
+    if (!width && !height) {
+      styleObject.width = '100%';
+      styleObject.height = 'auto';
+    }
+
+    // 将样式对象转换为CSS字符串
+    const style = Object.entries(styleObject)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('; ');
+
+    return ["video", mergeAttributes(otherAttrs, {
+      style,
       controls: true,
       loop: false,
       muted: false,
       playsinline: true,
-    };
-
-    if (width) style.width = `${width}px`;
-    if (height) style.height = `${height}px`;
-
-    if (!width && !height) {
-      style.width = '100%';
-      style.height = 'auto';
-    }
-
-    return ["video", mergeAttributes(otherAttrs, style)]
+      width: width || undefined,
+      height: height || undefined
+    })]
   },
 
   addNodeView() {

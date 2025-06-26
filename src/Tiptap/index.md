@@ -14,69 +14,52 @@ import {
 import { useState, useEffect } from 'react';
 
 export default () => {
-  const [open, setOpen] = useState(false);
+
+  const onReadUpdate = (value)  => console.log('🍐',value)
+  const readEditorRef = useTiptapEditor({
+    content: '',
+    editable: false,
+    onUpdate: onReadUpdate,
+    onError: (error) => {
+      console.log('read', error.message)
+    },
+  })
 
   const onSave = (value) => {
-    console.log('onSave', value);
-    editorRef?.setContent(value);
+    console.log('🍎', value)
+    readEditorRef?.setContent(value);
   };
 
-  const onUpdate = (value) => {
-    console.log('onUpdate', value);
-  };
-
+  const onUpdate = (value)  => console.log('🍌',value)
+  
   const handleFileUpload = async (file: File) => {
     return 'https://pandawiki.docs.baizhi.cloud/static-file/ff56bd46-7cd4-4ebc-bf75-07303d4d2c5c/8088b9cf-e12e-4eec-9f05-313c70935286.png';
-    // 实现文件上传逻辑，返回文件URL
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await fetch('/api/upload', {
-      method: 'POST',
-      body: formData,
-    });
-
-    const data = await response.json();
-    return data.fileUrl;
   };
 
   const editorRef = useTiptapEditor({
-    content: '',
+    content: `<img src="https://pandawiki.docs.baizhi.cloud/static-file/ff56bd46-7cd4-4ebc-bf75-07303d4d2c5c/8088b9cf-e12e-4eec-9f05-313c70935286.png" alt="header-bg" title="header-bg" style="width: 551px; height: 176px" width="551" height="176"><p>时饭撒上</p>`,
     aiUrl: '/api/v1/creation/text',
     onSave,
-    onUpdate,
     onError: (error) => {
       console.log(error.message)
     },
+    onUpdate,
     onUpload: handleFileUpload,
   });
 
-  useEffect(() => {
-    if (editorRef && open) {
-      editorRef
-        .setContent(`<h1>
-        This is a very unique heading.
-      </h1>
-      <p>
-        This is a unique paragraph. It's so unique, it even has an ID attached to it.
-      </p>
-      <p>
-        And this one, too.
-      </p>`)
-        .then((res) => console.log(res));
-    }
-  }, [open]);
-
-  if (!editorRef) return null;
+  if (!editorRef || !readEditorRef) return null;
 
   return (
     <>
       <div style={{ border: '1px solid #ccc' }}>
-          <TiptapToolbar editorRef={editorRef} />
-          <div style={{ padding: 48, height: '50vh', overflow: 'auto' }}>
-            <TiptapEditor editorRef={editorRef} />
-          </div>
+        <TiptapToolbar editorRef={editorRef} />
+        <div style={{ padding: 48, height: '30vh', overflow: 'auto', border: '1px solid #ccc' }}>
+          <TiptapEditor editorRef={editorRef} />
         </div>
+        <div style={{ padding: 48, height: '30vh', overflow: 'auto', border: '1px solid #ccc' }}>
+          <TiptapReader editorRef={readEditorRef} />
+        </div>
+      </div>
     </>
   );
 };

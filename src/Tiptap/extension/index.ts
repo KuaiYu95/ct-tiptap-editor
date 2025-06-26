@@ -2,6 +2,7 @@ import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
 import Heading from '@tiptap/extension-heading';
 import Highlight from "@tiptap/extension-highlight";
+import Image from '@tiptap/extension-image';
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import Table from '@tiptap/extension-table';
@@ -59,7 +60,58 @@ const extensions = (
   Underline,
   TextStyle,
   TaskList,
-  ResizableImage,
+  // 在编辑模式下使用可调整大小的图片，在只读模式下使用普通图片
+  ...(editable ? [
+    ResizableImage,
+  ] : [
+    Image.extend({
+      addAttributes() {
+        return {
+          ...this.parent?.(),
+          width: {
+            default: null,
+            parseHTML: element => {
+              const width = element.getAttribute('width')
+              return width ? parseInt(width) : null
+            },
+            renderHTML: attributes => {
+              if (!attributes.width) return {}
+              return { width: attributes.width }
+            },
+          },
+          height: {
+            default: null,
+            parseHTML: element => {
+              const height = element.getAttribute('height')
+              return height ? parseInt(height) : null
+            },
+            renderHTML: attributes => {
+              if (!attributes.height) return {}
+              return { height: attributes.height }
+            },
+          },
+        }
+      },
+      renderHTML({ HTMLAttributes }) {
+        const { width, height, ...otherAttrs } = HTMLAttributes;
+        const styleObject: Record<string, string> = {};
+
+        if (width) styleObject.width = `${width}px`;
+        if (height) styleObject.height = `${height}px`;
+
+        const style = Object.entries(styleObject)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join('; ');
+
+        return ["img", {
+          ...otherAttrs,
+          style: style || undefined,
+          width: width || undefined,
+          height: height || undefined
+        }]
+      },
+    }),
+  ]),
   ImageUploadNode.configure({
     accept: 'image/*',
     maxSize: 1024 * 1024 * (upload?.size || 20),
@@ -68,8 +120,12 @@ const extensions = (
     onError: onError,
     onSuccess: (url) => console.log('Image upload success:', url),
   }),
-  Video,
-  ResizableVideo,
+  // 在编辑模式下使用可调整大小的视频，在只读模式下使用普通视频
+  ...(editable ? [
+    ResizableVideo,
+  ] : [
+    Video,
+  ]),
   VideoUploadNode.configure({
     accept: 'video/*',
     maxSize: 1024 * 1024 * (upload?.size || 20),

@@ -25,8 +25,7 @@ export interface UseTiptapEditorProps {
 export type UseTiptapEditorReturn = {
   editor: Editor;
 
-  setCallback: (callback: () => void) => void;
-  setContent: (content: string) => Promise<Nav[]>;
+  setContent: (content: string) => void;
 
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
@@ -47,8 +46,6 @@ const useTiptapEditor = ({
   onError,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
-  const [dropPosition, setDropPosition] = useState(-1);
-  const [callback, setCallback] = useState<() => void>(() => { });
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -217,11 +214,6 @@ const useTiptapEditor = ({
     if (editor) {
       const content = editor.getHTML();
       const headings = extractHeadings(content);
-      const hasHeadNoId = headings.some(heading => !heading.id);
-      if (hasHeadNoId) {
-        const headings = await setContent(content);
-        return headings;
-      }
       return new Promise((resolve) => {
         resolve(headings);
       });
@@ -231,18 +223,15 @@ const useTiptapEditor = ({
     });
   }
 
-  const setContent = (content: string): Promise<Nav[]> => {
-    return new Promise((resolve, reject) => {
-      if (editor) {
-        try {
-          const html = setHeadingsId(replacePreCode(content || ''));
-          editor.commands.setContent(html);
-          getNavs().then(resolve);
-        } catch (error) {
-          reject(error);
-        }
+  const setContent = (content: string): void => {
+    if (editor) {
+      try {
+        const html = setHeadingsId(replacePreCode(content || ''));
+        editor.commands.setContent(html);
+      } catch (error) {
+        onError?.(error as Error);
       }
-    })
+    }
   }
 
   if (!editor) {
@@ -252,16 +241,11 @@ const useTiptapEditor = ({
 
   return {
     editor: editor!,
-
     aiUrl,
-
     onUpload,
     onError,
     previewImg,
-
-    setCallback,
     setContent,
-
     getNavs,
   };
 };
