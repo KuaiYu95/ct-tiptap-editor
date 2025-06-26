@@ -9,7 +9,6 @@ import { ImagePlusIcon } from "../icons/image-plus-icon";
 import { UploadIcon } from "../icons/upload-icon";
 import { VideoIcon } from "../icons/video-icon";
 import EditorToolbarButton from "./EditorToolbarButton";
-import { useVideoUploadButton } from "./EditorVideo";
 
 interface EditorUploadProps {
   editor: Editor
@@ -28,11 +27,6 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
     { id: 'video', icon: <VideoIcon sx={{ fontSize: 18 }} />, label: '上传视频' },
     { id: 'file', icon: <AttachmentIcon sx={{ fontSize: 17 }} />, label: '上传附件' },
   ];
-
-  const { isActive, handleInsertVideo } = useVideoUploadButton(
-    editor,
-    extensionName || 'videoUpload',
-  )
 
   const inputImg = (files: File[]) => {
     const file = files[0];
@@ -59,16 +53,24 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
     }
   };
 
-  const handleVideoClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!e.defaultPrevented) handleInsertVideo()
-  }, [handleInsertVideo])
+  const handleVideoClick = React.useCallback((e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    if (!e.defaultPrevented) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: extensionName,
+        })
+        .run()
+    }
+  }, [editor, extensionName])
 
   const updateSelection = () => {
-    if (editor.isActive('image')) {
+    if (editor.isActive('imageUpload')) {
       setSelectedValue('image');
-    } else if (editor.isActive('video')) {
+    } else if (editor.isActive('videoUpload')) {
       setSelectedValue('video');
-    } else if (editor.isActive('file')) {
+    } else if (editor.isActive('fileUpload')) {
       setSelectedValue('file');
     } else {
       setSelectedValue('none');
@@ -85,24 +87,21 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
     };
   }, [editor]);
 
-  const handleChange = (e: { target: { value: string } }) => {
-    const value = e.target.value;
-
+  const handleChange = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, value: string) => {
     if (value === 'image') {
       imgInputRef.current?.click()
     } else if (value === 'video') {
-      handleVideoClick(e as any)
+      handleVideoClick(e)
     } else if (value === 'file') {
       fileInputRef.current?.click()
     }
-    setSelectedValue(value);
   };
 
   return <>
     <Select
       value={selectedValue}
       className={['image', 'video', 'file'].includes(selectedValue) ? "active" : ""}
-      onChange={handleChange}
+      onChange={(e) => setSelectedValue(e.target.value)}
       renderValue={(value) => {
         return <EditorToolbarButton
           tip={'上传'}
@@ -136,7 +135,7 @@ const EditorUpload = ({ editor, extensionName, imgEdit, onUpload }: EditorUpload
         <Box sx={{ ml: 0.5 }}>无</Box>
       </MenuItem>
       {UploadOptions.map(it => {
-        return <MenuItem key={it.id} value={it.id}>
+        return <MenuItem key={it.id} value={it.id} onClick={(e) => handleChange(e, it.id)}>
           <Stack direction={'row'} alignItems={'center'} gap={0.5}>
             {it.icon}
             <Box>{it.label}</Box>

@@ -36,20 +36,18 @@ const EditorCode = ({ editor }: { editor: Editor }) => {
     };
   }, [editor]);
 
-  const handleChange = (e: { target: { value: string } }) => {
-    const value = e.target.value;
+  const handleChange = (value: string) => {
     if (value === 'code') {
       editor.chain().focus().toggleCode().run();
     } else if (value === 'codeBlock') {
       editor.chain().focus().toggleCodeBlock().run();
     }
-    setSelectedValue(value);
   };
 
   return <Select
     value={selectedValue}
     className={['code', 'codeBlock'].includes(selectedValue) ? "active" : ""}
-    onChange={handleChange}
+    onChange={(e) => setSelectedValue(e.target.value)}
     renderValue={(value) => {
       return <EditorToolbarButton
         tip={'代码'}
@@ -83,7 +81,9 @@ const EditorCode = ({ editor }: { editor: Editor }) => {
       <Box sx={{ ml: 0.5 }}>无</Box>
     </MenuItem>
     {CodeOptions.map(it => {
-      return <MenuItem key={it.id} value={it.id}>
+      return <MenuItem key={it.id} value={it.id} onClick={() => {
+        handleChange(it.id)
+      }}>
         <Tooltip title={<Box>
           {getShortcutKeyText(it.shortcutKey || [])}
         </Box>} key={it.id} placement="right" arrow>

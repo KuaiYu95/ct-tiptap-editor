@@ -40,37 +40,29 @@ const EditorListSelect = ({ editor }: { editor: Editor }) => {
     };
   }, [editor]);
 
-  const handleChange = (e: { target: { value: string } }) => {
-    const value = e.target.value;
+  const handleChange = (value: string) => {
 
     // 先清除所有列表类型
-    if (editor.isActive('orderedList')) {
+    if (editor.isActive('orderedList') && value === 'orderedList') {
       editor.chain().focus().toggleOrderedList().run();
-    }
-    if (editor.isActive('taskList')) {
+    } else if (editor.isActive('taskList') && value === 'taskList') {
       editor.chain().focus().toggleTaskList().run();
-    }
-    if (editor.isActive('bulletList')) {
+    } else if (editor.isActive('bulletList') && value === 'bulletList') {
       editor.chain().focus().toggleBulletList().run();
-    }
-
-    // 然后应用新的列表类型
-    if (value === 'orderedList') {
+    } else if (value === 'orderedList') {
       editor.chain().focus().toggleOrderedList().run();
     } else if (value === 'taskList') {
       editor.chain().focus().toggleTaskList().run();
     } else if (value === 'bulletList') {
       editor.chain().focus().toggleBulletList().run();
     }
-
-    setSelectedValue(value);
   };
 
   return (
     <Select
       value={selectedValue}
       className={['orderedList', 'taskList', 'bulletList'].includes(selectedValue) ? "active" : ""}
-      onChange={handleChange}
+      onChange={(e) => setSelectedValue(e.target.value)}
       renderValue={(value) => {
         return <EditorToolbarButton
           tip={'列表'}
@@ -104,7 +96,7 @@ const EditorListSelect = ({ editor }: { editor: Editor }) => {
         <Box sx={{ ml: 0.5 }}>无</Box>
       </MenuItem>
       {ListOptions.map(it => (
-        <MenuItem key={it.id} value={it.id}>
+        <MenuItem key={it.id} value={it.id} onClick={() => handleChange(it.id)}>
           {it.icon}
           <Box sx={{ ml: 0.5 }}>{it.label}</Box>
         </MenuItem>
