@@ -1,5 +1,5 @@
 import { Editor, useEditor } from "@tiptap/react";
-import { extractHeadings, setHeadingsId } from "ct-tiptap-editor/utils";
+import { extractHeadings, replacePreCode, setHeadingsId } from "ct-tiptap-editor/utils";
 import { TextSelection } from "prosemirror-state";
 import { useState } from "react";
 import extensions from "../extension";
@@ -220,7 +220,7 @@ const useTiptapEditor = ({
     return new Promise((resolve, reject) => {
       if (editor) {
         try {
-          const html = setHeadingsId(content || '');
+          const html = setHeadingsId(replacePreCode(content || ''));
           editor.commands.setContent(html);
           getNavs().then(resolve);
         } catch (error) {

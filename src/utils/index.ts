@@ -56,3 +56,10 @@ export const extractHeadings = (html: string) => {
     };
   });
 }
+
+export const replacePreCode = (html: string) => {
+  return html.replace(/<pre><code>([\s\S]*?)<\/code><\/pre>/g, (match, codeContent) => {
+    const processedCode = codeContent.replace(/\n/g, '<br/>');
+    return `<pre><code>${processedCode}</code></pre>`;
+  });
+}

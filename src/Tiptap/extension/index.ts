@@ -48,7 +48,11 @@ const extensions = (
     codeBlock: false,
     heading: false,
   }),
-  Markdown,
+  Markdown.configure({
+    html: true,
+    breaks: true,
+    transformPastedText: true,
+  }),
   Color,
   Underline,
   TextStyle,
