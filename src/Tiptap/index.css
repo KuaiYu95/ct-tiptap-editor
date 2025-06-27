@@ -17,10 +17,10 @@
 
   /* MUI v5/v6 Palette Variables - Text */
   --mui-palette-text-primary: #21222D;
-  --mui-palette-text-secondary: 'rgba(33,34,45, 0.7)';
-  --mui-palette-text-auxiliary: 'rgba(33,34,45, 0.5)';
-  --mui-palette-text-tertiary: var(--ct-color-text-auxiliary);
-  --mui-palette-text-disabled: 'rgba(33,34,45, 0.5)';
+  --mui-palette-text-secondary: rgba(33, 34, 45, 0.7);
+  --mui-palette-text-auxiliary: rgba(33, 34, 45, 0.5);
+  --mui-palette-text-tertiary: var(--mui-palette-text-auxiliary);
+  --mui-palette-text-disabled: rgba(33, 34, 45, 0.3);
 
   /* MUI v5/v6 Palette Variables - Background */
   --mui-palette-background-default: #ffffff;
@@ -312,7 +312,7 @@
   padding-top: 0.375em;
   padding-bottom: 0.375em;
   margin: 1.5rem 0;
-  color: var(--mui-palette-text-primary);
+  color: var(--mui-palette-text-tertiary);
   background-color: var(--mui-palette-background-paper);
 }
 
