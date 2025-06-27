@@ -214,6 +214,11 @@ const useTiptapEditor = ({
     if (editor) {
       const content = editor.getHTML();
       const headings = extractHeadings(content);
+      const hasHeadNoId = headings.some(heading => !heading.id);
+      if (hasHeadNoId) {
+        const headings = await setContent(content);
+        return headings;
+      }
       return new Promise((resolve) => {
         resolve(headings);
       });
@@ -229,7 +234,7 @@ const useTiptapEditor = ({
         try {
           const html = setHeadingsId(replacePreCode(content || ''));
           editor.commands.setContent(html);
-          resolve(getNavs());
+          getNavs().then(resolve);
         } catch (error) {
           reject(error);
         }
