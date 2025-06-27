@@ -165,8 +165,38 @@ const extensions = (
     handleWidth: 5,
     cellMinWidth: 25,
     lastColumnResizable: false,
+    HTMLAttributes: {
+      class: 'editor-table',
+    },
+  }).extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        class: {
+          default: 'editor-table',
+          parseHTML: element => element.getAttribute('class'),
+          renderHTML: attributes => ({
+            class: attributes.class,
+          }),
+        },
+      };
+    },
+
   }),
-  TableRow,
+  TableRow.extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        class: {
+          default: null,
+          parseHTML: element => element.getAttribute('class'),
+          renderHTML: attributes => ({
+            class: attributes.class,
+          }),
+        },
+      };
+    },
+  }),
   TableCell.extend({
     addAttributes() {
       return {
@@ -178,10 +208,30 @@ const extensions = (
             style: attributes.style,
           }),
         },
+        class: {
+          default: null,
+          parseHTML: element => element.getAttribute('class'),
+          renderHTML: attributes => ({
+            class: attributes.class,
+          }),
+        },
       };
     },
   }),
-  TableHeader,
+  TableHeader.extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        class: {
+          default: null,
+          parseHTML: element => element.getAttribute('class'),
+          renderHTML: attributes => ({
+            class: attributes.class,
+          }),
+        },
+      };
+    },
+  }),
   Superscript,
   Subscript,
   Selection,

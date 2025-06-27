@@ -48,7 +48,7 @@ export default () => {
   });
 
   const getData = () => {
-    setContent(`# sss\n<img src="https://pandawiki.docs.baizhi.cloud/static-file/ff56bd46-7cd4-4ebc-bf75-07303d4d2c5c/8088b9cf-e12e-4eec-9f05-313c70935286.png" alt="header-bg" title="header-bg" style="width: 551px; height: 176px" width="551" height="176"><p>时饭撒上</p>`)
+    setContent(``)
   }
 
   useEffect(() => {
