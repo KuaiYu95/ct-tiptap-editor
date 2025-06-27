@@ -212,6 +212,20 @@ const extensions = (
   }),
   Heading.configure({
     levels: [1, 2, 3, 4, 5, 6],
+    HTMLAttributes: {
+      class: 'heading',
+    },
+  }).extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        id: {
+          default: null,
+          parseHTML: element => element.getAttribute('id'),
+          renderHTML: attributes => ({ id: attributes.id })
+        },
+      }
+    },
   }),
 ]);
 

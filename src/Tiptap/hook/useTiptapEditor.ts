@@ -216,8 +216,9 @@ const useTiptapEditor = ({
       const headings = extractHeadings(content);
       const hasHeadNoId = headings.some(heading => !heading.id);
       if (hasHeadNoId) {
-        const headings = await setContent(content);
-        return headings;
+        const html = setHeadingsId(replacePreCode(content || ''));
+        editor.commands.setContent(html);
+        return getNavs();
       }
       return new Promise((resolve) => {
         resolve(headings);
@@ -248,7 +249,7 @@ const useTiptapEditor = ({
   }
 
   return {
-    editor: editor!,
+    editor,
     aiUrl,
     onUpload,
     onError,
