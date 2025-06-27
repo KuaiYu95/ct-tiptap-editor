@@ -422,7 +422,6 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
                 ref={imageRef}
                 src={src}
                 alt={title || ''}
-                crossOrigin="anonymous"
                 style={{
                   padding: 0,
                   width: dimensions.width ? `${dimensions.width - 12}px` : '100%',
@@ -471,7 +470,6 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
               ref={imageRef}
               src={src}
               alt={title || ''}
-              crossOrigin="anonymous"
               style={{
                 width: dimensions.width ? `${dimensions.width}px` : '100%',
                 height: dimensions.height ? `${dimensions.height}px` : 'auto',
