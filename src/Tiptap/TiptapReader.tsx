@@ -8,7 +8,6 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
   if (!editorRef) return null;
 
   const content = editorRef.editor.getHTML();
-  console.log('🍊', content)
 
   const { previewImg } = editorRef;
   const [previewOpen, setPreviewOpen] = useState(false);
