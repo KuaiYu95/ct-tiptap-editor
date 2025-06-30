@@ -56,6 +56,19 @@ const ensureHeadingIds = (editor: Editor): boolean => {
   return hasChanges;
 };
 
+// 辅助函数：处理代码块中的换行符
+const processCodeBlockHtml = (html: string): string => {
+  // 使用正则表达式匹配代码块内容并替换换行符
+  return html.replace(
+    /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/g,
+    (match, codeContent) => {
+      // 将代码内容中的 \n 替换为 <br>
+      const processedContent = codeContent.replace(/\n/g, '<br>');
+      return match.replace(codeContent, processedContent);
+    }
+  );
+};
+
 const useTiptapEditor = ({
   content,
   size,
@@ -106,7 +119,11 @@ const useTiptapEditor = ({
       handleKeyDown: (view, event) => {
         if ((event.metaKey || event.ctrlKey) && event.key === 's') {
           event.preventDefault();
-          if (editor) onSave?.(editor.getHTML(), editor.getJSON());
+          if (editor) {
+            const originalHtml = editor.getHTML();
+            const processedHtml = processCodeBlockHtml(originalHtml);
+            onSave?.(processedHtml, editor.getJSON());
+          }
           return true;
         }
         if (event.key === 'Tab') {

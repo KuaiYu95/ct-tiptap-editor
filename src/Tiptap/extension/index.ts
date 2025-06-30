@@ -54,8 +54,9 @@ const extensions = (
   }),
   Markdown.configure({
     html: true,
-    breaks: true,
+    breaks: false,
     transformPastedText: true,
+    transformCopiedText: false,
   }),
 
   // ========== 文本样式和格式化 ==========
