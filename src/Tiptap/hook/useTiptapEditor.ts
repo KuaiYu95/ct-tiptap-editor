@@ -1,5 +1,4 @@
 import { Editor, useEditor } from "@tiptap/react";
-import { extractHeadings } from "ct-tiptap-editor/utils";
 import { TextSelection } from "prosemirror-state";
 import { useState } from "react";
 import extensions from "../extension";
@@ -16,6 +15,7 @@ export interface UseTiptapEditorProps {
   editable?: boolean;
   size?: number
   aiUrl?: string
+  immediatelyRender?: boolean
   onSave?: (html: string, json: object | null) => void;
   onUpdate?: (content: string, json: any) => void;
   onUpload?: UploadFunction
@@ -65,11 +65,12 @@ const useTiptapEditor = ({
   onUpdate,
   onUpload,
   onError,
+  immediatelyRender = false,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
 
   const editor = useEditor({
-    immediatelyRender: false,
+    immediatelyRender,
     editable,
     extensions: extensions({
       editable,
@@ -236,13 +237,25 @@ const useTiptapEditor = ({
       // 首先确保所有标题都有ID
       const wasUpdated = ensureHeadingIds(editor);
 
-      // 如果有更新，等待DOM更新完成
       if (wasUpdated) {
         await new Promise(resolve => setTimeout(resolve, 10));
       }
 
-      const content = editor.getHTML();
-      const headings = extractHeadings(content);
+      const headings: Nav[] = [];
+      editor.state.doc.descendants((node) => {
+        if (node.type.name === 'heading') {
+          const level = node.attrs.level || 1;
+          const id = node.attrs.id || '';
+          const title = node.textContent || '';
+
+          headings.push({
+            id,
+            title,
+            heading: level
+          });
+        }
+      });
+
       return new Promise((resolve) => {
         resolve(headings);
       });
@@ -256,10 +269,8 @@ const useTiptapEditor = ({
     return new Promise((resolve, reject) => {
       if (editor) {
         try {
-          // 直接设置内容，让TipTap处理
-          editor.commands.setContent(content || '');
-
-          // 确保所有标题都有ID
+          const processedContent = (content || '').replace(/\n/g, '<br/>');
+          editor.commands.setContent(processedContent);
           setTimeout(() => {
             ensureHeadingIds(editor);
             getNavs().then(resolve);
