@@ -23,17 +23,18 @@ export interface UseTiptapEditorProps {
 }
 
 export type UseTiptapEditorReturn = {
+  aiUrl?: string
+  previewImg: string;
+
   editor: Editor;
 
-  setContent: (content: string) => Promise<Nav[]>;
+  getHtml: () => string;
+  getNavs: () => Promise<Nav[]>;
   setJson: (json: object | null) => void;
+  setContent: (content: string) => Promise<Nav[]>;
 
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
-  aiUrl?: string
-
-  previewImg: string;
-  getNavs: () => Promise<Nav[]>;
 } | null
 
 // 辅助函数：确保所有标题都有ID
@@ -305,6 +306,15 @@ const useTiptapEditor = ({
     }
   }
 
+  const getHtml = () => {
+    if (editor) {
+      const originalHtml = editor.getHTML();
+      const processedHtml = processCodeBlockHtml(originalHtml);
+      return processedHtml;
+    }
+    return '';
+  }
+
   if (!editor) {
     console.log('editor is not initialized')
     return null
@@ -316,6 +326,7 @@ const useTiptapEditor = ({
     onUpload,
     onError,
     previewImg,
+    getHtml,
     setContent,
     setJson,
     getNavs,
