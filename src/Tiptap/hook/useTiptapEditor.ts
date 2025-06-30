@@ -269,8 +269,8 @@ const useTiptapEditor = ({
     return new Promise((resolve, reject) => {
       if (editor) {
         try {
-          const processedContent = (content || '').replace(/\n/g, '<br/>');
-          editor.commands.setContent(processedContent);
+          editor.commands.setContent(content || '');
+
           setTimeout(() => {
             ensureHeadingIds(editor);
             getNavs().then(resolve);
