@@ -3,7 +3,7 @@ import { Extension, type Command } from '@tiptap/core';
 // 扩展 Tiptap 类型声明
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    fontSize: {
+    fontSizeExtension: {
       setFontSize: (size: number) => ReturnType;
       unsetFontSize: () => ReturnType;
     };
@@ -11,7 +11,7 @@ declare module '@tiptap/core' {
 }
 
 // 修复后的字体扩展
-const FontSize = Extension.create({
+const FontSizeExtension = Extension.create({
   name: 'fontSize',
 
   addOptions() {
@@ -60,4 +60,4 @@ const FontSize = Extension.create({
   },
 });
 
-export default FontSize;
+export default FontSizeExtension; 

@@ -1,12 +1,9 @@
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Color from '@tiptap/extension-color';
-import Heading from '@tiptap/extension-heading';
 import Highlight from "@tiptap/extension-highlight";
-import Image from '@tiptap/extension-image';
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import Table from '@tiptap/extension-table';
-import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
 import TaskItem from "@tiptap/extension-task-item";
@@ -18,17 +15,20 @@ import Underline from "@tiptap/extension-underline";
 import { StarterKit } from "@tiptap/starter-kit";
 import { all, createLowlight } from 'lowlight';
 import { Markdown } from 'tiptap-markdown';
-import { CodeBlock } from './CodeBlock';
-import FontSize from "./FontSize";
-import ImageUploadNode from './ImageUpload';
-import Link from "./Link";
-import ResizableImage from './ResizableImage';
-import ResizableVideo from './ResizableVideo';
-import Selection from "./Selection";
-import TabKeyExtension from "./TabKey";
-import TrailingNode from "./TrailingNode";
-import Video from './Video';
-import VideoUploadNode, { UploadFunction } from './VideoUpload';
+import CodeBlockExtension from './CodeBlockExtension';
+import FontSizeExtension from './FontSizeExtension';
+import HeadingExtension from './HeadingExtension';
+import ImageExtension from './ImageExtension';
+import ImageUploadExtension from './ImageUploadExtension';
+import LinkExtension from './LinkExtension';
+import ResizableImageExtension from './ResizableImageExtension';
+import ResizableVideoExtension from './ResizableVideoExtension';
+import SelectionExtension from './SelectionExtension';
+import TabExtension from './TabExtension';
+import TableCellExtension from './TableCellExtension';
+import TrailingNodeExtension from './TrailingNodeExtension';
+import VideoExtension from './VideoExtension';
+import VideoUploadExtension, { UploadFunction } from './VideoUploadExtension';
 
 type UploadOptions = {
   size?: number,
@@ -47,6 +47,7 @@ const extensions = (
     onError?: (error: Error) => void
   }
 ) => ([
+  // ========== 基础扩展 ==========
   StarterKit.configure({
     codeBlock: false,
     heading: false,
@@ -56,110 +57,41 @@ const extensions = (
     breaks: true,
     transformPastedText: true,
   }),
+
+  // ========== 文本样式和格式化 ==========
   Color,
-  Underline,
   TextStyle,
+  FontSizeExtension,
+  Underline,
+  Highlight.configure({
+    multicolor: true,
+    HTMLAttributes: {
+      class: 'highlight-marker'
+    }
+  }),
+  Superscript,
+  Subscript,
+
+  // ========== 标题和文本对齐 ==========
+  HeadingExtension,
+  TextAlign.configure({
+    types: ["heading", "paragraph"],
+    alignments: ['left', 'center', 'right', 'justify']
+  }),
+
+  // ========== 链接 ==========
+  LinkExtension.configure({
+    openOnClick: false,
+    HTMLAttributes: {
+      target: '_self'
+    }
+  }),
+
+  // ========== 列表 ==========
   TaskList,
-  // 在编辑模式下使用可调整大小的图片，在只读模式下使用普通图片
-  ...(editable ? [
-    ResizableImage,
-  ] : [
-    Image.extend({
-      addAttributes() {
-        return {
-          ...this.parent?.(),
-          width: {
-            default: null,
-            parseHTML: element => {
-              // 优先从width属性读取
-              const width = element.getAttribute('width')
-              if (width) return parseInt(width)
+  TaskItem.configure({ nested: true }),
 
-              // 其次从style中读取
-              const style = element.getAttribute('style')
-              if (style) {
-                const widthMatch = style.match(/width:\s*(\d+)px/)
-                if (widthMatch) return parseInt(widthMatch[1])
-              }
-
-              return null
-            },
-            renderHTML: attributes => {
-              if (!attributes.width) return {}
-              return { width: attributes.width }
-            },
-          },
-          height: {
-            default: null,
-            parseHTML: element => {
-              // 优先从height属性读取
-              const height = element.getAttribute('height')
-              if (height) return parseInt(height)
-
-              // 其次从style中读取
-              const style = element.getAttribute('style')
-              if (style) {
-                const heightMatch = style.match(/height:\s*(\d+)px/)
-                if (heightMatch) return parseInt(heightMatch[1])
-              }
-
-              return null
-            },
-            renderHTML: attributes => {
-              if (!attributes.height) return {}
-              return { height: attributes.height }
-            },
-          },
-        }
-      },
-      renderHTML({ HTMLAttributes }) {
-        const { width, height, ...otherAttrs } = HTMLAttributes;
-        const styleObject: Record<string, string> = {};
-
-        if (width) styleObject.width = `${width}px`;
-        if (height) styleObject.height = `${height}px`;
-
-        if (!width && !height) {
-          styleObject.width = '100%';
-          styleObject.height = 'auto';
-        }
-
-        const style = Object.entries(styleObject)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join('; ');
-
-        return ["img", {
-          ...otherAttrs,
-          style: style || undefined,
-          width: width || undefined,
-          height: height || undefined
-        }]
-      },
-    }),
-  ]),
-  ImageUploadNode.configure({
-    accept: 'image/*',
-    maxSize: 1024 * 1024 * (upload?.size || 20),
-    limit: 1,
-    upload: upload?.onUpload,
-    onError: onError,
-    onSuccess: (url) => console.log('Image upload success:', url),
-  }),
-  // 在编辑模式下使用可调整大小的视频，在只读模式下使用普通视频
-  ...(editable ? [
-    ResizableVideo,
-  ] : [
-    Video,
-  ]),
-  VideoUploadNode.configure({
-    accept: 'video/*',
-    maxSize: 1024 * 1024 * (upload?.size || 20),
-    limit: 1,
-    upload: upload?.onUpload,
-    onError: onError,
-    onSuccess: (url) => console.log('Video upload success:', url),
-  }),
-  Typography,
+  // ========== 表格 ==========
   Table.configure({
     resizable: true,
     handleWidth: 5,
@@ -167,66 +99,55 @@ const extensions = (
     lastColumnResizable: false,
   }),
   TableRow,
-  TableCell.extend({
-    addAttributes() {
-      return {
-        ...this.parent?.(),
-        style: {
-          default: null,
-          parseHTML: element => element.getAttribute('style'),
-          renderHTML: attributes => ({
-            style: attributes.style,
-          }),
-        },
-      };
-    },
-  }),
+  TableCellExtension,
   TableHeader,
-  Superscript,
-  Subscript,
-  Selection,
-  TrailingNode,
-  FontSize,
-  TabKeyExtension,
-  ...(!editable ? [CodeBlock.configure({
+
+  // ========== 代码块 ==========
+  ...(!editable ? [CodeBlockExtension.configure({
     lowlight,
   })] : [CodeBlockLowlight.configure({
     lowlight,
   })]),
-  TextAlign.configure({
-    types: ["heading", "paragraph"],
-    alignments: ['left', 'center', 'right', 'justify']
+
+  // ========== 图片相关 ==========
+  // 在编辑模式下使用可调整大小的图片，在只读模式下使用普通图片
+  ...(editable ? [
+    ResizableImageExtension,
+  ] : [
+    ImageExtension,
+  ]),
+  ImageUploadExtension.configure({
+    accept: 'image/*',
+    maxSize: 1024 * 1024 * (upload?.size || 20),
+    limit: 1,
+    upload: upload?.onUpload,
+    onError: onError,
+    onSuccess: (url: string) => console.log('Image upload success:', url),
   }),
-  Link.configure({
-    openOnClick: false,
-    HTMLAttributes: {
-      target: '_self'
-    }
+
+  // ========== 视频相关 ==========
+  // 在编辑模式下使用可调整大小的视频，在只读模式下使用普通视频
+  ...(editable ? [
+    ResizableVideoExtension,
+  ] : [
+    VideoExtension,
+  ]),
+  VideoUploadExtension.configure({
+    accept: 'video/*',
+    maxSize: 1024 * 1024 * (upload?.size || 20),
+    limit: 1,
+    upload: upload?.onUpload,
+    onError: onError,
+    onSuccess: (url: string) => console.log('Video upload success:', url),
   }),
-  TaskItem.configure({ nested: true }),
-  Highlight.configure({
-    multicolor: true,
-    HTMLAttributes: {
-      class: 'highlight-marker'
-    }
-  }),
-  Heading.configure({
-    levels: [1, 2, 3, 4, 5, 6],
-    HTMLAttributes: {
-      class: 'heading',
-    },
-  }).extend({
-    addAttributes() {
-      return {
-        ...this.parent?.(),
-        id: {
-          default: null,
-          parseHTML: element => element.getAttribute('id'),
-          renderHTML: attributes => ({ id: attributes.id })
-        },
-      }
-    },
-  }),
+
+  // ========== 交互和行为扩展 ==========
+  SelectionExtension,
+  TabExtension,
+  TrailingNodeExtension,
+
+  // ========== 排版 ==========
+  Typography,
 ]);
 
 export default extensions;

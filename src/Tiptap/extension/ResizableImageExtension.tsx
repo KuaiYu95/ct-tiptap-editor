@@ -1,14 +1,14 @@
 import { mergeAttributes, Node, ReactNodeViewRenderer } from "@tiptap/react";
-import { ResizableVideoNode } from "../component/ResizableVideoNode";
+import { ResizableImageNode } from "../component/ResizableImageNode";
 
-export interface ResizableVideoOptions {
+export interface ResizableImageExtensionOptions {
   HTMLAttributes: Record<string, any>
 }
 
 declare module "@tiptap/react" {
   interface Commands<ReturnType> {
-    resizableVideo: {
-      setResizableVideo: (options: {
+    resizableImageExtension: {
+      setResizableImage: (options: {
         src: string;
         alt?: string;
         title?: string;
@@ -19,8 +19,8 @@ declare module "@tiptap/react" {
   }
 }
 
-export const ResizableVideo = Node.create<ResizableVideoOptions>({
-  name: "resizableVideo",
+export const ResizableImageExtension = Node.create<ResizableImageExtensionOptions>({
+  name: "resizableImage",
 
   group: "block",
 
@@ -85,7 +85,7 @@ export const ResizableVideo = Node.create<ResizableVideoOptions>({
   parseHTML() {
     return [
       {
-        tag: "video",
+        tag: "img",
       },
     ]
   },
@@ -107,24 +107,20 @@ export const ResizableVideo = Node.create<ResizableVideoOptions>({
       .map(([key, value]) => `${key}: ${value}`)
       .join('; ');
 
-    return ["video", mergeAttributes(otherAttrs, {
+    return ["img", mergeAttributes(otherAttrs, {
       style,
-      controls: true,
-      loop: false,
-      muted: false,
-      playsinline: true,
       width: width || undefined,
       height: height || undefined
     })]
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ResizableVideoNode)
+    return ReactNodeViewRenderer(ResizableImageNode)
   },
 
   addCommands() {
     return {
-      setResizableVideo: (options) => ({ commands }) => {
+      setResizableImage: (options) => ({ commands }) => {
         return commands.insertContent({
           type: this.name,
           attrs: options,
@@ -134,4 +130,4 @@ export const ResizableVideo = Node.create<ResizableVideoOptions>({
   },
 })
 
-export default ResizableVideo 
+export default ResizableImageExtension 

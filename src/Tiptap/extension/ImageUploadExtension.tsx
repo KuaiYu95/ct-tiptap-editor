@@ -1,5 +1,5 @@
 import { mergeAttributes, Node, ReactNodeViewRenderer } from "@tiptap/react"
-import { VideoUploadNode as VideoUploadNodeComponent } from "../component/VideoUploadNode"
+import { ImageUploadNode as ImageUploadNodeComponent } from "../component/ImageUploadNode"
 
 export type UploadFunction = (
   file: File,
@@ -7,10 +7,10 @@ export type UploadFunction = (
   abortSignal?: AbortSignal
 ) => Promise<string>
 
-export interface VideoUploadNodeOptions {
+export interface ImageUploadExtensionOptions {
   /**
    * Acceptable file types for upload.
-   * @default 'video/*'
+   * @default 'image/*'
    */
   accept?: string
   /**
@@ -43,18 +43,17 @@ export interface VideoUploadNodeOptions {
 
 declare module "@tiptap/react" {
   interface Commands<ReturnType> {
-    videoUpload: {
-      setVideoUploadNode: (options?: VideoUploadNodeOptions) => ReturnType
+    imageUploadExtension: {
+      setImageUploadNode: (options?: ImageUploadExtensionOptions) => ReturnType
     }
   }
 }
 
 /**
- * A TipTap node extension that creates an video upload component.
- * @see registry/tiptap-node/video-upload-node/video-upload-node
+ * A TipTap node extension that creates an image upload component.
  */
-export const VideoUploadNode = Node.create<VideoUploadNodeOptions>({
-  name: "videoUpload",
+export const ImageUploadExtension = Node.create<ImageUploadExtensionOptions>({
+  name: "imageUpload",
 
   group: "block",
 
@@ -66,7 +65,7 @@ export const VideoUploadNode = Node.create<VideoUploadNodeOptions>({
 
   addOptions() {
     return {
-      accept: "video/*",
+      accept: "image/*",
       limit: 1,
       maxSize: 0,
       upload: undefined,
@@ -93,23 +92,23 @@ export const VideoUploadNode = Node.create<VideoUploadNodeOptions>({
   },
 
   parseHTML() {
-    return [{ tag: 'div[data-type="video-upload"]' }]
+    return [{ tag: 'div[data-type="image-upload"]' }]
   },
 
   renderHTML({ HTMLAttributes }) {
     return [
       "div",
-      mergeAttributes({ "data-type": "video-upload" }, HTMLAttributes),
+      mergeAttributes({ "data-type": "image-upload" }, HTMLAttributes),
     ]
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(VideoUploadNodeComponent)
+    return ReactNodeViewRenderer(ImageUploadNodeComponent)
   },
 
   addCommands() {
     return {
-      setVideoUploadNode:
+      setImageUploadNode:
         (options = {}) =>
           ({ commands }) => {
             return commands.insertContent({
@@ -131,8 +130,8 @@ export const VideoUploadNode = Node.create<VideoUploadNodeOptions>({
 
         if (
           nodeAfter &&
-          nodeAfter.type.name === "videoUpload" &&
-          editor.isActive("videoUpload")
+          nodeAfter.type.name === "imageUpload" &&
+          editor.isActive("imageUpload")
         ) {
           const nodeEl = editor.view.nodeDOM(selection.$from.pos)
           if (nodeEl && nodeEl instanceof HTMLElement) {
@@ -150,4 +149,4 @@ export const VideoUploadNode = Node.create<VideoUploadNodeOptions>({
   },
 })
 
-export default VideoUploadNode
+export default ImageUploadExtension 

@@ -4,7 +4,7 @@ import { NodeViewWrapper } from "@tiptap/react"
 import * as React from "react"
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
-import type { UploadFunction } from "../extension/ImageUpload"
+import type { UploadFunction } from "../extension/ImageUploadExtension"
 import { CancelIcon } from "../icons/cancel-icon"
 import { OkIcon } from "../icons/ok-icon"
 

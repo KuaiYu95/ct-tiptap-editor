@@ -1,26 +1,19 @@
-import { mergeAttributes, Node, ReactNodeViewRenderer } from "@tiptap/react";
-import { ResizableImageNode } from "../component/ResizableImageNode";
+import { mergeAttributes, Node } from "@tiptap/react";
 
-export interface ResizableImageOptions {
+export interface VideoExtensionOptions {
   HTMLAttributes: Record<string, any>
 }
 
 declare module "@tiptap/react" {
   interface Commands<ReturnType> {
-    resizableImage: {
-      setResizableImage: (options: {
-        src: string;
-        alt?: string;
-        title?: string;
-        width?: number;
-        height?: number;
-      }) => ReturnType
+    videoExtension: {
+      setVideo: (options: { src: string; alt?: string; title?: string }) => ReturnType
     }
   }
 }
 
-export const ResizableImage = Node.create<ResizableImageOptions>({
-  name: "resizableImage",
+export const VideoExtension = Node.create<VideoExtensionOptions>({
+  name: "video",
 
   group: "block",
 
@@ -85,7 +78,7 @@ export const ResizableImage = Node.create<ResizableImageOptions>({
   parseHTML() {
     return [
       {
-        tag: "img",
+        tag: "video",
       },
     ]
   },
@@ -107,20 +100,20 @@ export const ResizableImage = Node.create<ResizableImageOptions>({
       .map(([key, value]) => `${key}: ${value}`)
       .join('; ');
 
-    return ["img", mergeAttributes(otherAttrs, {
+    return ["video", mergeAttributes(otherAttrs, {
       style,
+      controls: true,
+      loop: false,
+      muted: false,
+      playsinline: true,
       width: width || undefined,
       height: height || undefined
     })]
   },
 
-  addNodeView() {
-    return ReactNodeViewRenderer(ResizableImageNode)
-  },
-
   addCommands() {
     return {
-      setResizableImage: (options) => ({ commands }) => {
+      setVideo: (options) => ({ commands }) => {
         return commands.insertContent({
           type: this.name,
           attrs: options,
@@ -130,4 +123,4 @@ export const ResizableImage = Node.create<ResizableImageOptions>({
   },
 })
 
-export default ResizableImage 
+export default VideoExtension 

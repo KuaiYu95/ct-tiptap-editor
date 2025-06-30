@@ -1,7 +1,7 @@
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { type Editor } from "@tiptap/react";
 import React, { useEffect, useRef, useState } from "react";
-import { UploadFunction } from "../extension/VideoUpload";
+import { UploadFunction } from "../extension/VideoUploadExtension";
 import { AlignLeftIcon } from "../icons/align-left-icon";
 import { ArrowIcon } from "../icons/arrow-icon";
 import { AttachmentIcon } from "../icons/attachment-icon";

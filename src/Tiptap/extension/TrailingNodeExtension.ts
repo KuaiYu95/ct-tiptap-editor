@@ -18,12 +18,12 @@ function nodeEqualsType({
   return node.type === types
 }
 
-export interface TrailingNodeOptions {
+export interface TrailingNodeExtensionOptions {
   node: string
   notAfter: string[]
 }
 
-export const TrailingNode = Extension.create<TrailingNodeOptions>({
+export const TrailingNodeExtension = Extension.create<TrailingNodeExtensionOptions>({
   name: "trailingNode",
 
   addOptions() {
@@ -79,4 +79,4 @@ export const TrailingNode = Extension.create<TrailingNodeOptions>({
   },
 })
 
-export default TrailingNode
+export default TrailingNodeExtension 

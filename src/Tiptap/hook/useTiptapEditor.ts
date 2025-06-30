@@ -1,9 +1,9 @@
 import { Editor, useEditor } from "@tiptap/react";
-import { extractHeadings, replacePreCode, setHeadingsId } from "ct-tiptap-editor/utils";
+import { extractHeadings } from "ct-tiptap-editor/utils";
 import { TextSelection } from "prosemirror-state";
 import { useState } from "react";
 import extensions from "../extension";
-import { UploadFunction } from "../extension/VideoUpload";
+import { UploadFunction } from "../extension/VideoUploadExtension";
 
 export interface Nav {
   id: string;
@@ -16,8 +16,8 @@ export interface UseTiptapEditorProps {
   editable?: boolean;
   size?: number
   aiUrl?: string
-  onSave?: (html: string) => void;
-  onUpdate?: (content: string) => void;
+  onSave?: (html: string, json: object | null) => void;
+  onUpdate?: (content: string, json: any) => void;
   onUpload?: UploadFunction
   onError?: (error: Error) => void
 }
@@ -26,6 +26,7 @@ export type UseTiptapEditorReturn = {
   editor: Editor;
 
   setContent: (content: string) => Promise<Nav[]>;
+  setJson: (json: object | null) => void;
 
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
@@ -34,6 +35,26 @@ export type UseTiptapEditorReturn = {
   previewImg: string;
   getNavs: () => Promise<Nav[]>;
 } | null
+
+// 辅助函数：确保所有标题都有ID
+const ensureHeadingIds = (editor: Editor): boolean => {
+  let hasChanges = false;
+  const tr = editor.state.tr;
+
+  editor.state.doc.descendants((node, pos) => {
+    if (node.type.name === 'heading' && (!node.attrs.id || node.attrs.id.length !== 22)) {
+      const newId = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+      tr.setNodeMarkup(pos, undefined, { ...node.attrs, id: newId });
+      hasChanges = true;
+    }
+  });
+
+  if (hasChanges) {
+    editor.view.dispatch(tr);
+  }
+
+  return hasChanges;
+};
 
 const useTiptapEditor = ({
   content,
@@ -58,9 +79,9 @@ const useTiptapEditor = ({
       },
       onError
     }),
-    content: content ? setHeadingsId(replacePreCode(content)) : '',
+    content: content,
     onUpdate: ({ editor }) => {
-      onUpdate?.(editor.getHTML());
+      onUpdate?.(editor.getHTML(), editor.getJSON());
     },
     editorProps: {
       attributes: {
@@ -84,7 +105,7 @@ const useTiptapEditor = ({
       handleKeyDown: (view, event) => {
         if ((event.metaKey || event.ctrlKey) && event.key === 's') {
           event.preventDefault();
-          if (editor) onSave?.(editor.getHTML());
+          if (editor) onSave?.(editor.getHTML(), editor.getJSON());
           return true;
         }
         if (event.key === 'Tab') {
@@ -212,14 +233,16 @@ const useTiptapEditor = ({
 
   const getNavs = async (): Promise<Nav[]> => {
     if (editor) {
+      // 首先确保所有标题都有ID
+      const wasUpdated = ensureHeadingIds(editor);
+
+      // 如果有更新，等待DOM更新完成
+      if (wasUpdated) {
+        await new Promise(resolve => setTimeout(resolve, 10));
+      }
+
       const content = editor.getHTML();
       const headings = extractHeadings(content);
-      const hasHeadNoId = headings.some(heading => !heading.id);
-      if (hasHeadNoId) {
-        const html = setHeadingsId(replacePreCode(content || ''));
-        editor.commands.setContent(html);
-        return getNavs();
-      }
       return new Promise((resolve) => {
         resolve(headings);
       });
@@ -233,14 +256,25 @@ const useTiptapEditor = ({
     return new Promise((resolve, reject) => {
       if (editor) {
         try {
-          const html = setHeadingsId(replacePreCode(content || ''));
-          editor.commands.setContent(html);
-          getNavs().then(resolve);
+          // 直接设置内容，让TipTap处理
+          editor.commands.setContent(content || '');
+
+          // 确保所有标题都有ID
+          setTimeout(() => {
+            ensureHeadingIds(editor);
+            getNavs().then(resolve);
+          }, 10);
         } catch (error) {
           reject(error);
         }
       }
     })
+  }
+
+  const setJson = (json: object | null) => {
+    if (editor) {
+      editor.commands.setContent(json);
+    }
   }
 
   if (!editor) {
@@ -255,6 +289,7 @@ const useTiptapEditor = ({
     onError,
     previewImg,
     setContent,
+    setJson,
     getNavs,
   };
 };

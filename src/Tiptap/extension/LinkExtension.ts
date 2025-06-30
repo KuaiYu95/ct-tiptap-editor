@@ -3,7 +3,7 @@ import { Plugin, TextSelection } from "@tiptap/pm/state"
 import type { EditorView } from "@tiptap/pm/view"
 import { getMarkRange } from "@tiptap/react"
 
-export const Link = TiptapLink.extend({
+export const LinkExtension = TiptapLink.extend({
   inclusive: false,
 
   addAttributes() {
@@ -80,4 +80,4 @@ export const Link = TiptapLink.extend({
   },
 })
 
-export default Link
+export default LinkExtension 

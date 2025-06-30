@@ -2,7 +2,7 @@ import { mergeAttributes } from '@tiptap/core'
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
 import { Plugin } from 'prosemirror-state'
 
-export const CodeBlock = CodeBlockLowlight.extend({
+export const CodeBlockExtension = CodeBlockLowlight.extend({
   addAttributes() {
     return {
       ...this.parent?.(),
@@ -78,4 +78,6 @@ export const CodeBlock = CodeBlockLowlight.extend({
       })
     ]
   }
-}) 
+})
+
+export default CodeBlockExtension 

@@ -1,5 +1,5 @@
 import { mergeAttributes, Node, ReactNodeViewRenderer } from "@tiptap/react"
-import { ImageUploadNode as ImageUploadNodeComponent } from "../component/ImageUploadNode"
+import { VideoUploadNode as VideoUploadNodeComponent } from "../component/VideoUploadNode"
 
 export type UploadFunction = (
   file: File,
@@ -7,10 +7,10 @@ export type UploadFunction = (
   abortSignal?: AbortSignal
 ) => Promise<string>
 
-export interface ImageUploadNodeOptions {
+export interface VideoUploadExtensionOptions {
   /**
    * Acceptable file types for upload.
-   * @default 'image/*'
+   * @default 'video/*'
    */
   accept?: string
   /**
@@ -43,17 +43,17 @@ export interface ImageUploadNodeOptions {
 
 declare module "@tiptap/react" {
   interface Commands<ReturnType> {
-    imageUpload: {
-      setImageUploadNode: (options?: ImageUploadNodeOptions) => ReturnType
+    videoUploadExtension: {
+      setVideoUploadNode: (options?: VideoUploadExtensionOptions) => ReturnType
     }
   }
 }
 
 /**
- * A TipTap node extension that creates an image upload component.
+ * A TipTap node extension that creates an video upload component.
  */
-export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
-  name: "imageUpload",
+export const VideoUploadExtension = Node.create<VideoUploadExtensionOptions>({
+  name: "videoUpload",
 
   group: "block",
 
@@ -65,7 +65,7 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
 
   addOptions() {
     return {
-      accept: "image/*",
+      accept: "video/*",
       limit: 1,
       maxSize: 0,
       upload: undefined,
@@ -92,23 +92,23 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
   },
 
   parseHTML() {
-    return [{ tag: 'div[data-type="image-upload"]' }]
+    return [{ tag: 'div[data-type="video-upload"]' }]
   },
 
   renderHTML({ HTMLAttributes }) {
     return [
       "div",
-      mergeAttributes({ "data-type": "image-upload" }, HTMLAttributes),
+      mergeAttributes({ "data-type": "video-upload" }, HTMLAttributes),
     ]
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ImageUploadNodeComponent)
+    return ReactNodeViewRenderer(VideoUploadNodeComponent)
   },
 
   addCommands() {
     return {
-      setImageUploadNode:
+      setVideoUploadNode:
         (options = {}) =>
           ({ commands }) => {
             return commands.insertContent({
@@ -130,8 +130,8 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
 
         if (
           nodeAfter &&
-          nodeAfter.type.name === "imageUpload" &&
-          editor.isActive("imageUpload")
+          nodeAfter.type.name === "videoUpload" &&
+          editor.isActive("videoUpload")
         ) {
           const nodeEl = editor.view.nodeDOM(selection.$from.pos)
           if (nodeEl && nodeEl instanceof HTMLElement) {
@@ -149,4 +149,4 @@ export const ImageUploadNode = Node.create<ImageUploadNodeOptions>({
   },
 })
 
-export default ImageUploadNode 
+export default VideoUploadExtension 

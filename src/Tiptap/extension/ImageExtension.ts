@@ -1,35 +1,9 @@
-import { mergeAttributes, Node } from "@tiptap/react";
+import Image from '@tiptap/extension-image';
 
-export interface VideoOptions {
-  HTMLAttributes: Record<string, any>
-}
-
-declare module "@tiptap/react" {
-  interface Commands<ReturnType> {
-    video: {
-      setVideo: (options: { src: string; alt?: string; title?: string }) => ReturnType
-    }
-  }
-}
-
-export const Video = Node.create<VideoOptions>({
-  name: "video",
-
-  group: "block",
-
-  atom: true,
-
+const ImageExtension = Image.extend({
   addAttributes() {
     return {
-      src: {
-        default: null,
-      },
-      alt: {
-        default: null,
-      },
-      title: {
-        default: null,
-      },
+      ...this.parent?.(),
       width: {
         default: null,
         parseHTML: element => {
@@ -74,15 +48,6 @@ export const Video = Node.create<VideoOptions>({
       },
     }
   },
-
-  parseHTML() {
-    return [
-      {
-        tag: "video",
-      },
-    ]
-  },
-
   renderHTML({ HTMLAttributes }) {
     const { width, height, ...otherAttrs } = HTMLAttributes;
     const styleObject: Record<string, string> = {};
@@ -95,32 +60,17 @@ export const Video = Node.create<VideoOptions>({
       styleObject.height = 'auto';
     }
 
-    // 将样式对象转换为CSS字符串
     const style = Object.entries(styleObject)
       .map(([key, value]) => `${key}: ${value}`)
       .join('; ');
 
-    return ["video", mergeAttributes(otherAttrs, {
-      style,
-      controls: true,
-      loop: false,
-      muted: false,
-      playsinline: true,
+    return ["img", {
+      ...otherAttrs,
+      style: style || undefined,
       width: width || undefined,
       height: height || undefined
-    })]
+    }]
   },
+});
 
-  addCommands() {
-    return {
-      setVideo: (options) => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: options,
-        })
-      },
-    }
-  },
-})
-
-export default Video 
+export default ImageExtension; 

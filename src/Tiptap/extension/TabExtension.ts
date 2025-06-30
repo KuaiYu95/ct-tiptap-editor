@@ -1,6 +1,6 @@
 import { Extension, type Editor } from '@tiptap/core';
 
-const TabKeyExtension = Extension.create({
+const TabExtension = Extension.create({
   addKeyboardShortcuts() {
     return {
       Tab: ({ editor }: { editor: Editor }) => {
@@ -28,4 +28,4 @@ const TabKeyExtension = Extension.create({
   }
 })
 
-export default TabKeyExtension;
+export default TabExtension; 
