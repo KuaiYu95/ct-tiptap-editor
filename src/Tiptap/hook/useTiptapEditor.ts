@@ -44,8 +44,8 @@ const ensureHeadingIds = (editor: Editor): boolean => {
 
   editor.state.doc.descendants((node, pos) => {
     if (node.type.name === 'heading' && (!node.attrs.id || node.attrs.id.length !== 22)) {
-      const newId = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
-      tr.setNodeMarkup(pos, undefined, { ...node.attrs, id: newId });
+      const newId = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+      tr.setNodeMarkup(pos, undefined, { ...node.attrs, id: newId.slice(0, 22) });
       hasChanges = true;
     }
   });
