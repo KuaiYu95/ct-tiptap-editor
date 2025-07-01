@@ -13,7 +13,6 @@ import TextStyle from '@tiptap/extension-text-style';
 import Typography from "@tiptap/extension-typography";
 import Underline from "@tiptap/extension-underline";
 import { StarterKit } from "@tiptap/starter-kit";
-import 'katex/dist/katex.min.css';
 import { all, createLowlight } from 'lowlight';
 import { Markdown } from 'tiptap-markdown';
 import CodeBlockExtension from './CodeBlockExtension';
@@ -22,7 +21,6 @@ import HeadingExtension from './HeadingExtension';
 import ImageExtension from './ImageExtension';
 import ImageUploadExtension from './ImageUploadExtension';
 import LinkExtension from './LinkExtension';
-import { MathBlockExtension, MathInlineExtension } from './MathExtension';
 import ResizableImageExtension from './ResizableImageExtension';
 import ResizableVideoExtension from './ResizableVideoExtension';
 import SelectionExtension from './SelectionExtension';
@@ -31,6 +29,9 @@ import TableCellExtension from './TableCellExtension';
 import TrailingNodeExtension from './TrailingNodeExtension';
 import VideoExtension from './VideoExtension';
 import VideoUploadExtension, { UploadFunction } from './VideoUploadExtension';
+
+import 'katex/dist/katex.min.css';
+import { MathBlockExtension, MathInlineExtension } from './MathExtension';
 
 type UploadOptions = {
   size?: number,

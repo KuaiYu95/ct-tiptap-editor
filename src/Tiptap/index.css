@@ -913,24 +913,6 @@
   background-color: var(--mui-palette-background-paper);
 }
 
-.editor-table:not(.editor-table-read) td:hover::after,
-.editor-table:not(.editor-table-read) th:hover::after {
-  content: '右键点击可操作';
-  position: absolute;
-  bottom: -24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: var(--mui-palette-background-default);
-  color: var(--mui-palette-text-primary);
-  padding: 2px 6px;
-  border-radius: var(--mui-shape-borderRadius);
-  font-size: 12px;
-  font-weight: normal;
-  white-space: nowrap;
-  z-index: 1000;
-  pointer-events: none;
-}
-
 .ProseMirror {
   padding-inline: 1rem;
 }

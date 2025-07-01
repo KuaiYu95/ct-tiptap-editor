@@ -49,7 +49,9 @@ export default () => {
   });
 
   const getData = () => {
-    setContent("$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$")
+    setContent(`<p>行内公式示例: $E = mc^2$</p>
+    <p>块级公式示例:</p>
+    <div class="math-block">$$ \Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt $$</div>`)
   }
 
   useEffect(() => {
