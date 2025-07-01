@@ -39,6 +39,8 @@
   /* MUI v5/v6 Shape Variables */
   --mui-shape-borderRadius: 10px;
 
+  --mui-spacing-unit: 8px;
+
   /* MUI v5/v6 Transitions Variables */
   --mui-transitions-duration-short: 250ms;
   --mui-transitions-duration-standard: 300ms;
@@ -494,30 +496,103 @@
 }
 
 .tiptap.ProseMirror .Tiptap-mathematics-editor {
-  padding: 0 0.25rem;
-  margin: 0 0.25rem;
-  border: 1px solid var(--mui-palette-divider);
+  padding: 0.25rem 0.75rem;
+  margin: 0 var(--mui-spacing-unit);
   font-family: monospace;
-  font-size: 0.875rem;
+  border: 1px solid var(--mui-palette-divider);
+  font-size: 0.75rem;
+  border-radius: var(--mui-shape-borderRadius);
+  display: inline-block;
 }
 
 .tiptap.ProseMirror .Tiptap-mathematics-render {
-  padding: 0 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--mui-palette-divider);
+}
+
+.tiptap.ProseMirror .Tiptap-mathematics-render,
+.tiptap.ProseMirror [data-type="mathematics"],
+.tiptap.ProseMirror .katex-display,
+.tiptap.ProseMirror .katex {
+  border-radius: var(--mui-shape-borderRadius);
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
 }
 
 .tiptap.ProseMirror .Tiptap-mathematics-render--editable {
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .tiptap.ProseMirror .Tiptap-mathematics-render--editable:hover {
-  background: var(--mui-palette-background-default);
+  background: var(--mui-palette-background-paper);
+  border-color: var(--mui-palette-primary-main);
 }
 
-.tiptap.ProseMirror .Tiptap-mathematics-editor,
-.tiptap.ProseMirror .Tiptap-mathematics-render {
-  border-radius: var(--mui-shape-borderRadius);
+/* 块级数学公式样式 - 重写默认样式 */
+.tiptap.ProseMirror .Tiptap-mathematics-render--block {
+  margin: 1.125rem 0;
+}
+
+.tiptap.ProseMirror .Tiptap-mathematics-render--block,
+.tiptap.ProseMirror .katex-display,
+.tiptap.ProseMirror [data-type="mathematics"][data-display-mode="true"] {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  border: none !important;
+  background: transparent !important;
+  box-sizing: border-box;
+}
+
+/* 智能检测块级数学公式 - 匹配包含$$的内容 */
+.tiptap.ProseMirror .Tiptap-mathematics-render:has(.katex):has([data-mathml*="$$"]),
+.tiptap.ProseMirror .Tiptap-mathematics-render .katex[data-mathml*="$$"],
+.tiptap.ProseMirror span[data-type="mathematics"]:has([data-mathml*="$$"]) {
+  display: block !important;
+  width: 100% !important;
+  text-align: center !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.tiptap.ProseMirror .Tiptap-mathematics-render--block.Tiptap-mathematics-render--editable:hover {
+  border: 1px dashed var(--mui-palette-primary-main) !important;
+  background: var(--mui-palette-background-paper) !important;
+  transform: none;
+}
+
+/* 内联数学公式样式 */
+.tiptap.ProseMirror .Tiptap-mathematics-render--inline,
+.tiptap.ProseMirror .katex:not(.katex-display),
+.tiptap.ProseMirror [data-type="mathematics"][data-display-mode="false"] {
   display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.1rem;
+  padding: 0.1rem 0.3rem;
+}
+
+/* 确保数学公式在只读模式下也能正确显示 */
+.tiptap.ProseMirror.readonly .Tiptap-mathematics-render,
+.tiptap.ProseMirror.readonly .katex,
+.tiptap.ProseMirror.readonly [data-type="mathematics"] {
+  background: transparent;
+  cursor: default;
+}
+
+.tiptap.ProseMirror.readonly .Tiptap-mathematics-render--editable:hover::after {
+  display: none;
+}
+
+/* 数学公式错误显示 */
+.tiptap.ProseMirror .math-error {
+  color: #cc0000;
+  border: 1px dashed #cc0000;
+  padding: 2px 4px;
+  border-radius: 3px;
+  background-color: rgba(204, 0, 0, 0.1);
 }
 
 .is-empty[data-placeholder]:has(> .ProseMirror-trailingBreak:only-child)::before {

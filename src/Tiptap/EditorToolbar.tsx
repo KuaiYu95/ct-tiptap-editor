@@ -9,6 +9,7 @@ import EditorHeading from "./component/EditorHeading";
 import HighlightButton from "./component/EditorHighlight";
 import EditorLink from "./component/EditorLink";
 import EditorListSelect from "./component/EditorListSelect";
+import EditorMath from "./component/EditorMath";
 import EditorTable from "./component/EditorTable";
 import EditorTextColor from "./component/EditorTextColor";
 import EditorToolbarButton from "./component/EditorToolbarButton";
@@ -136,6 +137,7 @@ const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
     <EditorLink editor={editor} />
     <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
     <EditorCode editor={editor} />
+    <EditorMath editor={editor} />
     <EditorTable editor={editor} />
     <Divider orientation="vertical" flexItem sx={{ height: 20, alignSelf: 'center' }} />
     <EditorToolbarButton

@@ -1,6 +1,6 @@
 {
   "name": "ct-tiptap-editor",
-  "version": "0.6.18",
+  "version": "0.7.0",
   "description": "基于 Tiptap 二次开发的编辑器组件",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -103,6 +103,7 @@
     "@tiptap/extension-highlight": "^2.12.0",
     "@tiptap/extension-image": "^2.12.0",
     "@tiptap/extension-link": "^2.12.0",
+    "@tiptap/extension-mathematics": "^2.23.1",
     "@tiptap/extension-subscript": "^2.12.0",
     "@tiptap/extension-superscript": "^2.12.0",
     "@tiptap/extension-table": "^2.12.0",
@@ -119,6 +120,7 @@
     "@tiptap/react": "^2.12.0",
     "@tiptap/starter-kit": "^2.12.0",
     "highlight.js": "^11.11.1",
+    "katex": "^0.16.22",
     "lowlight": "^3.3.0",
     "prosemirror-model": "^1.25.1",
     "prosemirror-state": "^1.4.3",
