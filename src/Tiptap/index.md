@@ -49,7 +49,7 @@ export default () => {
   });
 
   const getData = () => {
-    setContent("放假啊都来看是否结束了\n```js\nvar a = 1;\n\n\n\nconsole.log(a);")
+    setContent("$$\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.$$")
   }
 
   useEffect(() => {
