@@ -87,7 +87,8 @@ const extensions = (
   LinkExtension.configure({
     openOnClick: false,
     HTMLAttributes: {
-      target: '_self'
+      target: '_self',
+      rel: null
     }
   }),
 

@@ -20,6 +20,18 @@ export const LinkExtension = TiptapLink.extend({
             download: attributes.download
           }
         }
+      },
+      rel: {
+        default: null,
+        parseHTML: element => element.getAttribute('rel'),
+        renderHTML: attributes => {
+          if (!attributes.rel) {
+            return {}
+          }
+          return {
+            rel: attributes.rel
+          }
+        }
       }
     }
   },
