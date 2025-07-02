@@ -56,7 +56,7 @@ const ImageExtension = Image.extend({
     if (height) styleObject.height = `${height}px`;
 
     if (!width && !height) {
-      styleObject.width = '100%';
+      styleObject.width = 'auto';
       styleObject.height = 'auto';
     }
 

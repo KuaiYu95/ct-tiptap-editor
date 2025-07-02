@@ -98,7 +98,7 @@ export const ResizableImageExtension = Node.create<ResizableImageExtensionOption
     if (height) styleObject.height = `${height}px`;
 
     if (!width && !height) {
-      styleObject.width = '100%';
+      styleObject.width = 'auto';
       styleObject.height = 'auto';
     }
 
@@ -110,7 +110,8 @@ export const ResizableImageExtension = Node.create<ResizableImageExtensionOption
     return ["img", mergeAttributes(otherAttrs, {
       style,
       width: width || undefined,
-      height: height || undefined
+      height: height || undefined,
+      maxWidth: '100%',
     })]
   },
 

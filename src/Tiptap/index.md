@@ -49,9 +49,7 @@ export default () => {
   });
 
   const getData = () => {
-    setContent(`<p>行内公式示例: $E = mc^2$</p>
-    <p>块级公式示例:</p>
-    <div class="math-block">$$ \Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt $$</div>`)
+    setContent(`步骤一：\n  \u003C/strong\u003E\n  打开任何所需要修改的页面\n\u003C/p\u003E\n\u003Cp\u003E\n  \u003Cstrong\u003E\n    步骤二：\n  \u003C/strong\u003E\n  点击页面右边的编辑按钮，如下图：\n\u003C/p\u003E\n\u003Cp\u003E\n  \u003Cimg src=\"https://info.chaitin.net/static-file/a675386e-f020-42c7-bc36-f6e821cd6d40/090fe5ca-8bd8-40e1-b45b-740f6bcef5b5.png\"/\u003E\n\u003C/p\u003E\n\u003Cp\u003E\n  \u003Cstrong\u003E\n    步骤三：\n  \u003C/strong\u003E\n  在编辑框编辑内容，然后点击保存按钮。这个时候会弹出一个框，大家可以在里面填写编辑记录，例如：“修改了文档缺失的xxx”、“更新了过时的xx信息” 等等，如果已经结束修改，可以最后一次保存的时候，写上 “已经结束编辑” 字样，帮助管理员了解到编辑已经结束。\n\u003C/p\u003E\n\u003Cp\u003E\n`)
   }
 
   useEffect(() => {

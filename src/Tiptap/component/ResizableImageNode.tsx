@@ -139,20 +139,37 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
   })
   const imageRef = React.useRef<HTMLImageElement>(null)
   const containerRef = React.useRef<HTMLDivElement>(null)
+  const isInitialized = React.useRef(false)
+
+  // 使用 useCallback 包装 updateAttributes 以保持引用稳定
+  const updateAttributes = React.useCallback((attrs: any) => {
+    props.updateAttributes(attrs)
+  }, [props.updateAttributes])
 
   // 计算初始尺寸
   React.useEffect(() => {
-    if (imageRef.current && !width && !height) {
+    // 添加条件检查，防止重复初始化
+    if (imageRef.current && !width && !height && !isInitialized.current) {
       const image = imageRef.current
       const handleLoad = () => {
+        // 防止重复执行
+        if (isInitialized.current) return
+
         const containerWidth = containerRef.current?.clientWidth || 800
         const imageWidth = image.naturalWidth
         const imageHeight = image.naturalHeight
+
+        // 确保图像有有效尺寸
+        if (imageWidth === 0 || imageHeight === 0) return
+
         const aspectRatio = imageHeight / imageWidth
 
         // 设置默认宽度为容器100%宽度，高度按比例计算
         const defaultWidth = Math.min(containerWidth, imageWidth)
         const defaultHeight = Math.round(defaultWidth * aspectRatio)
+
+        // 标记为已初始化
+        isInitialized.current = true
 
         setDimensions({
           width: defaultWidth,
@@ -160,7 +177,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
         })
 
         // 更新节点属性
-        props.updateAttributes({
+        updateAttributes({
           width: defaultWidth,
           height: defaultHeight
         })
@@ -182,7 +199,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
         return () => image.removeEventListener('load', handleLoad)
       }
     }
-  }, [src, width, height, props])
+  }, [src, width, height, updateAttributes])
 
   // 处理拖拽调整大小
   const handleMouseDown = React.useCallback((e: React.MouseEvent) => {
@@ -242,7 +259,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
       document.body.style.cursor = ''
 
       // 使用最新的尺寸值更新节点属性
-      props.updateAttributes({
+      updateAttributes({
         width: currentDimensions.width,
         height: currentDimensions.height
       })
@@ -259,7 +276,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
 
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
-  }, [dimensions, props])
+  }, [dimensions, updateAttributes])
 
   // 处理裁切
   const handleCropClick = () => {
@@ -362,7 +379,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
         }
 
         // 更新图片源和尺寸
-        props.updateAttributes({
+        updateAttributes({
           src: newSrc,
           width: crop.width,
           height: crop.height
@@ -376,7 +393,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
       } catch (error) {
         console.error('Failed to process image crop:', error)
         // 如果整个过程失败，至少更新尺寸
-        props.updateAttributes({
+        updateAttributes({
           width: crop.width,
           height: crop.height
         })
@@ -471,7 +488,7 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
               src={src}
               alt={title || ''}
               style={{
-                width: dimensions.width ? `${dimensions.width}px` : '100%',
+                width: dimensions.width ? `${dimensions.width}px` : 'auto',
                 height: dimensions.height ? `${dimensions.height}px` : 'auto',
                 display: 'block',
                 borderRadius: 'var(--mui-shape-borderRadius)',
