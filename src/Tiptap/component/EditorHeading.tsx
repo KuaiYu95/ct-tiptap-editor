@@ -28,7 +28,7 @@ const EditorHeading = ({ editor }: { editor: Editor }) => {
       const value = e.target.value;
       if (value !== 'paragraph') {
         const level = parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6;
-        const id = `h${level}-${new Date().getTime().toString()}`;
+        const id = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`.slice(0, 22);
         // @ts-ignore
         editor.chain().focus().toggleHeading({ level, id }).run();
       } else {

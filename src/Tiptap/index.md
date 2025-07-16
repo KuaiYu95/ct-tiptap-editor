@@ -46,7 +46,7 @@ export default () => {
   });
 
   const getData = () => {
-    setContent('aaa')
+    setContent('')
   }
 
   useEffect(() => {

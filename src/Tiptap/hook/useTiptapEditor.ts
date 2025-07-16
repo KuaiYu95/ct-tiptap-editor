@@ -41,12 +41,16 @@ export type UseTiptapEditorReturn = {
 const ensureHeadingIds = (editor: Editor): boolean => {
   let hasChanges = false;
   const tr = editor.state.tr;
+  const existingIds = new Set<string>();
 
   editor.state.doc.descendants((node, pos) => {
-    if (node.type.name === 'heading' && (!node.attrs.id || node.attrs.id.length !== 22)) {
-      const newId = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
-      tr.setNodeMarkup(pos, undefined, { ...node.attrs, id: newId.slice(0, 22) });
-      hasChanges = true;
+    if (node.type.name === 'heading') {
+      if (existingIds.has(node.attrs.id) || !node.attrs.id || node.attrs.id.length !== 22) {
+        const newId = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
+        tr.setNodeMarkup(pos, undefined, { ...node.attrs, id: newId.slice(0, 22) });
+        hasChanges = true;
+      }
+      existingIds.add(node.attrs.id);
     }
   });
 
@@ -157,7 +161,6 @@ const useTiptapEditor = ({
       handlePaste: (_, event) => {
         const items = event.clipboardData?.items;
         if (!items || !items.length) return false;
-
         for (let i = 0; i < items.length; i++) {
           const item = items[i];
           if (item.type.indexOf('image') !== -1) {
@@ -187,6 +190,15 @@ const useTiptapEditor = ({
             }
             return true;
           }
+        }
+
+        const htmlData = event.clipboardData?.getData('text/html');
+        if (htmlData?.includes('<h')) {
+          setTimeout(() => {
+            if (editor) {
+              ensureHeadingIds(editor);
+            }
+          }, 10);
         }
 
         return false;
