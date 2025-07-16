@@ -888,29 +888,244 @@
 
 .editor-table {
   border-collapse: collapse;
-  margin: 1rem 0;
+  border-spacing: 0;
+  margin: calc(var(--mui-spacing-unit) * 2) 0;
   text-indent: 0;
-  border-color: inherit;
+  width: 100%;
+  table-layout: auto;
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: var(--mui-shape-borderRadius);
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .editor-table td,
 .editor-table th {
   border: 1px solid var(--mui-palette-divider);
-  padding: 8px;
-  min-width: 50px;
-  word-break: break-all;
+  padding: calc(var(--mui-spacing-unit) * 1.5);
+  min-width: 60px;
+  word-break: break-word;
   cursor: context-menu;
   position: relative;
   cursor: pointer;
+  vertical-align: top;
+  transition: background-color var(--mui-transitions-duration-short) var(--mui-transitions-easing-easeOut);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--mui-palette-text-primary);
 }
 
 .editor-table th {
   background-color: var(--mui-palette-background-paper);
+  font-weight: 600;
+  color: var(--mui-palette-text-primary);
+  text-transform: none;
+  letter-spacing: 0.0178571429em;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: calc(var(--mui-spacing-unit) * 2);
+  border-bottom: 1px solid var(--mui-palette-divider);
 }
 
 .editor-table:not(.editor-table-read) td:not(.selectedCell):hover,
 .editor-table:not(.editor-table-read) th:not(.selectedCell):hover {
-  background-color: var(--mui-palette-background-paper);
+  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 4%, transparent);
+  transition: background-color var(--mui-transitions-duration-short) var(--mui-transitions-easing-easeOut);
+}
+
+/* 表格选择状态 */
+.editor-table:not(.editor-table-read) .selectedCell {
+  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 8%, transparent) !important;
+}
+
+/* 表格调整大小手柄 */
+.editor-table .column-resize-handle {
+  position: absolute;
+  right: -3px;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background-color: var(--mui-palette-primary-main);
+  cursor: col-resize;
+  opacity: 0;
+  transition: opacity var(--mui-transitions-duration-short) var(--mui-transitions-easing-easeOut);
+  border-radius: 3px;
+}
+
+.editor-table:hover .column-resize-handle {
+  opacity: 0.6;
+}
+
+.editor-table .column-resize-handle:hover {
+  opacity: 1;
+  background-color: var(--mui-palette-primary-main);
+}
+
+/* 表格样式变体 */
+.editor-table.table-striped tbody tr:nth-child(even) {
+  background-color: color-mix(in srgb, var(--mui-palette-text-primary) 2%, transparent);
+}
+
+.editor-table.table-striped tbody tr:nth-child(even):hover {
+  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 6%, transparent);
+}
+
+.editor-table.table-bordered {
+  border: 1px solid var(--mui-palette-divider);
+}
+
+.editor-table.table-bordered td,
+.editor-table.table-bordered th {
+  border: 1px solid var(--mui-palette-divider);
+}
+
+.editor-table.table-compact td,
+.editor-table.table-compact th {
+  padding: calc(var(--mui-spacing-unit) * 0.75);
+  font-size: 0.8125rem;
+}
+
+.editor-table.table-hover tbody tr:hover {
+  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 4%, transparent);
+}
+
+/* 表格响应式设计 */
+@media (max-width: 768px) {
+  .editor-table {
+    font-size: 0.8125rem;
+    margin: var(--mui-spacing-unit) 0;
+  }
+
+  .editor-table td,
+  .editor-table th {
+    padding: calc(var(--mui-spacing-unit) * 1);
+    min-width: 50px;
+  }
+
+  .editor-table th {
+    padding: calc(var(--mui-spacing-unit) * 1.5);
+  }
+}
+
+@media (max-width: 480px) {
+  .editor-table {
+    font-size: 0.75rem;
+  }
+
+  .editor-table td,
+  .editor-table th {
+    padding: calc(var(--mui-spacing-unit) * 0.75);
+    min-width: 40px;
+  }
+}
+
+/* 表格内容对齐 */
+.editor-table .text-left {
+  text-align: left;
+}
+
+.editor-table .text-center {
+  text-align: center;
+}
+
+.editor-table .text-right {
+  text-align: right;
+}
+
+.editor-table .text-justify {
+  text-align: justify;
+}
+
+/* 表格字体样式 */
+.editor-table .font-bold {
+  font-weight: 600;
+}
+
+.editor-table .font-italic {
+  font-style: italic;
+}
+
+.editor-table .font-light {
+  font-weight: 300;
+}
+
+.editor-table .font-medium {
+  font-weight: 500;
+}
+
+/* 表格边框样式 */
+.editor-table .border-none {
+  border: none !important;
+}
+
+.editor-table .border-dashed {
+  border-style: dashed;
+}
+
+.editor-table .border-dotted {
+  border-style: dotted;
+}
+
+.editor-table .border-solid {
+  border-style: solid;
+}
+
+/* 表格颜色变体 */
+.editor-table.table-primary th {
+  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 8%, transparent);
+  color: var(--mui-palette-primary-main);
+  border-bottom-color: var(--mui-palette-primary-main);
+}
+
+.editor-table.table-secondary th {
+  background-color: color-mix(in srgb, var(--mui-palette-text-secondary) 8%, transparent);
+  color: var(--mui-palette-text-secondary);
+  border-bottom-color: var(--mui-palette-text-secondary);
+}
+
+.editor-table.table-success th {
+  background-color: color-mix(in srgb, var(--mui-palette-success-main) 8%, transparent);
+  color: var(--mui-palette-success-main);
+  border-bottom-color: var(--mui-palette-success-main);
+}
+
+.editor-table.table-warning th {
+  background-color: color-mix(in srgb, var(--mui-palette-warning-main) 8%, transparent);
+  color: var(--mui-palette-warning-main);
+  border-bottom-color: var(--mui-palette-warning-main);
+}
+
+.editor-table.table-error th {
+  background-color: color-mix(in srgb, var(--mui-palette-error-main) 8%, transparent);
+  color: var(--mui-palette-error-main);
+  border-bottom-color: var(--mui-palette-error-main);
+}
+
+/* 表格动画效果 */
+.editor-table tbody tr {
+  transition: background-color var(--mui-transitions-duration-short) var(--mui-transitions-easing-easeOut);
+}
+
+
+
+/* 表格加载状态 */
+.editor-table.table-loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.editor-table.table-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--mui-palette-primary-main);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 .ProseMirror {
