@@ -1,6 +1,6 @@
 import { Editor, useEditor } from "@tiptap/react";
 import { TextSelection } from "prosemirror-state";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import extensions from "../extension";
 import { UploadFunction } from "../extension/VideoUploadExtension";
 
@@ -79,25 +79,29 @@ const useTiptapEditor = ({
   onUpdate,
   onUpload,
   onError,
-  immediatelyRender = false,
+  immediatelyRender = true,
 }: UseTiptapEditorProps): UseTiptapEditorReturn => {
   const [previewImg, setPreviewImg] = useState('');
+
+  const editorExtensions = useMemo(() => extensions({
+    editable,
+    upload: {
+      size: size || 20,
+      onUpload,
+    },
+    onError
+  }), [editable, size, onUpload, onError]);
+
+  const handleUpdate = useCallback(({ editor }: { editor: Editor }) => {
+    onUpdate?.(editor.getHTML(), editor.getJSON());
+  }, [onUpdate]);
 
   const editor = useEditor({
     immediatelyRender,
     editable,
-    extensions: extensions({
-      editable,
-      upload: {
-        size: size || 20,
-        onUpload,
-      },
-      onError
-    }),
+    extensions: editorExtensions,
     content: content,
-    onUpdate: ({ editor }) => {
-      onUpdate?.(editor.getHTML(), editor.getJSON());
-    },
+    onUpdate: handleUpdate,
     editorProps: {
       attributes: {
         autocomplete: "off",
@@ -316,7 +320,6 @@ const useTiptapEditor = ({
   }
 
   if (!editor) {
-    console.log('editor is not initialized')
     return null
   }
 

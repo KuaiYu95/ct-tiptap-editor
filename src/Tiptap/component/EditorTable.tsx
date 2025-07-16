@@ -1,4 +1,15 @@
-import { MenuItem, Popover } from '@mui/material';
+import {
+  Add as AddIcon,
+  BorderAll as BorderAllIcon,
+  Delete as DeleteIcon
+} from '@mui/icons-material';
+import {
+  Divider,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
+  Popover
+} from '@mui/material';
 import { type Editor } from '@tiptap/core';
 import { TextSelection } from 'prosemirror-state';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +20,7 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
   const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number } | null>(null);
   const [selectedCell, setSelectedCell] = useState<HTMLElement | null>(null);
 
-  // 插入3x3表格
+  // 插入表格（支持自定义行列数）
   const insertTable = () => {
     editor
       .chain()
@@ -17,7 +28,6 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
       .insertTable({ rows: 3, cols: 6, withHeaderRow: true })
       .run();
   };
-
 
   const handleContextMenu = (e: any) => {
     // 只在可编辑模式下处理右键菜单
@@ -47,7 +57,6 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
       mouseY: e.clientY,
     })
   };
-
 
   // 添加CSS样式类来改变表格单元格的鼠标样式
   const addHoverClass = () => {
@@ -101,6 +110,11 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
     insertRowBelow: () => editor.chain().focus().addRowAfter().run(),
     deleteColumn: () => editor.chain().focus().deleteColumn().run(),
     deleteRow: () => editor.chain().focus().deleteRow().run(),
+    mergeCells: () => editor.chain().focus().mergeCells().run(),
+    splitCell: () => editor.chain().focus().splitCell().run(),
+    toggleHeaderRow: () => editor.chain().focus().toggleHeaderRow().run(),
+    toggleHeaderColumn: () => editor.chain().focus().toggleHeaderColumn().run(),
+    deleteTable: () => editor.chain().focus().deleteTable().run(),
   };
 
   return (
@@ -120,23 +134,62 @@ const EditorTable = ({ editor }: { editor: Editor }) => {
             : undefined
         }
       >
+        {/* 插入操作 */}
         <MenuItem onClick={() => { tableOperations.insertColumnLeft(); closeMenu(); }}>
-          左侧插入列
+          <ListItemIcon><AddIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>左侧插入列</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => { tableOperations.insertColumnRight(); closeMenu(); }}>
-          右侧插入列
+          <ListItemIcon><AddIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>右侧插入列</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => { tableOperations.insertRowAbove(); closeMenu(); }}>
-          上方插入行
+          <ListItemIcon><AddIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>上方插入行</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => { tableOperations.insertRowBelow(); closeMenu(); }}>
-          下方插入行
+          <ListItemIcon><AddIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>下方插入行</ListItemText>
         </MenuItem>
+
+        <Divider />
+
+        {/* 删除操作 */}
         <MenuItem onClick={() => { tableOperations.deleteColumn(); closeMenu(); }}>
-          删除当前列
+          <ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>删除当前列</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => { tableOperations.deleteRow(); closeMenu(); }}>
-          删除当前行
+          <ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>删除当前行</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={() => { tableOperations.deleteTable(); closeMenu(); }}>
+          <ListItemIcon><DeleteIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>删除整个表格</ListItemText>
+        </MenuItem>
+
+        <Divider />
+
+        {/* 单元格操作 */}
+        {/* <MenuItem onClick={() => { tableOperations.mergeCells(); closeMenu(); }}>
+          <ListItemIcon><ViewModuleIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>合并单元格</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={() => { tableOperations.splitCell(); closeMenu(); }}>
+          <ListItemIcon><ViewColumnIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>拆分单元格</ListItemText>
+        </MenuItem>
+
+        <Divider /> */}
+
+        {/* 表头操作 */}
+        <MenuItem onClick={() => { tableOperations.toggleHeaderRow(); closeMenu(); }}>
+          <ListItemIcon><BorderAllIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>切换表头行</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={() => { tableOperations.toggleHeaderColumn(); closeMenu(); }}>
+          <ListItemIcon><BorderAllIcon fontSize="small" /></ListItemIcon>
+          <ListItemText>切换表头列</ListItemText>
         </MenuItem>
       </Popover>
     </>
