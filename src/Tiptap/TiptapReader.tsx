@@ -41,7 +41,9 @@ const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
         padding: '0px !important'
       }
     }}>
-      <EditorContent editor={editorRef.editor} />
+      <Box className="editor-container" >
+        <EditorContent editor={editorRef.editor} />
+      </Box>
       <Dialog sx={{
         '.MuiDialog-paper': {
           maxWidth: '95vw',
