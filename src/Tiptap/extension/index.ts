@@ -16,11 +16,13 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { all, createLowlight } from 'lowlight';
 import { Markdown } from 'tiptap-markdown';
 import CodeBlockExtension from './CodeBlockExtension';
+import { CustomMarkdownExtension } from './CustomMarkdownExtension';
 import FontSizeExtension from './FontSizeExtension';
 import HeadingExtension from './HeadingExtension';
 import ImageExtension from './ImageExtension';
 import ImageUploadExtension from './ImageUploadExtension';
 import LinkExtension from './LinkExtension';
+import { MathBlockExtension, MathInlineExtension } from './MathExtension';
 import ResizableImageExtension from './ResizableImageExtension';
 import ResizableVideoExtension from './ResizableVideoExtension';
 import SelectionExtension from './SelectionExtension';
@@ -31,7 +33,6 @@ import VideoExtension from './VideoExtension';
 import VideoUploadExtension, { UploadFunction } from './VideoUploadExtension';
 
 import 'katex/dist/katex.min.css';
-import { MathBlockExtension, MathInlineExtension } from './MathExtension';
 
 type UploadOptions = {
   size?: number,
@@ -55,12 +56,19 @@ const extensions = (
     codeBlock: false,
     heading: false,
   }),
-  Markdown.configure({
-    html: true,
-    breaks: false,
-    transformPastedText: true,
-    transformCopiedText: false,
-  }),
+  ...(upload?.onUpload ? [
+    CustomMarkdownExtension.configure({
+      onUpload: upload.onUpload,
+      onError: onError,
+    })
+  ] : [
+    Markdown.configure({
+      html: true,
+      breaks: false,
+      transformPastedText: true,
+      transformCopiedText: false,
+    })
+  ]),
 
   // ========== 文本样式和格式化 ==========
   Color,
@@ -101,7 +109,7 @@ const extensions = (
     resizable: true,
     handleWidth: 5,
     cellMinWidth: 25,
-    lastColumnResizable: false,
+    lastColumnResizable: true,
   }),
   TableRow,
   TableCellExtension,

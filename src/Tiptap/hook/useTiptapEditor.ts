@@ -192,6 +192,57 @@ const useTiptapEditor = ({
           }
         }
 
+        // 检查是否有markdown格式的base64图片
+        const textData = event.clipboardData?.getData('text/plain');
+        if (textData) {
+          // 匹配markdown格式的base64图片: ![alt](data:image/xxx;base64,xxx)
+          const base64ImageRegex = /!\[([^\]]*)\]\(data:image\/([^;]+);base64,([^)]+)\)/g;
+          const matches = Array.from(textData.matchAll(base64ImageRegex));
+
+          if (matches.length > 0) {
+            event.preventDefault();
+
+            // 处理每个匹配的base64图片
+            const processBase64Images = async () => {
+              for (const match of matches) {
+                const [, alt, mimeType, base64Data] = match;
+
+                try {
+                  // 将base64转换为File对象
+                  const byteCharacters = atob(base64Data);
+                  const byteNumbers = new Array(byteCharacters.length);
+                  for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                  }
+                  const byteArray = new Uint8Array(byteNumbers);
+
+                  // 确保MIME类型正确
+                  const fileExtension = mimeType.split('/')[1] || 'png';
+                  const fileName = `image.${fileExtension}`;
+                  const fileType = mimeType || 'image/png';
+
+                  const file = new File([byteArray], fileName, { type: fileType });
+
+                  if (editor) {
+                    editor.chain()
+                      .focus()
+                      .setImageUploadNode({
+                        pendingFile: file
+                      })
+                      .run();
+                  }
+                } catch (error) {
+                  console.error('处理base64图片失败:', error);
+                  onError?.(new Error('处理base64图片失败'));
+                }
+              }
+            };
+
+            processBase64Images();
+            return true;
+          }
+        }
+
         const htmlData = event.clipboardData?.getData('text/html');
         if (htmlData?.includes('<h')) {
           setTimeout(() => {

@@ -393,8 +393,15 @@ export const ImageUploadNode: React.FC<NodeViewProps> = (props) => {
       return
     }
 
-    // 检查文件类型
-    if (!file.type.startsWith('image/')) {
+    // 检查文件类型 - 支持base64图片
+    const isValidImage = file.type.startsWith('image/') ||
+      file.name.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i) ||
+      (file.size > 0 && file.size < 50 * 1024 * 1024); // 小于50MB的文件可能是图片
+
+    // 如果是base64转换的文件，放宽检查条件
+    const isBase64File = file.name.startsWith('image.') && file.size > 0;
+
+    if (!isValidImage && !isBase64File) {
       extension.options.onError?.(new Error("选择的文件不是图片格式"))
       return
     }

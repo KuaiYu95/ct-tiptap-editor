@@ -891,7 +891,8 @@
   border-spacing: 0;
   margin: calc(var(--mui-spacing-unit) * 2) 0;
   text-indent: 0;
-  width: 100%;
+  max-width: 100%;
+  /* width: 100%; */
   table-layout: auto;
   border: 1px solid var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
@@ -905,9 +906,7 @@
   padding: calc(var(--mui-spacing-unit) * 1.5);
   min-width: 60px;
   word-break: break-word;
-  cursor: context-menu;
   position: relative;
-  cursor: pointer;
   vertical-align: top;
   transition: background-color var(--mui-transitions-duration-short) var(--mui-transitions-easing-easeOut);
   font-size: 0.875rem;
@@ -946,7 +945,6 @@
   bottom: 0;
   width: 6px;
   background-color: var(--mui-palette-primary-main);
-  cursor: col-resize;
   opacity: 0;
   transition: opacity var(--mui-transitions-duration-short) var(--mui-transitions-easing-easeOut);
   border-radius: 3px;
