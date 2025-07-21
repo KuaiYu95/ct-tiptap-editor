@@ -78,7 +78,7 @@ const HighlightButton = ({ editor }: { editor: Editor }) => {
                   onClick={() => handleColorSelect(color)}
                   sx={{
                     border: '1px solid',
-                    borderColor: 'divider',
+                    borderColor: (color.toLowerCase() === '#ffffff' || color.toLowerCase() === '#fff' || color.toLowerCase() === 'white') ? 'divider' : color,
                     width: 18,
                     height: 18,
                     borderRadius: '2px',
@@ -92,7 +92,7 @@ const HighlightButton = ({ editor }: { editor: Editor }) => {
           <Box sx={{ '.react-colorful': { width: '100%', height: 200 } }}>
             <HexAlphaColorPicker color={customColor} onChange={handleCustomColor} />
             <Stack direction="row" alignItems="center" sx={{ mt: 1 }} justifyContent="space-between">
-              <Box>{customColor}</Box>
+              <Box sx={{ fontSize: 14, color: 'text.secondary', fontFamily: 'monospace' }}>{customColor}</Box>
               <Button size="small" variant="outlined" onClick={() => handleColorSelect(customColor)}>确定</Button>
             </Stack>
           </Box>

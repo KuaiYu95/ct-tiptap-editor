@@ -1,26 +1,37 @@
-import { Box, Button, Grid, Popover, Stack } from '@mui/material';
+import { Box, Button, Grid, Popover, Stack, Tooltip, useTheme } from '@mui/material';
 import { type Editor } from '@tiptap/react';
 import React, { useRef, useState } from 'react';
 import { HexAlphaColorPicker } from 'react-colorful';
 import { TextColorIcon } from '../icons/text-color-icon';
 import EditorToolbarButton from './EditorToolbarButton';
 
-const PRESET_COLORS = [
-  '#000000',
-  '#FF0000',
-  '#008000',
-  '#0000FF',
-  '#FFA500',
-  '#800080',
-  '#FFC0CB',
-  '#A52A2A',
-  '#808080',
-  '#FFFFFF',
-];
-
 const EditorTextColor = ({ editor }: { editor: Editor }) => {
+  const theme = useTheme();
+  const PRESET_COLORS = [
+    theme.palette.primary.main,
+    theme.palette.success.main,
+    theme.palette.warning.main,
+    theme.palette.error.main,
+    theme.palette.text.primary,
+    '#0F7173',
+    '#D8A47F',
+    '#3F4739',
+    '#CDDFA0',
+    '#78586F',
+    '#6FD08C',
+    '#9AADBF',
+    '#73B5F0',
+    '#A973F0',
+    '#D0D8F5',
+    '#F0A7A4',
+    '#A38C43',
+    '#C0F54F',
+    '#8A37EF',
+    '#F041E7',
+  ];
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [customColor, setCustomColor] = useState('#000000');
+  const [customColor, setCustomColor] = useState(theme.palette.text.primary);
   const buttonRef = useRef(null);
 
   const currentColor = editor.getAttributes('textStyle').color;
@@ -67,24 +78,27 @@ const EditorTextColor = ({ editor }: { editor: Editor }) => {
           <Grid container spacing={1} sx={{ mb: 2, width: 280 }}>
             {PRESET_COLORS.map((color) => (
               <Grid component="div" key={color}>
-                <Box
-                  onClick={() => handleColorSelect(color)}
-                  sx={{
-                    width: 20,
-                    height: 20,
-                    borderRadius: '50%',
-                    cursor: 'pointer',
-                    backgroundColor: color,
-                    border: color === '#FFFFFF' ? '1px solid #ddd' : 'none',
-                  }}
-                />
+                <Tooltip title={color}>
+                  <Box
+                    onClick={() => handleColorSelect(color)}
+                    sx={{
+                      border: '1px solid',
+                      borderColor: (color.toLowerCase() === '#ffffff' || color.toLowerCase() === '#fff' || color.toLowerCase() === 'white') ? 'divider' : color,
+                      width: 18,
+                      height: 18,
+                      borderRadius: '50%',
+                      cursor: 'pointer',
+                      backgroundColor: color,
+                    }}
+                  />
+                </Tooltip>
               </Grid>
             ))}
           </Grid>
           <Box sx={{ '.react-colorful': { width: '100%', height: 200 } }}>
             <HexAlphaColorPicker color={customColor} onChange={handleCustomColorChange} />
             <Stack direction="row" alignItems="center" sx={{ mt: 1 }} justifyContent="space-between">
-              <Box>{customColor}</Box>
+              <Box sx={{ fontSize: 14, color: 'text.secondary', fontFamily: 'monospace' }}>{customColor}</Box>
               <Button
                 size="small"
                 variant="outlined"
