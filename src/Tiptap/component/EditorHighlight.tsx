@@ -78,7 +78,7 @@ const HighlightButton = ({ editor }: { editor: Editor }) => {
                   onClick={() => handleColorSelect(color)}
                   sx={{
                     border: '1px solid',
-                    borderColor: 'divider',
+                    borderColor: (color.toLowerCase() === '#ffffff' || color.toLowerCase() === '#fff' || color.toLowerCase() === 'white') ? 'divider' : color,
                     width: 18,
                     height: 18,
                     borderRadius: '2px',
