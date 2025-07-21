@@ -87,7 +87,6 @@
 
 .tiptap.ProseMirror img {
   cursor: pointer;
-  display: block;
 }
 
 .tiptap.ProseMirror>img:not([data-type="emoji"] img) {
@@ -854,7 +853,6 @@
   cursor: default;
 }
 
-.editor-container img,
 .editor-container svg,
 .editor-container video,
 .editor-container canvas,

@@ -1,6 +1,10 @@
 import Image from '@tiptap/extension-image';
 
 const ImageExtension = Image.extend({
+  group: "inline",
+
+  inline: true,
+
   addAttributes() {
     return {
       ...this.parent?.(),
@@ -59,6 +63,10 @@ const ImageExtension = Image.extend({
       styleObject.width = 'auto';
       styleObject.height = 'auto';
     }
+
+    styleObject.display = 'inline-block';
+    styleObject['vertical-align'] = 'middle';
+    styleObject.margin = '0 8px';
 
     const style = Object.entries(styleObject)
       .map(([key, value]) => `${key}: ${value}`)

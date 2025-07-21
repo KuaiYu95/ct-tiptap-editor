@@ -22,7 +22,9 @@ declare module "@tiptap/react" {
 export const ResizableImageExtension = Node.create<ResizableImageExtensionOptions>({
   name: "resizableImage",
 
-  group: "block",
+  group: "inline",
+
+  inline: true,
 
   atom: true,
 

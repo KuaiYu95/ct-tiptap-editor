@@ -6,39 +6,9 @@ import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import type { UploadFunction } from "../extension/ImageUploadExtension"
 import { CancelIcon } from "../icons/cancel-icon"
+import { CropIcon } from "../icons/corp-icon"
 import { OkIcon } from "../icons/ok-icon"
-
-// 拖拽图标组件
-const ResizeIcon: React.FC = () => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 12 12"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M12 0L0 12V8L8 0H12ZM12 4L4 12H8L12 8V4Z"
-      fill="currentColor"
-    />
-  </svg>
-)
-
-// 裁切图标组件
-const CropIcon: React.FC = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M7 17H17V7H19V17C19 18.1 18.1 19 17 19H7V17ZM17 3H9.5L7.5 5H17C18.1 5 19 5.9 19 7V16.5L17 14.5V7H17ZM1 1L3.9 3.9L5 3V7C5 8.1 5.9 9 7 9H11L13 11V17C13 18.1 12.1 19 11 19H7C5.9 19 5 18.1 5 17V13L1 9L1 1Z"
-      fill="currentColor"
-    />
-  </svg>
-)
+import { ResizeIcon } from "../icons/resize-icon"
 
 interface ResizeHandleProps {
   onMouseDown: (e: React.MouseEvent) => void
@@ -49,7 +19,7 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({ onMouseDown, isVisible }) =
   <Box
     sx={{
       position: 'absolute',
-      bottom: 0,
+      bottom: 2.5,
       right: 0,
       width: 20,
       height: 20,
@@ -70,13 +40,10 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({ onMouseDown, isVisible }) =
         backgroundColor: 'primary.main',
         transform: 'scale(1.05)',
       },
-      '&:active': {
-        transform: 'scale(0.95)',
-      },
     }}
     onMouseDown={onMouseDown}
   >
-    <ResizeIcon />
+    <ResizeIcon sx={{ fontSize: 16 }} />
   </Box>
 )
 
@@ -93,7 +60,7 @@ const CropButton: React.FC<CropButtonProps> = ({ onClick, isVisible }) => (
       right: 0,
       width: 20,
       height: 20,
-      bgcolor: 'rgba(0, 0, 0, 0.7)',
+      bgcolor: 'rgba(0, 0, 0, 0.2)',
       border: '2px solid white',
       borderRadius: '6px',
       cursor: 'pointer',
@@ -107,7 +74,7 @@ const CropButton: React.FC<CropButtonProps> = ({ onClick, isVisible }) => (
       userSelect: 'none',
       zIndex: 10,
       '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
         transform: 'scale(1.05)',
       },
       '&:active': {
@@ -116,7 +83,7 @@ const CropButton: React.FC<CropButtonProps> = ({ onClick, isVisible }) => (
     }}
     onClick={onClick}
   >
-    <CropIcon />
+    <CropIcon sx={{ fontSize: 18 }} />
   </Box>
 )
 
@@ -413,12 +380,15 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
   }
 
   return (
-    <NodeViewWrapper>
+    <NodeViewWrapper as='span'>
       <Box
         ref={containerRef}
         sx={{
           position: 'relative',
           display: 'inline-block',
+          margin: '0 8px',
+          verticalAlign: 'middle',
+          lineHeight: 1,
         }}
         onMouseEnter={() => isEditable && setIsHovered(true)}
         onMouseLeave={() => isEditable && !isResizing && !isCropping && setIsHovered(false)}
@@ -490,7 +460,6 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
               style={{
                 width: dimensions.width ? `${dimensions.width}px` : 'auto',
                 height: dimensions.height ? `${dimensions.height}px` : 'auto',
-                display: 'block',
                 borderRadius: 'var(--mui-shape-borderRadius)',
                 transition: isResizing ? 'none' : 'all 0.2s ease',
                 borderColor: isHovered || isResizing ? 'primary.main' : 'divider',
