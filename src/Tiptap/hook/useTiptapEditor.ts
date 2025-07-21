@@ -1,4 +1,5 @@
 import { Editor, useEditor } from "@tiptap/react";
+import { downloadImageAsFile, ensureHeadingIds, isValidImageUrl, processCodeBlockHtml } from "ct-tiptap-editor/utils";
 import { TextSelection } from "prosemirror-state";
 import { useCallback, useMemo, useState } from "react";
 import extensions from "../extension";
@@ -36,43 +37,6 @@ export type UseTiptapEditorReturn = {
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
 } | null
-
-// 辅助函数：确保所有标题都有ID
-const ensureHeadingIds = (editor: Editor): boolean => {
-  let hasChanges = false;
-  const tr = editor.state.tr;
-  const existingIds = new Set<string>();
-
-  editor.state.doc.descendants((node, pos) => {
-    if (node.type.name === 'heading') {
-      if (existingIds.has(node.attrs.id) || !node.attrs.id || node.attrs.id.length !== 22) {
-        const newId = `${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`;
-        tr.setNodeMarkup(pos, undefined, { ...node.attrs, id: newId.slice(0, 22) });
-        hasChanges = true;
-      }
-      existingIds.add(node.attrs.id);
-    }
-  });
-
-  if (hasChanges) {
-    editor.view.dispatch(tr);
-  }
-
-  return hasChanges;
-};
-
-// 辅助函数：处理代码块中的换行符
-const processCodeBlockHtml = (html: string): string => {
-  // 使用正则表达式匹配代码块内容并替换换行符
-  return html.replace(
-    /<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/g,
-    (match, codeContent) => {
-      // 将代码内容中的 \n 替换为 <br>
-      const processedContent = codeContent.replace(/\n/g, '<br>');
-      return match.replace(codeContent, processedContent);
-    }
-  );
-};
 
 const useTiptapEditor = ({
   content,
@@ -255,16 +219,17 @@ const useTiptapEditor = ({
         return false;
       },
       handleDrop: (view, event) => {
+        const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
+        if (!coordinates) return false;
+        const dropPosition = coordinates.pos;
+
+        // 处理本地文件拖拽
         if (event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length > 0) {
           event.preventDefault();
           const files = event.dataTransfer.files;
           for (let i = 0; i < files.length; i++) {
             const file = files[i];
             if (file.type.startsWith('image/')) {
-              const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
-              if (!coordinates) return false;
-              const dropPosition = coordinates.pos;
-
               if (editor) {
                 const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
                 editor.view.dispatch(tr);
@@ -277,10 +242,6 @@ const useTiptapEditor = ({
               }
               return true;
             } else if (file.type.startsWith('video/')) {
-              const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
-              if (!coordinates) return false;
-              const dropPosition = coordinates.pos;
-
               if (editor) {
                 const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
                 editor.view.dispatch(tr);
@@ -293,9 +254,6 @@ const useTiptapEditor = ({
               }
               return true;
             } else if (onUpload) {
-              const coordinates = view.posAtCoords({ left: event.clientX, top: event.clientY });
-              if (!coordinates) return false;
-              const dropPosition = coordinates.pos;
               onUpload(file).then(fileUrl => {
                 if (editor) {
                   const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
@@ -312,6 +270,48 @@ const useTiptapEditor = ({
             }
           }
         }
+
+        if (event.dataTransfer && onUpload) {
+          const imageUrl = event.dataTransfer.getData('text/uri-list') ||
+            event.dataTransfer.getData('text/plain') ||
+            event.dataTransfer.getData('URL');
+
+          const htmlData = event.dataTransfer.getData('text/html');
+          let extractedImageUrl = imageUrl;
+
+          if (htmlData && !isValidImageUrl(extractedImageUrl)) {
+            const imgMatch = htmlData.match(/<img[^>]+src=["']([^"']+)["'][^>]*>/i);
+            if (imgMatch) {
+              extractedImageUrl = imgMatch[1];
+            }
+          }
+
+          if (extractedImageUrl && isValidImageUrl(extractedImageUrl)) {
+            event.preventDefault();
+
+            if (editor) {
+              const tr = view.state.tr.setSelection(TextSelection.near(view.state.doc.resolve(dropPosition)));
+              editor.view.dispatch(tr);
+            }
+
+            downloadImageAsFile(extractedImageUrl)
+              .then(file => {
+                if (file && editor) {
+                  editor.chain()
+                    .focus()
+                    .setImageUploadNode({
+                      pendingFile: file
+                    })
+                    .run();
+                  return true;
+                }
+                throw new Error('编辑器或上传函数不可用');
+              })
+
+            return true;
+          }
+        }
+
         return false;
       },
     },
