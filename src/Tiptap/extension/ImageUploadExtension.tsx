@@ -55,13 +55,15 @@ declare module "@tiptap/react" {
 export const ImageUploadExtension = Node.create<ImageUploadExtensionOptions>({
   name: "imageUpload",
 
-  group: "block",
+  group: "inline",
 
   draggable: true,
 
   selectable: true,
 
   atom: true,
+
+  inline: true,
 
   addOptions() {
     return {

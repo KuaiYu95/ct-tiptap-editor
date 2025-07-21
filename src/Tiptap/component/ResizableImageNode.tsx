@@ -413,12 +413,14 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
   }
 
   return (
-    <NodeViewWrapper>
+    <NodeViewWrapper as='span'>
       <Box
         ref={containerRef}
         sx={{
           position: 'relative',
           display: 'inline-block',
+          margin: '0 8px',
+          verticalAlign: 'middle',
         }}
         onMouseEnter={() => isEditable && setIsHovered(true)}
         onMouseLeave={() => isEditable && !isResizing && !isCropping && setIsHovered(false)}
@@ -490,7 +492,6 @@ export const ResizableImageNode: React.FC<NodeViewProps> = (props) => {
               style={{
                 width: dimensions.width ? `${dimensions.width}px` : 'auto',
                 height: dimensions.height ? `${dimensions.height}px` : 'auto',
-                display: 'block',
                 borderRadius: 'var(--mui-shape-borderRadius)',
                 transition: isResizing ? 'none' : 'all 0.2s ease',
                 borderColor: isHovered || isResizing ? 'primary.main' : 'divider',

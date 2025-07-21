@@ -27,7 +27,7 @@ export default () => {
     readEditorRef?.setContent(html);
   };
 
-  const onUpdate = (value)  => console.log('🍌',value)
+  const onUpdate = (value)  => {}
   
   const handleFileUpload = async (file: File) => {
     return 'https://pandawiki.docs.baizhi.cloud/static-file/ff56bd46-7cd4-4ebc-bf75-07303d4d2c5c/8088b9cf-e12e-4eec-9f05-313c70935286.png';
