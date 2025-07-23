@@ -16,7 +16,6 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { all, createLowlight } from 'lowlight';
 import { Markdown } from 'tiptap-markdown';
 import CodeBlockExtension from './CodeBlockExtension';
-import { CustomMarkdownExtension } from './CustomMarkdownExtension';
 import FontSizeExtension from './FontSizeExtension';
 import HeadingExtension from './HeadingExtension';
 import ImageExtension from './ImageExtension';
@@ -56,19 +55,25 @@ const extensions = (
     codeBlock: false,
     heading: false,
   }),
-  ...(upload?.onUpload ? [
-    CustomMarkdownExtension.configure({
-      onUpload: upload.onUpload,
-      onError: onError,
-    })
-  ] : [
-    Markdown.configure({
-      html: true,
-      breaks: false,
-      transformPastedText: true,
-      transformCopiedText: false,
-    })
-  ]),
+  Markdown.configure({
+    html: true,
+    breaks: false,
+    transformPastedText: true,
+    transformCopiedText: false,
+  }),
+  // ...(upload?.onUpload ? [
+  //   CustomMarkdownExtension.configure({
+  //     onUpload: upload.onUpload,
+  //     onError: onError,
+  //   })
+  // ] : [
+  //   Markdown.configure({
+  //     html: true,
+  //     breaks: false,
+  //     transformPastedText: true,
+  //     transformCopiedText: false,
+  //   })
+  // ]),
 
   // ========== 文本样式和格式化 ==========
   Color,

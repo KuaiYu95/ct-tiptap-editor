@@ -18,8 +18,6 @@ export const CustomMarkdownExtension = Extension.create<CustomMarkdownExtensionO
   },
 
   addProseMirrorPlugins() {
-    const { editor } = this;
-
     return [
       new Plugin({
         props: {
@@ -89,12 +87,12 @@ export const CustomMarkdownExtension = Extension.create<CustomMarkdownExtensionO
 // 创建一个包装的Markdown扩展
 export const createCustomMarkdownExtension = (options: CustomMarkdownExtensionOptions) => {
   return [
+    CustomMarkdownExtension.configure(options),
     Markdown.configure({
       html: true,
       breaks: false,
       transformPastedText: true,
       transformCopiedText: false,
     }),
-    CustomMarkdownExtension.configure(options),
   ];
 }; 

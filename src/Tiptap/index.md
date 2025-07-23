@@ -46,7 +46,7 @@ export default () => {
   });
 
   const getData = () => {
-    setContent('')
+    setContent('# 啊手机发的离开')
   }
 
   useEffect(() => {
