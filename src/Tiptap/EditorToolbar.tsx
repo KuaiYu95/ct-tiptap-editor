@@ -29,7 +29,7 @@ type EditorToolbarProps = {
 }
 
 const EditorToolbar = ({ editorRef }: EditorToolbarProps) => {
-  if (!editorRef) return null;
+  if (!editorRef || !editorRef.editor) return null;
   const { editor, onUpload, aiUrl, onError } = editorRef;
   return <Stack
     direction={'row'}

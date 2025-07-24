@@ -11,8 +11,6 @@ interface TiptapEditorProps {
 }
 
 const TiptapEditor = ({ editorRef }: TiptapEditorProps) => {
-  if (!editorRef) return null;
-
   const { editor } = editorRef;
   return (
     <>
