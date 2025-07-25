@@ -1,3 +1,5 @@
+'use client'
+
 import { Editor, useEditor } from "@tiptap/react";
 import { downloadImageAsFile, ensureHeadingIds, isValidImageUrl, processCodeBlockHtml } from "ct-tiptap-editor/utils";
 import { TextSelection } from "prosemirror-state";
@@ -27,7 +29,7 @@ export type UseTiptapEditorReturn = {
   aiUrl?: string
   previewImg: string;
 
-  editor: Editor;
+  editor: Editor | null;
 
   getHtml: () => string;
   getNavs: () => Promise<Nav[]>;
@@ -36,7 +38,7 @@ export type UseTiptapEditorReturn = {
 
   onUpload?: UploadFunction;
   onError?: (error: Error) => void
-} | null
+}
 
 const useTiptapEditor = ({
   content,
@@ -380,10 +382,6 @@ const useTiptapEditor = ({
       return processedHtml;
     }
     return '';
-  }
-
-  if (!editor) {
-    return null
   }
 
   return {

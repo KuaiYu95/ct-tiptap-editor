@@ -5,15 +5,20 @@ import React, { useEffect, useState } from "react";
 import './index.css';
 
 const TiptapReader = ({ editorRef }: { editorRef: UseTiptapEditorReturn }) => {
-  if (!editorRef) return null;
-
-  const content = editorRef.editor.getHTML();
+  const [content, setContent] = useState('');
 
   const { previewImg } = editorRef;
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImgSrc, setPreviewImgSrc] = useState('');
 
   useEffect(() => {
+    if (editorRef.editor) {
+      setContent(editorRef.editor.getHTML());
+    }
+  }, [editorRef.editor])
+
+  useEffect(() => {
+    if (!editorRef.editor) return;
     const tables = editorRef.editor.options.element.querySelectorAll('table');
     tables.forEach(table => {
       if (!table.classList.contains('editor-table')) {

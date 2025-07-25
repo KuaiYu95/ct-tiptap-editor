@@ -8,7 +8,6 @@ type EditorAttachmentProps = {
 }
 
 const EditorAttachment = ({ editorRef }: EditorAttachmentProps) => {
-  if (!editorRef) return null;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +17,7 @@ const EditorAttachment = ({ editorRef }: EditorAttachmentProps) => {
     try {
       const fileUrl = await editorRef.onUpload(file);
       editorRef.editor
-        .chain()
+        ?.chain()
         .focus()
         .insertContent(`<a href="${fileUrl}" download="${file.name}">📎 ${file.name}</a>`)
         .run();
