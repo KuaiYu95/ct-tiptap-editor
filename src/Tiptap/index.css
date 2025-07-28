@@ -63,7 +63,6 @@
   padding: 0 5px;
   line-height: 22px;
   word-break: break-all;
-  font-family: "JetBrains Mono NL", monospace;
   font-size: 0.875em;
   border-radius: var(--mui-shape-borderRadius);
 }
@@ -71,10 +70,8 @@
 .tiptap.ProseMirror pre {
   background-color: var(--mui-palette-background-paper);
   margin-top: 1em;
-  font-family: 'JetBrainsMono', monospace;
   margin-bottom: 1em;
   padding: 1em;
-  font-size: 1rem;
   border-radius: var(--mui-shape-borderRadius);
 }
 
@@ -497,7 +494,6 @@
 .tiptap.ProseMirror .Tiptap-mathematics-editor {
   padding: 0.25rem 0.75rem;
   margin: 0 var(--mui-spacing-unit);
-  font-family: monospace;
   border: 1px solid var(--mui-palette-divider);
   font-size: 0.75rem;
   border-radius: var(--mui-shape-borderRadius);
@@ -746,7 +742,6 @@
 .editor-container kbd,
 .editor-container samp,
 .editor-container pre {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-feature-settings: normal;
   font-variation-settings: normal;
   font-size: 1em;
@@ -878,10 +873,6 @@
 
 .editor-container [hidden]:where(:not([hidden="until-found"])) {
   display: none;
-}
-
-.tiptap.ProseMirror {
-  font-family: "DM Sans", sans-serif;
 }
 
 .editor-table {
