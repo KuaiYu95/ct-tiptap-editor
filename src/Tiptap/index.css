@@ -58,8 +58,8 @@
 
 .tiptap.ProseMirror code {
   display: inline-block;
-  color: var(--mui-palette-primary-main);
-  background-color: var(--mui-palette-background-paper);
+  color: '#21222D';
+  background-color: '#F8F9FA';
   padding: 0 5px;
   line-height: 22px;
   word-break: break-all;
@@ -68,7 +68,7 @@
 }
 
 .tiptap.ProseMirror pre {
-  background-color: var(--mui-palette-background-paper);
+  background-color: '#F8F9FA';
   margin-top: 1em;
   margin-bottom: 1em;
   padding: 1em;
@@ -1143,9 +1143,9 @@
   position: absolute;
   right: 10px;
   top: 10px;
-  background: var(--mui-palette-background-paper);
+  background: '#F8F9FA';
   border: 1px solid var(--mui-palette-divider);
-  color: var(--mui-palette-text-primary);
+  color: '#21222D';
   padding: 4px 8px;
   border-radius: var(--mui-shape-borderRadius);
   font-size: 12px;
