@@ -69,6 +69,7 @@
 
 .tiptap.ProseMirror pre {
   background-color: #F8F9FA;
+  color: #21222D;
   margin-top: 1em;
   margin-bottom: 1em;
   padding: 1em;
@@ -1136,6 +1137,7 @@
 }
 
 .tiptap.ProseMirror .code-block-wrapper {
+  color: #21222D;
   position: relative;
 }
 
